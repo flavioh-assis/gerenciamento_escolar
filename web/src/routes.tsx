@@ -14,7 +14,7 @@ export default () => (
     <Route path="/" exact component={Alunado} />
 
     <Route path="/alterar-classe" component={AlterarClasse} />
-    <Route path="/criar-classe" component={CadastrarClasse} />
+    <Route path="/cadastrar-classe" component={CadastrarClasse} />
     <Route path="/listar-classes" component={ListarClasses} />
 
     <Route path="/alunado" component={Alunado} />
