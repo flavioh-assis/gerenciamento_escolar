@@ -1,0 +1,39 @@
+.menu {
+  background: var(--blue);
+  border-right: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-align: left;
+  min-width: 25rem;
+}
+
+.menu-div {
+  background: var(--blue);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.menu-div p {
+  color: #fff;
+  padding: 1rem 0 1rem 1.5rem;
+}
+
+.menu-div a {
+  background: var(--green);
+  border-bottom: 1px solid #fff;
+  color: var(--blue);
+  font-weight: 700;
+  padding: 1rem 0 1rem 3rem;
+  text-decoration: none;
+  transition: 0.4s;
+  width: 100%;
+}
+
+.menu-div a:hover {
+  background: #52e728;
+  text-decoration: underline;
+  opacity: 1;
+}

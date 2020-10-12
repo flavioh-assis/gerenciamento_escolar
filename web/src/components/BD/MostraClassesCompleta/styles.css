@@ -1,0 +1,20 @@
+.mostra-classes-completa {
+  background: #bbb;
+  border-radius: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr 1fr 0.94fr;
+  height: 55vh;
+  margin: 0 auto;
+  max-width: 90rem;
+}
+
+.mostra-classes-completa p {
+  background: #fff;
+  border-radius: 0.5rem;
+  font: 100 2rem Archivo;
+  padding: 0.5rem 1rem;
+}
+
+.mostra-classes-completa :not(:first-child) {
+  margin: 0 0 0 1rem;
+}

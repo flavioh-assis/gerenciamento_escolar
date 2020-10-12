@@ -1,0 +1,122 @@
+.dados-pesquisa-alunos {
+  padding: 1vh 0 1vh 0;
+}
+
+.dados-pesquisa-alunos p {
+  font: 600 2.5rem Poppins;
+  text-align: center;
+  margin: 2rem auto 0 auto;
+}
+
+.dados-pesquisa-alunos .input-block input {
+  height: 5rem;
+  padding: 0 1rem;
+}
+
+.dados-pesquisa-alunos .select-block select {
+  height: 5rem;
+  padding: 0 1rem;
+}
+
+.dados-pesquisa-alunos .dados {
+  background: #ccc;
+  display: grid;
+  grid-column-gap: 1rem;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-areas:
+    'aluno aluno aluno aluno aluno aluno'
+    'ra rm nee nee ano turma'
+    'professor professor bairro bairro cidade cidade';
+  margin: 0 auto;
+  max-width: 90rem;
+}
+
+.dados-pesquisa-alunos .buttons {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 2vh auto 2vh auto;
+}
+
+.dados-pesquisa-alunos .buttons input {
+  align-items: center;
+  border-radius: 0.8rem;
+  border-width: 0;
+  display: flex;
+  font: 700 2rem Archivo;
+  height: 5.6rem;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  width: 11.5rem;
+}
+
+#btn-pesquisar {
+  background: var(--green);
+  color: var(--blue);
+  margin-right: 1rem;
+  width: 20rem;
+}
+
+#btn-pesquisar:hover {
+  background: #52e728;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#btn-limpar {
+  background: var(--blue);
+  color: #fff;
+  margin-left: 1rem;
+  width: 20rem;
+}
+
+#btn-limpar:hover {
+  background-color: #3071f3;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.professor {
+  grid-area: professor;
+}
+
+.ano {
+  grid-area: ano;
+}
+
+.turma {
+  grid-area: turma;
+}
+
+.bairro {
+  grid-area: bairro;
+}
+
+.cidade {
+  grid-area: cidade;
+}
+
+.aluno {
+  grid-area: aluno;
+}
+
+.rm {
+  grid-area: rm;
+}
+
+.ra {
+  grid-area: ra;
+}
+
+.pai {
+  grid-area: pai;
+}
+
+.mae {
+  grid-area: mae;
+}
+
+.nee {
+  grid-area: nee;
+}

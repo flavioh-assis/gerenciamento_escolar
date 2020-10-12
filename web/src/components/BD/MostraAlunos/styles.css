@@ -1,0 +1,20 @@
+.mostra-alunos {
+  background: #bbb;
+  border-radius: 0.5rem;
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 2fr 1fr 1fr;
+  height: 25vh;
+  margin: 0 auto 5vh auto;
+  max-width: 90rem;
+}
+
+.mostra-alunos p {
+  background: #fff;
+  border-radius: 0.5rem;
+  font: 100 2rem Archivo;
+  padding: 0.5rem 1rem;
+}
+
+.mostra-alunos :not(:first-child) {
+  margin: 0 0 0 1rem;
+}
