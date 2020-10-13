@@ -16,7 +16,7 @@ export default () => (
     <div className="menu-div">
       <p>Classes</p>
       <Link to="/alterar-classe">Alterar</Link>
-      <Link to="/criar-classe">Cadastrar</Link>
+      <Link to="/cadastrar-classe">Cadastrar</Link>
       <Link to="/listar-classes">Listar</Link>
     </div>
   </div>
