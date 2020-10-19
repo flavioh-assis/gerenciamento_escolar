@@ -8,7 +8,7 @@ export async function up(knex: Knex) {
     table.date('data_fim').nullable()
     table.string('ano_letivo').notNullable()
     table.string('classe').nullable()
-    table.string('status').notNullable()
+    table.string('status').nullable()
     table.string('num_chamada').nullable()
     table.integer('idade').notNullable()
   })
