@@ -9,7 +9,6 @@ import './styles.css'
 export default () => {
   return (
     <form action="" method="post" className="dados-alunos">
-    {/* <div className="dados-alunos"> */}
       <p>IDENTIFICAÇÃO</p>
       <div className="identificaçao">
         <div className="item aluno">
@@ -199,7 +198,6 @@ export default () => {
         </div>
 
         <div className="telefones">
-          {/* <Input label="Telefone" name="telefone" value="" /> */}
           <textarea
             name="telefones"
             placeholder="Telefones"
@@ -207,7 +205,6 @@ export default () => {
         </div>
 
         <div className="observaçoes">
-          {/* <Input label="Observação" name="observaçao" value="" /> */}
           <textarea
             name="observaçoes"
             placeholder="Observações"
@@ -221,7 +218,7 @@ export default () => {
           <Input label="Escola" name="escola" value="EMEB. 'Antônio Joaquim da Silva'" />
         </div>
         <div className="cidade">
-          <Input label="Cidade" name="cidade" value="Cravinhos" />
+          <Input label="Cidade" name="cidade" value="Ribeirão Preto" />
         </div>
 
         <div className="ano-proc">
@@ -254,11 +251,23 @@ export default () => {
             label="Ano Desejado"
             name="ano-desejado"
             options={[
-              { value: '1º ano', label: '1º ano' },
-              { value: '2º ano', label: '2º ano' },
-              { value: '3º ano', label: '3º ano' },
-              { value: '4º ano', label: '4º ano' },
-              { value: '5º ano', label: '5º ano' }
+              { value: '1º', label: '1º ano' },
+              { value: '2º', label: '2º ano' },
+              { value: '3º', label: '3º ano' },
+              { value: '4º', label: '4º ano' },
+              { value: '5º', label: '5º ano' }
+            ]}
+          />
+        </div>
+        <div className="turma">
+          <Select
+            label="Turma"
+            name="turma"
+            options={[
+              { value: 'A', label: 'A' },
+              { value: 'B', label: 'B' },
+              { value: 'C', label: 'C' },
+              { value: 'D', label: 'D' },
             ]}
           />
         </div>
@@ -270,7 +279,6 @@ export default () => {
         {/* <button type="submit"></button> */}
         {/* <button type="button" id="btn-limpar">Limpar Campos</button> */}
       </div>
-      {/* </div> */}
     </form>
   )
 }
