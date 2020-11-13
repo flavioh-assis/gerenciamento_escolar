@@ -8,7 +8,7 @@ export async function up(knex: Knex) {
     table.string('periodo').notNullable()
     table.string('sala').notNullable()
     table.string('professor').nullable()
-    table.string('status').notNullable()
+    table.string('situaçao').notNullable()
     table.string('ano_letivo').notNullable()
   })
 }
