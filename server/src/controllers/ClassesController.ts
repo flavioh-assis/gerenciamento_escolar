@@ -5,27 +5,33 @@ export default class ClassesController {
   async index(req: Request, res: Response) {
     const currentYear = new Date().getFullYear()
 
-    const classes = await db('tbClasses')
-      .where('tbClasses.status', '=', 'ATIVO')
-      .andWhere('tbClasses.ano_letivo', '=', currentYear)
+    try {
+      const classes = await db('tbClasses')
+        .where('tbClasses.situaçao', '=', 'ATIVO')
+        .andWhere('tbClasses.ano_letivo', '=', currentYear)
 
-    return res.json(classes)
+      return res.json(classes)
+    } catch (err) {
+      return res.status(400).json({
+        error: err,
+      })
+    }
   }
   async create(req: Request, res: Response) {
     const currentYear = new Date().getFullYear()
-    
+
     const {
       ano,
       turma,
       periodo,
       sala,
       professor,
-      status,
-      ano_letivo
+      situaçao,
+      ano_letivo,
     } = req.body
-  
+
     const trx = await db.transaction()
-  
+
     try {
       await trx('tbClasses').insert({
         ano,
@@ -33,19 +39,18 @@ export default class ClassesController {
         periodo,
         sala,
         professor,
-        status: 'ATIVO',
-        ano_letivo: currentYear
+        situaçao: 'ATIVO',
+        ano_letivo: String(currentYear),
       })
-  
+
       await trx.commit()
-    
+
       return res.status(201).send()
-  
     } catch (err) {
       await trx.rollback()
-  
+
       return res.status(400).json({
-        error: 'Erro ao cadastrar a classe'
+        error: err,
       })
     }
   }
