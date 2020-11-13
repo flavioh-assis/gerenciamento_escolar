@@ -18,6 +18,8 @@
     "@types/knex": "^0.16.1",
     "express": "^4.17.1",
     "knex": "^0.21.6",
-    "pg": "^8.4.1"
+    "pg": "^8.4.1",
+    "react-data-table-component": "^6.11.5",
+    "styled-components": "^5.2.1"
   }
 }
