@@ -4,8 +4,7 @@ export async function up(knex: Knex) {
   return knex.schema.createTable('tbRm', table => {
     table.increments('rm').primary()
     table.string('aluno').notNullable()
-    table.string('ano_letivo').nullable()
-    table.date('data_nasc').nullable()
+    table.string('data_nasc').nullable()
     table.string('mae').nullable()
   })
 }
