@@ -26,31 +26,35 @@ export default class ClassesController {
       periodo,
       sala,
       professor,
-      situaçao,
-      ano_letivo,
+      // situaçao,
+      // ano_letivo,
     } = req.body
 
     const trx = await db.transaction()
 
     try {
-      await trx('tbClasses').insert({
-        ano,
-        turma,
-        periodo,
-        sala,
-        professor,
-        situaçao: 'ATIVO',
-        ano_letivo: String(currentYear),
-      })
+      const id = await trx('tbClasses')
+        .insert({
+          ano,
+          turma,
+          periodo,
+          sala,
+          professor,
+          situaçao: 'ATIVO',
+          ano_letivo: String(currentYear),
+        })
+        .returning('id')
 
       await trx.commit()
 
-      return res.status(201).send()
+      return res.status(201).json({
+        ID: Number(id),
+      })
     } catch (err) {
       await trx.rollback()
 
       return res.status(400).json({
-        error: err,
+        error: 'err',
       })
     }
   }
