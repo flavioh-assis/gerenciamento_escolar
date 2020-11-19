@@ -2,15 +2,16 @@ import { Request, Response } from 'express'
 import db from '../database/connection'
 
 export default class ClassesController {
-  async index(req: Request, res: Response) {
+  async index(req: Request, res: Response) {   
     const currentYear = new Date().getFullYear()
 
     try {
       const classes = await db('tbClasses')
-        .where('tbClasses.situaçao', '=', 'ATIVO')
-        .andWhere('tbClasses.ano_letivo', '=', currentYear)
-
+        .where('situaçao', '=', 'ATIVO')
+        .andWhere('ano_letivo', '=', currentYear)
+        
       return res.json(classes)
+      
     } catch (err) {
       return res.status(400).json({
         error: err,
@@ -26,8 +27,6 @@ export default class ClassesController {
       periodo,
       sala,
       professor,
-      // situaçao,
-      // ano_letivo,
     } = req.body
 
     const trx = await db.transaction()
@@ -40,6 +39,8 @@ export default class ClassesController {
           periodo,
           sala,
           professor,
+          ativos: 0,
+          total: 0,
           situaçao: 'ATIVO',
           ano_letivo: String(currentYear),
         })
