@@ -8,19 +8,20 @@ import SelecaoClasses from '../../components/SelecaoClasses'
 
 import './styles.css'
 
-export default () => (
-  <div className="container">
-    <Cabeçalho titulo="Cadastrar Classe" endereço="Classe > Cadastrar" />
-    
-    <div className="menu-conteudo">
-      <Menu />
+export default () => {
+  return (
+    <div className="container">
+      <Cabeçalho titulo="Cadastrar Classe" endereço="Classe > Cadastrar" />
 
-      <div className="conteudo">
-        <SelecaoClasses />
-        <MostraClasses />
+      <div className="menu-conteudo">
+        <Menu />
+
+        <div className="conteudo">
+          <SelecaoClasses />
+          <MostraClasses />
+        </div>
       </div>
-
+      <Rodape />
     </div>
-    <Rodape />
-  </div>
-)
+  )
+}
