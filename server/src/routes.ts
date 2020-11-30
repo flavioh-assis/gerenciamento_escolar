@@ -1,8 +1,10 @@
 import express from 'express'
+
 import AlunosController from './controllers/AlunosController'
 import ClassesController from './controllers/ClassesController'
 
 const routes  = express.Router()
+
 const alunosController = new AlunosController()
 const classesController = new ClassesController()
 
