@@ -9,9 +9,12 @@ import ListarClasses from './pages/ListarClasses'
 import MatricularAluno from './pages/MatricularAluno'
 import PesquisarAluno from './pages/PesquisarAluno'
 
+// import MostraClasses from './components/BD/MostraClasses'
+
 export default () => (
   <BrowserRouter>
-    <Route path="/" exact component={Alunado} />
+    <Route path="/" exact component={CadastrarClasse} />
+    {/* <routerReducer path="/" exact component={Alunado} /> */}
 
     <Route path="/alterar-classe" component={AlterarClasse} />
     <Route path="/cadastrar-classe" component={CadastrarClasse} />
