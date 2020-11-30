@@ -9,7 +9,8 @@ export default class ClassesController {
       const classes = await db('tbClasses')
         .where('situaçao', '=', 'ATIVO')
         .andWhere('ano_letivo', '=', currentYear)
-        
+        // .select('id', 'ano', 'turma', 'periodo', 'sala', 'professor')
+
       return res.json(classes)
       
     } catch (err) {

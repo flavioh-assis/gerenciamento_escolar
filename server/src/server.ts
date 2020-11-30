@@ -3,7 +3,6 @@ import routes from './routes'
 
 const app = express()
 
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -13,11 +12,6 @@ app.use(express.json())
 app.use(routes)
 
 app.listen(3333)
-
-// const classe = [
-//   {ano: '1º', turma: 'A', periodo: 'Manhã', sala: '06', professor: 'Adriana Bonavena'},
-//   {ano: '1º', turma: 'B', periodo: 'Tarde', sala: '06', professor: 'Ricardo'},
-// ]
 
 // GET: buscar ou listar alguma informaçao
 // POST: criar uma informaçao

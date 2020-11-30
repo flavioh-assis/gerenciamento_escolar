@@ -59,17 +59,6 @@ export default class AlunosController {
       .andWhere('professor', 'ilike', `${professor}%`)
       .andWhere('nee', 'like', `${nee}`)
 
-      .select(
-        'nome',
-        'ano',
-        'turma',
-        'tbAlunos.ra',
-        'rm',
-        'nee',
-        'professor',
-        'num_chamada'
-      )
-
     return res.json(alunos)
   }
 
