@@ -1,8 +1,5 @@
 .mostra-classes-completa {
   background: #bbb;
-  border-radius: 0.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr 1fr 0.94fr;
   height: 82%;
   margin: 0 auto;
   max-width: 90rem;

@@ -15,12 +15,11 @@ export default () => {
           <Input
             label="Nome do Aluno(a)"
             name="nome-aluno"
-            value="Vitor Augusto das Neves Martins de Almeida Santos"
+            value="Flavio henrique de Assis silva"
           />
         </div>
-
         <div className="item ra">
-          <Input label="RA" name="ra" className="ra" value="44.937.520-X" />
+          <Input label="RA" name="ra" className="ra" value="944.937.520-X" />
         </div>
         <div className="item rm">
           <Input label="RM" name="rm" className="item rm" value="12.345" />
@@ -39,6 +38,7 @@ export default () => {
             ]}
           />
         </div>
+        
         <div className="item ano">
           <Select
             label="Ano"
@@ -66,7 +66,6 @@ export default () => {
             ]}
           />
         </div>
-
         <div className="item professor">
           <Input
             label="Professor(a)"
@@ -74,11 +73,8 @@ export default () => {
             value="Adriana Bonavena"
           />
         </div>
-        <div className="bairro">
+        <div className="item bairro">
           <Input label="Bairro" name="bairro" value="Jardim Regina Volpato" />
-        </div>
-        <div className="cidade">
-          <Input label="Cidade" name="cidade" value="Cravinhos" />
         </div>
       </div>
 

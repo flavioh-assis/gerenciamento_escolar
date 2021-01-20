@@ -215,7 +215,7 @@ export default () => {
 
       <div className="buttons">
         <input type="submit" id="btn-matricular" value="Matricular Aluno"/>
-        <input type="button" id="btn-limpar" value="Limpar Campos"/>
+        <input type="button" id="btn-limpar" value="Limpar Campos" />
       </div>
     </form>
   )
