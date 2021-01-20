@@ -1,4 +1,4 @@
-.selecao-classes {
+.selecao-classes form {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr;
   column-gap: 2rem;
@@ -6,10 +6,11 @@
   max-width: 90rem;
 }
 
-.selecao-classes a {
+.selecao-classes .botao {
   align-items: center;
   background-color: var(--blue);
   border-radius: 0.8rem;
+  border-width: 0;
   color: #fff;
   display: flex;
   font: 700 2rem Archivo;
@@ -21,8 +22,9 @@
   width: 11.5rem;
 }
 
-.selecao-classes a:hover {
+.selecao-classes .botao:hover {
   background-color: var(--green);
   color: #000;
+  cursor: pointer;
   text-decoration: underline;
 }

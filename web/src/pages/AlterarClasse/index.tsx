@@ -4,7 +4,6 @@ import ClasseSelecionada from '../../components/ClasseSelecionada'
 import Menu from '../../components/Menu'
 import MostraClasses from '../../components/BD/MostraClasses'
 import Cabeçalho from '../../components/Cabeçalho'
-import Rodape from '../../components/Rodape'
 
 import './styles.css'
 
@@ -21,6 +20,5 @@ export default () => (
       </div>
 
     </div>
-    <Rodape />
   </div>
 )

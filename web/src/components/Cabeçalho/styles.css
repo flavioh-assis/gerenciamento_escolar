@@ -1,17 +1,16 @@
 .page-header {
   background: var(--blue);
-  border-bottom: 1px solid #FFF;
+  border-bottom: 1px solid #fff;
   display: flex;
   flex-direction: column;
-  /* height: 15rem; */
-  min-height: 15rem;
+  min-height: 10rem;
   width: 100vw;
 }
 
 .page-header .top-bar-container {
   display: flex;
   align-items: center;
-  color: #FFF;
+  color: #fff;
   justify-content: space-between;
   margin: 0 auto;
   padding: 1.6rem 0;
@@ -22,19 +21,10 @@
   align-items: flex-start;
   margin: 0 auto;
   padding: 0rem 1.6rem;
-  /* position: relative;
-  margin: 0 auto;
-  margin: 3.2rem auto;
-  width: 90%; */
-  /* display: flex; */
-  /* flex: 1; */
-  /* flex-direction: column; */
-  /* justify-content: center; */
-  /* max-width: 740px; */
 }
 
 .page-header .header-content strong {
   color: var(--color-title-in-primary);
-  font: 700 3.6rem Archivo;
-  line-height: 4.2rem;
+  font: 700 3rem Archivo;
+  line-height: 0;
 }

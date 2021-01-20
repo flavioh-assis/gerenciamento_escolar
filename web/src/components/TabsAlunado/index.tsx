@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppBar, Box, Typography, Tab, Tabs } from '@material-ui/core'
 
-import MostraAlunos from '../../components/BD/MostraAlunos'
+import MostraAlunosPesquisa from '../../components/BD/MostraAlunosPesquisa'
 
 import { useStyles, tabStyle } from './styles'
 
@@ -13,7 +13,7 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
-
+  
   return (
     <div
       role="tabpanel"
@@ -45,6 +45,27 @@ export default function ScrollableTabsButtonAuto() {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
+
+  const filtro: Array<string> = [
+    '?ano=1º&turma=A',
+    '?ano=1º&turma=B',
+    '?ano=1º&turma=C',
+    '?ano=1º&turma=D',
+    '?ano=2º&turma=A',
+    '?ano=2º&turma=B',
+    '?ano=2º&turma=C',
+    '?ano=2º&turma=D',
+    '?ano=3º&turma=A',
+    '?ano=3º&turma=B',
+    '?ano=3º&turma=C',
+    '?ano=4º&turma=A',
+    '?ano=4º&turma=B',
+    '?ano=4º&turma=C',
+    '?ano=4º&turma=D',
+    '?ano=5º&turma=A',
+    '?ano=5º&turma=B',
+    '?ano=5º&turma=C'
+  ]
 
   return (
     <div className={classes.root}>
@@ -81,25 +102,58 @@ export default function ScrollableTabsButtonAuto() {
       </AppBar>
 
       <TabPanel value={value} index={0}>
-        <MostraAlunos />
+        <MostraAlunosPesquisa filter={filtro[0]} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <MostraAlunos />
+        <MostraAlunosPesquisa filter={filtro[1]} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <MostraAlunos />
+        <MostraAlunosPesquisa filter={filtro[2]} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <MostraAlunos />
+        <MostraAlunosPesquisa filter={filtro[3]} />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <MostraAlunos />
+        <MostraAlunosPesquisa filter={filtro[4]} />
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <MostraAlunos />
+        <MostraAlunosPesquisa filter={filtro[5]} />
       </TabPanel>
       <TabPanel value={value} index={6}>
-        <MostraAlunos />
+        <MostraAlunosPesquisa filter={filtro[6]} />
+      </TabPanel>
+      <TabPanel value={value} index={7}>
+        <MostraAlunosPesquisa filter={filtro[7]} />
+      </TabPanel>
+      <TabPanel value={value} index={8}>
+        <MostraAlunosPesquisa filter={filtro[8]} />
+      </TabPanel>
+      <TabPanel value={value} index={9}>
+        <MostraAlunosPesquisa filter={filtro[9]} />
+      </TabPanel>
+      <TabPanel value={value} index={10}>
+        <MostraAlunosPesquisa filter={filtro[10]} />
+      </TabPanel>
+      <TabPanel value={value} index={11}>
+        <MostraAlunosPesquisa filter={filtro[11]} />
+      </TabPanel>
+      <TabPanel value={value} index={12}>
+        <MostraAlunosPesquisa filter={filtro[12]} />
+      </TabPanel>
+      <TabPanel value={value} index={13}>
+        <MostraAlunosPesquisa filter={filtro[13]} />
+      </TabPanel>
+      <TabPanel value={value} index={14}>
+        <MostraAlunosPesquisa filter={filtro[14]} />
+      </TabPanel>
+      <TabPanel value={value} index={15}>
+        <MostraAlunosPesquisa filter={filtro[15]} />
+      </TabPanel>
+      <TabPanel value={value} index={16}>
+        <MostraAlunosPesquisa filter={filtro[16]} />
+      </TabPanel>
+      <TabPanel value={value} index={17}>
+        <MostraAlunosPesquisa filter={filtro[17]} />
       </TabPanel>
     </div>
   )

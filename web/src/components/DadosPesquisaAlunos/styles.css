@@ -8,13 +8,7 @@
   margin: 2rem auto 0 auto;
 }
 
-.dados-pesquisa-alunos .input-block input {
-  height: 5rem;
-  padding: 0 1rem;
-}
-
-.dados-pesquisa-alunos .select-block select {
-  height: 5rem;
+.dados-pesquisa-alunos .input-block input, .select-block select {
   padding: 0 1rem;
 }
 
@@ -35,7 +29,7 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  margin: 2vh auto 2vh auto;
+  margin: 3vh auto 2vh auto;
 }
 
 .dados-pesquisa-alunos .buttons input {

@@ -8,7 +8,7 @@ export default class ClassesController {
     try {
       const classes = await db('tbClasses')
         .where('situaçao', '=', 'ATIVO')
-        .andWhere('ano_letivo', '=', currentYear)
+        .andWhere('ano_letivo', '=', '2020')
         // .select('id', 'ano', 'turma', 'periodo', 'sala', 'professor')
 
       return res.json(classes)
@@ -43,7 +43,8 @@ export default class ClassesController {
           ativos: 0,
           total: 0,
           situaçao: 'ATIVO',
-          ano_letivo: String(currentYear),
+          // ano_letivo: String(currentYear),
+          ano_letivo: '2020',
         })
         .returning('id')
 
@@ -56,7 +57,7 @@ export default class ClassesController {
       await trx.rollback()
 
       return res.status(400).json({
-        error: 'err',
+        error: err,
       })
     }
   }

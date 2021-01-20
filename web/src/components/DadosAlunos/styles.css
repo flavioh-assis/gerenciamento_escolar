@@ -1,5 +1,4 @@
 .dados-alunos {
-  padding: 1vh 0 1vh 0;
   width: 100%;
 }
 
@@ -9,36 +8,31 @@
   margin: 2rem auto 0 auto;
 }
 
-.dados-alunos .input-block input {
-  height: 5rem;
-  padding: 0 1rem;
-}
-
-.dados-alunos .select-block select {
-  height: 5rem;
+.dados-alunos .input-block input, .select-block select {
   padding: 0 1rem;
 }
 
 .dados-alunos .identificaçao {
-  background: #ccc;
+  background: var(--green);
+  background: var(--green);
+  border-radius: 1rem;
   display: grid;
   grid-column-gap: 1rem;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   grid-template-areas: 
-    "aluno aluno aluno aluno ra ra rm"
-    "localidade localidade localidade uf-nasc nacionalidade nacionalidade data-nasc"
-    "cert-nasc livro folha distrito distrito distrito distrito"
-    "comarca comarca comarca comarca uf-comarca nee nee"
-    "pai pai pai pai pai pai pai"
-    "mae mae mae mae mae mae mae"
-    "responsavel responsavel responsavel responsavel responsavel responsavel validade"
+    "aluno aluno aluno aluno aluno aluno ra ra rm rm nee nee"
+    "loca loca loca loca loca loca uf-nasc nac nac nac data-nasc data-nasc"
+    "pai pai pai pai pai pai mae mae mae mae mae mae"
+    "resp resp resp resp resp resp resp resp resp validade validade validade"
     ;
   margin: 0 auto;
   max-width: 90rem;
+  padding: 0 .5rem .5rem .5rem;
 }
 
 .dados-alunos .residencia {
-  background: #ccc;
+  background: var(--green);
+  border-radius: 1rem;
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(5, 1fr);
@@ -48,23 +42,12 @@
     ;
   margin: 0 auto;
   max-width: 90rem;
+  padding: 0 .5rem .1rem .5rem;
 }
 
-/* .dados-alunos .procedencia {
-  background: #ccc;
-  display: grid;
-  grid-column-gap: 1rem;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-areas: 
-    "escola escola escola cidade cidade"
-    "ano-proc ex-aluno ano-desejado turma turma"
-  ;
-  margin: 0 auto 2vh auto;
-  max-width: 90rem;
-} */
-
 .dados-alunos .procedencia {
-  background: #ccc;
+  background: var(--green);
+  border-radius: 1rem;
   display: grid;
   grid-column-gap: 1rem;
   grid-template-columns: 3.5fr 1.7fr 1.7fr 1fr 1.5fr 1fr;
@@ -73,6 +56,7 @@
   ;
   margin: 0 auto 2vh auto;
   max-width: 90rem;
+  padding: 0 .5rem .5rem .5rem;
 }
 
 .dados-alunos .buttons {
@@ -104,6 +88,7 @@
 
 #btn-matricular:hover {
   background: #52e728;
+  cursor: pointer;
   text-decoration: underline;
 }
 
@@ -116,19 +101,26 @@
 
 #btn-limpar:hover {
   background-color: #3071f3;
+  cursor: pointer;
   text-decoration: underline;
 }
 
-.telefones textarea {
+.dados-alunos textarea {
+  border: 1px solid var(--color-line-in-white);
+  border-radius: 0.8rem;
+  color: #000;
+  font: 1.6rem Archivo;
   height: 5rem;
-  resize: vertical;
-  width: 35.5rem;
+  resize: none;
+  padding: .5rem 1rem;
+}
+
+.telefones textarea {
+  width: 35rem;
 }
 
 .observaçoes textarea {
-  height: 5rem;
-  resize: vertical;
-  width: 53.5rem;
+  width: 53rem;
 }
 
 .telefones {
@@ -184,7 +176,7 @@
 }
 
 .localidade {
-  grid-area: localidade;
+  grid-area: loca;
 }
 
 .uf-nasc {
@@ -192,7 +184,7 @@
 }
 
 .nacionalidade {
-  grid-area: nacionalidade;
+  grid-area: nac;
 }
 
 .data-nasc {
@@ -232,7 +224,7 @@
 }
 
 .responsavel {
-  grid-area: responsavel;
+  grid-area: resp;
 }
 
 .validade {

@@ -4,6 +4,7 @@
   flex: 1;
   flex-direction: column;
   height: 100vh;
+  color: #000;
 }
 
 .menu-conteudo {

@@ -15,8 +15,6 @@ const Cabeçalho: React.FC<PageHeaderProps> = props => (
 
     <div className="header-content">
       <strong>{props.titulo}</strong>
-      {/* <strong>Criar Classe</strong> */}
-      {/* {props.children} */}
     </div>
   </header>
 )

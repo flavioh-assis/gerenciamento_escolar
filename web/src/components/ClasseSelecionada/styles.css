@@ -6,10 +6,11 @@
   max-width: 90rem;
 }
 
-.classe-selecao a {
+.classe-selecao .botao {
   align-items: center;
   background-color: var(--blue);
   border-radius: 0.8rem;
+  border-width: 0;
   color: #fff;
   display: flex;
   font: 700 2rem Archivo;
@@ -21,11 +22,13 @@
   width: 11.5rem;
 }
 
-.classe-selecao a:hover {
+.classe-selecao .botao:hover {
   background-color: var(--green);
   color: #000;
+  cursor: pointer;
   text-decoration: underline;
 }
+
 
 .input-block {
   min-width: 10.5rem;

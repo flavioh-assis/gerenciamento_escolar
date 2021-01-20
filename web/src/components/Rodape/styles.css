@@ -3,11 +3,12 @@
   border-top: 1px solid #FFF;
   display: flex;
   width: 100vw;
+  max-height: 5rem;
 }
 
 .rodape strong {
   color: #fff;
   font: 500 2rem Archivo;
   line-height: 4.2rem;
-  margin: 2rem auto;
+  margin: auto auto;
 }

@@ -1,20 +1,6 @@
 .mostra-classes {
-  background: #bbb;
-  /* border-radius: 20rem; */
-  /* display: grid; */
-  /* grid-template-columns: 1fr 1fr 1fr 1fr 2fr 0.7fr; */
-  height: 61vh;
+  background: #ccc;
+  height: 71.3%;
   margin: 3vh auto 0 auto;
   max-width: 90rem;
 }
-
-/* .mostra-classes p {
-  background: #fff;
-  border-radius: 0.5rem;
-  font: 100 2rem Archivo;
-  padding: 0.5rem 1rem;
-}
-
-.mostra-classes :not(:first-child) {
-  margin: 0 0 0 1rem;
-} */

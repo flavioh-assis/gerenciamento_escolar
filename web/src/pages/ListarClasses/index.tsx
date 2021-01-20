@@ -3,7 +3,6 @@ import React from 'react'
 import Menu from '../../components/Menu'
 import MostraClassesCompleta from '../../components/BD/MostraClassesCompleta'
 import Cabeçalho from '../../components/Cabeçalho'
-import Rodape from '../../components/Rodape'
 
 import './styles.css'
 
@@ -19,6 +18,5 @@ export default () => (
       </div>
 
     </div>
-    <Rodape />
   </div>
 )

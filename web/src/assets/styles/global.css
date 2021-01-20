@@ -71,3 +71,39 @@ textarea {
     font-size: 62.5%;
   }
 } */
+
+.MuiDataGrid-columnsContainer {
+  background: var(--blue);
+  color: #fff;
+  font: 100 1.7rem Poppins;
+}
+
+.MuiDataGrid-window {
+  background: var(--green);
+  color: #000;
+  font: 100 1.6rem Archivo;
+}
+
+.MuiDataGrid-footer.MuiDataGrid-footer-justifyContentEnd {
+  background: var(--blue);
+}
+
+.MuiDataGrid-footer.MuiDataGrid-footer-paginationAvailable {
+  background: var(--blue);
+  font-size: 0;
+}
+
+.MuiTablePagination-caption.MuiTypography-body2 {
+  border-radius: 0.5rem;
+  color: #fff;
+  font: 100 2rem Archivo;
+  font-size: 2rem;
+}
+
+.MuiButtonBase-root.MuiIconButton-root {
+  color: #fff;
+}
+
+.MuiButtonBase-root.MuiIconButton-root .MuiSvgIcon-root {
+  font-size: 2.5rem;
+}
