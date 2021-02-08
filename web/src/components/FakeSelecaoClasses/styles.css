@@ -1,0 +1,30 @@
+.selecao-classes form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr;
+  column-gap: 2rem;
+  margin: 0 auto;
+  max-width: 90rem;
+}
+
+.selecao-classes .botao {
+  align-items: center;
+  background-color: var(--blue);
+  border-radius: 0.8rem;
+  border-width: 0;
+  color: #fff;
+  display: flex;
+  font: 700 2rem Archivo;
+  height: 5.6rem;
+  justify-content: center;
+  margin-top: 2.4rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  width: 11.5rem;
+}
+
+.selecao-classes .botao:hover {
+  background-color: var(--green);
+  color: #000;
+  cursor: pointer;
+  text-decoration: underline;
+}

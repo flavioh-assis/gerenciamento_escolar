@@ -1,8 +1,9 @@
 import React from 'react'
 
+import Cabeçalho from '../../components/Cabeçalho'
+import FakeSelecaoClasses from '../../components/FakeSelecaoClasses'
 import Menu from '../../components/Menu'
 import MostraClassesCompleta from '../../components/BD/MostraClassesCompleta'
-import Cabeçalho from '../../components/Cabeçalho'
 
 import './styles.css'
 
@@ -14,6 +15,7 @@ export default () => (
       <Menu />
 
       <div className="listar-classe">
+        <FakeSelecaoClasses/>
         <MostraClassesCompleta />
       </div>
 
