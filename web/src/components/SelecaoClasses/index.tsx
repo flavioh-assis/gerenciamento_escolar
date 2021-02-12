@@ -7,34 +7,38 @@ import Select from '../../components/Select'
 import './styles.css'
 
 export default () => {
-  const [ano, setAno] = useState('2º')
-  const [turma, setTurma] = useState('A')
-  const [periodo, setPeriodo] = useState('Manhã')
-  const [sala, setSala] = useState('07')
-  const [professor, setProfessor] = useState('Angélica')
+  const [ano, setAno] = useState('')
+  const [turma, setTurma] = useState('')
+  const [periodo, setPeriodo] = useState('')
+  const [sala, setSala] = useState('')
+  const [professor, setProfessor] = useState('')
 
   function handleCadastrar(e: FormEvent) {
     e.preventDefault()
 
-    api.post('classes', {
-      ano,
-      turma,
-      periodo,
-      sala,
-      professor
-    })
-    .then(() => {
-      alert('Cadastro feito com sucesso!')
-    })
-    .catch(error => {
-      alert('Deu ruim: ' + error)
-    })
-}
+    if ([ano, turma, periodo, sala].includes('')) {
+      alert('ERRO! Preencha os campos ANO, TURMA, PERÍODO e SALA.')
+    } else {
+      api
+        .post('classes', {
+          ano,
+          turma,
+          periodo,
+          sala,
+          professor
+        })
+        .then(() => {
+          alert('Cadastro feito com sucesso!')
+        })
+        .catch(error => {
+          alert('Deu ruim: ' + error)
+        })
+    }
+  }
 
   return (
     <div className="selecao-classes">
       <form onSubmit={handleCadastrar}>
-
         <Select
           name="ano"
           label="Ano"

@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppBar, Box, Typography, Tab, Tabs } from '@material-ui/core'
 
 import MostraAlunado from '../../components/BD/MostraAlunado'
+
+import api from '../../services/api'
 
 import { useStyles, tabStyle } from './styles'
 
@@ -13,7 +15,7 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
-  
+
   return (
     <div
       role="tabpanel"
@@ -31,7 +33,7 @@ function TabPanel(props: TabPanelProps) {
   )
 }
 
-function a11yProps(index: any) {
+function a11yProps(index: number) {
   return {
     id: `scrollable-auto-tab-${index}`,
     'aria-controls': `scrollable-auto-tabpanel-${index}`
@@ -40,32 +42,61 @@ function a11yProps(index: any) {
 
 export default function ScrollableTabsButtonAuto() {
   const classes = useStyles()
-  const [value, setValue] = React.useState(0)
+  const [value, setValue] = useState(0)
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue)
   }
 
-  const filtro: Array<string> = [
-    '?ano=1º&turma=A',
-    '?ano=1º&turma=B',
-    '?ano=1º&turma=C',
-    '?ano=1º&turma=D',
-    '?ano=2º&turma=A',
-    '?ano=2º&turma=B',
-    '?ano=2º&turma=C',
-    '?ano=2º&turma=D',
-    '?ano=3º&turma=A',
-    '?ano=3º&turma=B',
-    '?ano=3º&turma=C',
-    '?ano=4º&turma=A',
-    '?ano=4º&turma=B',
-    '?ano=4º&turma=C',
-    '?ano=4º&turma=D',
-    '?ano=5º&turma=A',
-    '?ano=5º&turma=B',
-    '?ano=5º&turma=C'
-  ]
+  // const filtro: Array<string> = [
+  //   '?ano=1º&turma=A',
+  //   '?ano=1º&turma=B',
+  //   '?ano=1º&turma=C',
+  //   '?ano=1º&turma=D',
+  //   '?ano=2º&turma=A',
+  //   '?ano=2º&turma=B',
+  //   '?ano=2º&turma=C',
+  //   '?ano=2º&turma=D',
+  //   '?ano=3º&turma=A',
+  //   '?ano=3º&turma=B',
+  //   '?ano=3º&turma=C',
+  //   '?ano=4º&turma=A',
+  //   '?ano=4º&turma=B',
+  //   '?ano=4º&turma=C',
+  //   '?ano=4º&turma=D',
+  //   '?ano=5º&turma=A',
+  //   '?ano=5º&turma=B',
+  //   '?ano=5º&turma=C'
+  // ]
+
+  interface classeProps {
+    push: any
+    forEach: any
+    // val: any
+    map: any
+    sort: any
+    [id: number]: { ano: string; turma: string }
+  }
+  const [list, setList] = useState<classeProps>([])
+  const [listSorted, setListSorted] = useState<classeProps>([])
+
+  useEffect(() => {
+    api.get('classes').then(response => {
+      setList(response.data)
+      console.log(response.data)
+    })
+    // setList([
+    //   { ano: '1º', turma: 'A' },
+    //   { ano: '1º', turma: 'B' },
+    //   { ano: '1º', turma: 'C' },
+    //   { ano: '1º', turma: 'D' },
+    // ])
+  }, [list])
+
+  useEffect(() => {
+    // const myClonedArray = []
+    list.forEach(val => listSorted.push(Object.assign({}, val)))
+  }, [listSorted])
 
   return (
     <div className={classes.root}>
@@ -78,9 +109,22 @@ export default function ScrollableTabsButtonAuto() {
           variant="scrollable"
           scrollButtons="auto"
           aria-label="Classes"
-          centered
+          // centered
         >
-          <Tab label="1º ano A" {...a11yProps(0)} style={tabStyle} />
+          {list.map((item: { ano: string; turma: string; id: number }) => {
+            let classe = `${item.ano} ano ${item.turma}`
+
+            return (
+              <Tab
+                key={item.id}
+                label={classe}
+                {...a11yProps(item.id)}
+                style={tabStyle}
+              />
+            )
+          })}
+
+          {/* <Tab label="1º ano A" {...a11yProps(0)} style={tabStyle} />
           <Tab label="1º ano B" {...a11yProps(1)} style={tabStyle} />
           <Tab label="1º ano C" {...a11yProps(2)} style={tabStyle} />
           <Tab label="1º ano D" {...a11yProps(3)} style={tabStyle} />
@@ -97,11 +141,19 @@ export default function ScrollableTabsButtonAuto() {
           <Tab label="4º ano D" {...a11yProps(14)} style={tabStyle} />
           <Tab label="5º ano A" {...a11yProps(15)} style={tabStyle} />
           <Tab label="5º ano B" {...a11yProps(16)} style={tabStyle} />
-          <Tab label="5º ano C" {...a11yProps(17)} style={tabStyle} />
+          <Tab label="5º ano C" {...a11yProps(17)} style={tabStyle} /> */}
         </Tabs>
       </AppBar>
 
-      <TabPanel value={value} index={0}>
+      {list.map((item: { ano: string; turma: string; id: number }) => {
+        return (
+          <TabPanel key={item.id} value={value} index={item.id}>
+            <MostraAlunado filter={`?ano=${item.ano}&turma=${item.turma}`} />
+          </TabPanel>
+        )
+      })}
+
+      {/* <TabPanel value={value} index={0}>
         <MostraAlunado filter={filtro[0]} />
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -154,7 +206,7 @@ export default function ScrollableTabsButtonAuto() {
       </TabPanel>
       <TabPanel value={value} index={17}>
         <MostraAlunado filter={filtro[17]} />
-      </TabPanel>
+      </TabPanel> */}
     </div>
   )
 }
