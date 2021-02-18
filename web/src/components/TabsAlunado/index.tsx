@@ -93,10 +93,10 @@ export default function ScrollableTabsButtonAuto() {
     // ])
   }, [list])
 
-  useEffect(() => {
-    // const myClonedArray = []
-    list.forEach(val => listSorted.push(Object.assign({}, val)))
-  }, [listSorted])
+  // useEffect(() => {
+  //   // const myClonedArray = []
+  //   list.forEach(val => listSorted.push(Object.assign({}, val)))
+  // }, [listSorted])
 
   return (
     <div className={classes.root}>
