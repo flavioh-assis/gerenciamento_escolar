@@ -1,6 +1,18 @@
 .mostra-classes {
   background: #ccc;
-  height: 71.3%;
   margin: 3vh auto 0 auto;
   max-width: 90rem;
+}
+
+.excluir_icon {
+  height: 2.5rem;
+}
+
+.mostra-classes .excluir {
+  height: 4rem;
+  min-width: 6rem;
+}
+
+.mostra-classes .excluir:hover {
+  background-color: #d62d2d;
 }

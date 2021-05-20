@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import db from '../database/connection'
+import moment from 'moment'
 
 export default class AlunosController {
   async index(req: Request, res: Response) {
@@ -17,14 +18,10 @@ export default class AlunosController {
       var ra = filters.ra as string
     }
 
-    if (!filters.rm) {
-      var rm = '%'
-    } else {
-      var rm = filters.rm as string
-    }
-
     if (!filters.nee) {
       var nee = '%'
+    } else if (filters.nee == 'Qualquer') {
+      var nee = '%a%'
     } else {
       var nee = filters.nee as string
     }
@@ -48,16 +45,29 @@ export default class AlunosController {
     }
 
     const alunos = await db('tbAlunos')
-      .join('tbMatriculas', 'tbMatriculas.ra', '=', 'tbAlunos.ra')
-      .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.classe_id')
+      .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
+      .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
+      .join('tbRm', 'tbRm.id', '=', 'tbAlunos.id_rm')
 
       .where('nome', 'ilike', `${nome}%`)
       .andWhere('tbAlunos.ra', 'like', `${ra}`)
-      .andWhere('rm', 'like', `${rm}`)
-      .andWhere('tbClasses.ano', 'ilike', `${ano}`)
-      .andWhere('tbClasses.turma', 'ilike', `${turma}`)
+      .andWhere('nee', 'ilike', `${nee}`)
+      .andWhere('ano', 'like', `${ano}`)
+      .andWhere('turma', 'like', `${turma}`)
       .andWhere('professor', 'ilike', `${professor}%`)
-      .andWhere('nee', 'like', `${nee}`)
+      .select(
+        'tbAlunos.id as id',
+        'num_chamada',
+        'nome',
+        'ra',
+        'tbRm.id as rm',
+        'nee',
+        'tbAlunos.nasc_data',
+        'ano',
+        'turma',
+        'professor',
+        'situacao'
+      )
 
     return res.json(alunos)
   }
@@ -70,113 +80,96 @@ export default class AlunosController {
       nasc_uf,
       nacionalidade,
       nasc_data,
-      cert_numero,
-      cert_livro,
-      cert_folha,
-      distrito,
-      comarca,
-      comarca_uf,
       nee,
       pai,
       mae,
-      resp_nome,
-      resp_validade,
-      endereço,
+      responsavel,
+      endereco,
       bairro,
       cidade,
       telefones,
-      observaçoes,
+      obs,
       proc_escola,
       proc_cidade,
       proc_ano,
       ex_aluno,
       ano_desejado,
-      
-      data_inicio,
-      data_fim,
-      ano_letivo,
-      ano,
       turma,
-      situaçao,
-      idade,
     } = req.body
+
+    const toDate = new Date()
+    const today = moment(toDate).format('DD/MM/YYYY')
+
+    const yearNasc = nasc_data.substr(6, 4)
 
     const trx = await db.transaction()
 
     try {
-      const rm_gerado = await trx('tbRm')
+      const id_rm = await trx('tbRm')
         .insert({
           aluno: nome,
-          data_nasc: nasc_data,
-          mae,
+          nasc_data,
         })
-        .returning('rm')
+        .returning('id')
 
-      await trx('tbAlunos').insert({
-        nome,
-        ra,
-        rm: String(rm_gerado[0]),
-        nasc_cidade,
-        nasc_uf,
-        nacionalidade,
-        nasc_data,
-        cert_numero,
-        cert_livro,
-        cert_folha,
-        distrito,
-        comarca,
-        comarca_uf,
-        nee,
-        pai,
-        mae,
-        resp_nome,
-        resp_validade,
-        endereço,
-        bairro,
-        cidade,
-        telefones,
-        observaçoes,
-        proc_escola,
-        proc_cidade,
-        proc_ano,
-        ex_aluno,
-        ano_desejado,
-      })
-
-      const sel_id_classe = trx('tbClasses')
-        .where('ano', '=', `${ano}`)
+      const id_classe = trx('tbClasses')
+        .where('ano', '=', `${ano_desejado}`)
         .andWhere('turma', '=', `${turma}`)
-        .select('id')
+        // .select('id')
+        .distinct('id')
 
-      const id_classe = await trx('tbClasses')
-        .increment('ativos', 1)
-        .where('id', 'in', sel_id_classe)
+      const id_aluno = await trx('tbAlunos')
+        .insert({
+          nome,
+          ra,
+          id_rm: id_rm[0],
+          nasc_cidade,
+          nasc_uf,
+          nacionalidade,
+          nasc_data,
+          nee,
+          pai,
+          mae,
+          responsavel,
+          endereco,
+          bairro,
+          cidade,
+          telefones,
+          obs,
+          proc_escola,
+          proc_cidade,
+          proc_ano,
+          ex_aluno,
+          ano_desejado,
+        })
         .returning('id')
 
       const n_chamada = await trx('tbClasses')
-        .increment('total', 1)
-        .where('id', 'in', sel_id_classe)
-        .returning('total')
+        .increment('n_ativos', 1)
+        .increment('n_total', 1)
+        .where('id', '=', id_classe)
+        .returning('n_total')
 
-      await trx('tbMatriculas').insert({
-        ra,
-        data_inicio,
-        data_fim,
-        ano_letivo,
-        classe_id: id_classe[0],
-        situaçao,
-        num_chamada: n_chamada[0],
-        idade,
-      })
+      await trx('tbMatriculas')
+        .insert({
+          id_aluno: id_aluno[0],
+          data_inicio: today,
+          data_fim: null,
+          situacao: 'ATIVO',
+          num_chamada: n_chamada[0],
+          idade: (2021 - yearNasc) as Number,
+          id_classe,
+        })
+        .returning('id')
 
       await trx.commit()
 
       return res.status(201).json({
-        RM: rm_gerado[0],
         Total: n_chamada[0],
       })
     } catch (err) {
       await trx.rollback()
+      console.log(err)
 
       return res.status(400).json({
         error: 'Deu ruim',

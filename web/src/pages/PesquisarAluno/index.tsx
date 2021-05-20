@@ -1,14 +1,12 @@
 import React from 'react'
 
 import Cabeçalho from '../../components/Cabeçalho'
-import DadosPesquisaAlunos from '../../components/DadosPesquisaAlunos'
+import DadosMostraPesqAlunos from '../../components/DadosMostraPesqAlunos'
 import Menu from '../../components/Menu'
-import MostraAlunosPesquisa from '../../components/BD/MostraAlunosPesquisa'
 
 import './styles.css'
 
 export default () => {
-  const filtro = '?nome=&'
 
   return (
     <div className="container">
@@ -18,8 +16,7 @@ export default () => {
         <Menu />
 
         <div className="pesquisar-aluno">
-          <DadosPesquisaAlunos />
-          <MostraAlunosPesquisa filter={filtro} />
+          <DadosMostraPesqAlunos/>
         </div>
       </div>
     </div>

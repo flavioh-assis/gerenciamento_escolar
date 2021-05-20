@@ -44,7 +44,7 @@ body,
 }
 
 body {
-  background-color: var(--color-background);
+  padding-left: calc(100vw - 100%);
 }
 
 #root {

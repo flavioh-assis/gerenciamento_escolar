@@ -21,8 +21,7 @@
   grid-template-areas: 
     "aluno aluno aluno aluno aluno aluno ra ra rm rm nee nee"
     "loca loca loca loca loca loca uf-nasc nac nac nac data-nasc data-nasc"
-    "pai pai pai pai pai pai mae mae mae mae mae mae"
-    "resp resp resp resp resp resp resp resp resp validade validade validade"
+    "pai pai pai pai mae mae mae mae resp resp resp resp"
     ;
   margin: 0 auto;
   max-width: 90rem;
@@ -41,7 +40,7 @@
     ;
   margin: 0 auto;
   max-width: 90rem;
-  padding: 0 .5rem .1rem .5rem;
+  padding: 0 .5rem 0 .5rem;
 }
 
 .dados-alunos .procedencia {

@@ -7,9 +7,9 @@ export default class ClassesController {
 
     try {
       const classes = await db('tbClasses')
-        .where('situaçao', '=', 'ATIVO')
-        .andWhere('ano_letivo', '=', '2020')
-        // .select('id', 'ano', 'turma', 'periodo', 'sala', 'professor')
+        .where('ano_letivo', '=', currentYear)
+        .orderBy('ano')
+        .orderBy('turma')
 
       return res.json(classes)
       
@@ -19,6 +19,7 @@ export default class ClassesController {
       })
     }
   }
+  
   async create(req: Request, res: Response) {
     const currentYear = new Date().getFullYear()
 
@@ -40,11 +41,9 @@ export default class ClassesController {
           periodo,
           sala,
           professor,
-          ativos: 0,
-          total: 0,
-          situaçao: 'ATIVO',
-          // ano_letivo: String(currentYear),
-          ano_letivo: '2020',
+          n_ativos: 0,
+          n_total: 0,
+          ano_letivo: currentYear,
         })
         .returning('id')
 
@@ -61,4 +60,16 @@ export default class ClassesController {
       })
     }
   }
+
+//   async delete(req: Request, res: Response) {
+//     const id = req.body
+
+//     const trx = await db.transaction()
+
+//     try {
+//       await trx('tbClasses')
+//       .delete()
+//     }
+//   }
+
 }

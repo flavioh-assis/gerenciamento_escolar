@@ -4,7 +4,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: '#bbb',
     flexGrow: 1,
-    width: '78.6vw'
+    margin: '0 auto',
+    width: '90rem',
   }
 }))
 

@@ -22,7 +22,7 @@ export default () => {
     api.get('alunos').then(response => {
       setAlunos(response.data)
     })
-  }, [alunos])
+  }, [])
 
   return (
     <div className="mostra-alunos">

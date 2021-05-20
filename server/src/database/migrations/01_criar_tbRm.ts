@@ -2,10 +2,9 @@ import Knex from 'knex'
 
 export async function up(knex: Knex) {
   return knex.schema.createTable('tbRm', table => {
-    table.increments('rm').primary()
-    table.string('aluno').notNullable()
-    table.string('data_nasc').nullable()
-    table.string('mae').nullable()
+    table.increments('id').primary()
+    table.string('aluno')
+    table.string('nasc_data')
   })
 }
 
