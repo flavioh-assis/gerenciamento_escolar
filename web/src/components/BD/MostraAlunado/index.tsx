@@ -7,14 +7,6 @@ import './styles.css'
 
 const columns: ColDef[] = [
   {
-    field: 'id',
-    headerName: 'ID',
-    width: 70,
-    hide: true,
-    align: 'center',
-    headerAlign: 'center',
-  },
-  {
     field: 'num_chamada',
     headerName: 'Nº',
     width: 60,
@@ -24,7 +16,7 @@ const columns: ColDef[] = [
   {
     field: 'nome',
     headerName: 'Nome',
-    width: 240,
+    width: 300,
     align: 'center',
     headerAlign: 'center',
   },
@@ -36,7 +28,7 @@ const columns: ColDef[] = [
     headerAlign: 'center',
   },
   {
-    field: 'rm',
+    field: 'id',
     headerName: 'RM',
     width: 60,
     align: 'center',
@@ -52,14 +44,14 @@ const columns: ColDef[] = [
   {
     field: 'situacao',
     headerName: 'Situação',
-    width: 110,
+    width: 130,
     align: 'center',
     headerAlign: 'center',
   },
   {
     field: 'nee',
     headerName: 'Deficiência',
-    width: 130,
+    width: 140,
     align: 'center',
     headerAlign: 'center',
   },

@@ -13,6 +13,7 @@ routes.post('/classes', classesController.create)
 // routes.delete('/classes', classesController.delete)
 
 routes.get('/alunos', alunosController.index)
+routes.get('/alunos_rm', alunosController.rm)
 routes.post('/alunos', alunosController.create)
 
 export default routes

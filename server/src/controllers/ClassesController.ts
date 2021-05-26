@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import db from '../database/connection'
 
 export default class ClassesController {
-  async index(req: Request, res: Response) {   
+  async index(req: Request, res: Response) {
     const currentYear = new Date().getFullYear()
 
     try {
@@ -12,29 +12,22 @@ export default class ClassesController {
         .orderBy('turma')
 
       return res.json(classes)
-      
     } catch (err) {
       return res.status(400).json({
         error: err,
       })
     }
   }
-  
+
   async create(req: Request, res: Response) {
     const currentYear = new Date().getFullYear()
 
-    const {
-      ano,
-      turma,
-      periodo,
-      sala,
-      professor,
-    } = req.body
+    const { ano, turma, periodo, sala, professor } = req.body
 
     const trx = await db.transaction()
 
     try {
-      const id = await trx('tbClasses')
+      await trx('tbClasses')
         .insert({
           ano,
           turma,
@@ -49,11 +42,10 @@ export default class ClassesController {
 
       await trx.commit()
 
-      return res.status(201).json({
-        ID: Number(id),
-      })
+      return res.status(201).json({})
     } catch (err) {
       await trx.rollback()
+      console.log(err)
 
       return res.status(400).json({
         error: err,
@@ -61,15 +53,14 @@ export default class ClassesController {
     }
   }
 
-//   async delete(req: Request, res: Response) {
-//     const id = req.body
+  //   async delete(req: Request, res: Response) {
+  //     const id = req.body
 
-//     const trx = await db.transaction()
+  //     const trx = await db.transaction()
 
-//     try {
-//       await trx('tbClasses')
-//       .delete()
-//     }
-//   }
-
+  //     try {
+  //       await trx('tbClasses')
+  //       .delete()
+  //     }
+  //   }
 }

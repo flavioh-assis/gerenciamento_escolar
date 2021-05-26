@@ -47,7 +47,6 @@ export default class AlunosController {
     const alunos = await db('tbAlunos')
       .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
       .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
-      .join('tbRm', 'tbRm.id', '=', 'tbAlunos.id_rm')
 
       .where('nome', 'ilike', `${nome}%`)
       .andWhere('tbAlunos.ra', 'like', `${ra}`)
@@ -60,9 +59,8 @@ export default class AlunosController {
         'num_chamada',
         'nome',
         'ra',
-        'tbRm.id as rm',
         'nee',
-        'tbAlunos.nasc_data',
+        'nasc_data',
         'ano',
         'turma',
         'professor',
@@ -105,24 +103,15 @@ export default class AlunosController {
     const trx = await db.transaction()
 
     try {
-      const id_rm = await trx('tbRm')
-        .insert({
-          aluno: nome,
-          nasc_data,
-        })
-        .returning('id')
-
       const id_classe = trx('tbClasses')
         .where('ano', '=', `${ano_desejado}`)
         .andWhere('turma', '=', `${turma}`)
-        // .select('id')
         .distinct('id')
 
       const id_aluno = await trx('tbAlunos')
         .insert({
           nome,
           ra,
-          id_rm: id_rm[0],
           nasc_cidade,
           nasc_uf,
           nacionalidade,
@@ -165,14 +154,28 @@ export default class AlunosController {
       await trx.commit()
 
       return res.status(201).json({
-        Total: n_chamada[0],
+        rm: id_aluno[0],
       })
     } catch (err) {
       await trx.rollback()
       console.log(err)
 
       return res.status(400).json({
-        error: 'Deu ruim',
+        error: 'Erro ao matricular aluno.',
+      })
+    }
+  }
+
+  async rm(req: Request, res: Response) {
+    try {
+      const newRM = await db('tbAlunos').max('id')
+
+      return res.json(newRM[0]['max'] + 1)
+
+    } catch (error) {
+
+      return res.status(400).json({
+        error: 'Erro ao retornar um novo RM.'
       })
     }
   }

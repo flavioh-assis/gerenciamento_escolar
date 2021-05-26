@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: '#bbb',
     flexGrow: 1,
     margin: '0 auto',
-    width: '90rem',
+    width: '100rem',
   }
 }))
 

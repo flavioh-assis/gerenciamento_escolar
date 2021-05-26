@@ -9,7 +9,6 @@ import Select from '../Select'
 import './styles.css'
 
 const columns: ColDef[] = [
-  { field: 'id', headerName: 'ID', width: 70, hide: true },
   {
     field: 'nome',
     headerName: 'Nome Completo',
@@ -51,7 +50,7 @@ const columns: ColDef[] = [
     headerAlign: 'center',
   },
   {
-    field: 'rm',
+    field: 'id',
     headerName: 'RM',
     width: 70,
     align: 'center',

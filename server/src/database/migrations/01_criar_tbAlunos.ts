@@ -5,7 +5,6 @@ export async function up(knex: Knex) {
     table.increments('id').primary()
     table.string('nome')
     table.string('ra')
-    table.integer('id_rm').references('id').inTable('tbRm')
     table.string('nasc_cidade')
     table.string('nasc_uf')
     table.string('nacionalidade')

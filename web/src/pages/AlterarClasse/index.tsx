@@ -2,7 +2,7 @@ import React from 'react'
 
 import ClasseSelecionada from '../../components/ClasseSelecionada'
 import Menu from '../../components/Menu'
-import MostraClasses from '../../components/BD/MostraClasses'
+import MostraClassesEditar from '../../components/BD/MostraClassesEditar'
 import Cabeçalho from '../../components/Cabeçalho'
 
 import './styles.css'
@@ -16,7 +16,7 @@ export default () => (
 
       <div className="conteudo">
         <ClasseSelecionada />
-        <MostraClasses />
+        <MostraClassesEditar />
       </div>
 
     </div>

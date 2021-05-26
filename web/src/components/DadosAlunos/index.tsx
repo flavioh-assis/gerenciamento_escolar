@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 
 import api from '../../services/api'
 import Input from '../Input'
@@ -32,15 +32,52 @@ export default () => {
         proc_ano,
         ex_aluno,
         ano_desejado,
-        turma
+        turma,
       })
-      .then(() => {
-        alert('Cadastro feito com sucesso!')
+      .then((res) => {
+        alert('Cadastro feito com sucesso!\nO RM gerado foi o '+ res.data.rm +'.')
+        newRM()
+        limparCampos()
       })
-      .catch(error => {
+      .catch((error) => {
         alert('Deu ruim: ' + error)
       })
   }
+
+  function newRM() {
+    api.get('/alunos_rm').then((res) => {
+      setRm(res.data)
+    })
+  }
+
+  function limparCampos() {
+    setNome('')
+    setRa('')
+    setRm('')
+    setNee('')
+    setLocalidade('')
+    setUfNasc('')
+    setNacionalidade('')
+    setDataNasc('')
+    setPai('')
+    setMae('')
+    setResponsavel('')
+    setEndereço('')
+    setBairro('')
+    setCidadeRes('')
+    setTelefones('')
+    setObservaçoes('')
+    setEscola('')
+    setCidadeProc('')
+    setAnoProc('')
+    setExAluno('')
+    setAnoDesejado('')
+    setTurma('')
+  }
+
+  useEffect(() => {
+    newRM()
+  }, [])
 
   const [nome, setNome] = useState('Flavio Henrique de Assis Silva')
   const [ra, setRa] = useState('144.937.520-X')
@@ -71,66 +108,66 @@ export default () => {
   const [turma, setTurma] = useState('A')
 
   return (
-    <form onSubmit={handleCadastrar} className="dados-alunos">
+    <form onSubmit={handleCadastrar} className='dados-alunos'>
       <p>IDENTIFICAÇÃO</p>
-      <div className="identificaçao">
-        <div className="item aluno">
+      <div className='identificaçao'>
+        <div className='item aluno'>
           <Input
-            label="Nome do Aluno"
-            name="nome-aluno"
-            onChange={t => setNome(t.target.value)}
+            label='Nome do Aluno'
+            name='nome-aluno'
+            onChange={(t) => setNome(t.target.value)}
             value={nome}
           />
         </div>
-        <div className="item ra">
+        <div className='item ra'>
           <Input
-            label="RA"
-            name="ra"
-            className="ra"
-            onChange={t => setRa(t.target.value)}
+            label='RA'
+            name='ra'
+            className='ra'
+            onChange={(t) => setRa(t.target.value)}
             value={ra}
           />
         </div>
-        <div className="item rm">
+        <div className='item rm'>
           <Input
-            label="RM"
-            name="rm"
-            className="item rm"
-            onChange={t => setRm(t.target.value)}
+            label='RM'
+            name='rm'
+            className='item rm'
+            onChange={(t) => setRm(t.target.value)}
             value={rm}
             disabled
           />
         </div>
-        <div className="item nee">
+        <div className='item nee'>
           <Select
             value={nee}
-            label="Deficiência"
-            name="nee"
-            onChange={e => setNee(e.target.value)}
+            label='Deficiência'
+            name='nee'
+            onChange={(e) => setNee(e.target.value)}
             options={[
               { value: '', label: 'Não Possui' },
               { value: 'Autismo', label: 'Autismo' },
               { value: 'Cadeirante', label: 'Cadeirante' },
               { value: 'Intelectual', label: 'Intelectual' },
-              { value: 'Múltipla', label: 'Múltipla' }
+              { value: 'Múltipla', label: 'Múltipla' },
             ]}
           />
         </div>
 
-        <div className="item localidade">
+        <div className='item localidade'>
           <Input
-            label="Localidade"
-            name="localidade"
-            onChange={t => setLocalidade(t.target.value)}
+            label='Cidade'
+            name='localidade'
+            onChange={(t) => setLocalidade(t.target.value)}
             value={nasc_cidade}
           />
         </div>
-        <div className="item uf-nasc">
+        <div className='item uf-nasc'>
           <Select
             value={nasc_uf}
-            label="UF"
-            name="uf-nasc"
-            onChange={e => setUfNasc(e.target.value)}
+            label='UF'
+            name='uf-nasc'
+            onChange={(e) => setUfNasc(e.target.value)}
             options={[
               { value: 'AC', label: 'AC' },
               { value: 'AL', label: 'AL' },
@@ -159,22 +196,22 @@ export default () => {
               { value: 'SC', label: 'SC' },
               { value: 'SE', label: 'SE' },
               { value: 'TO', label: 'TO' },
-              { value: 'EX', label: 'Est.' }
+              { value: 'EX', label: 'Est.' },
             ]}
           />
         </div>
-        <div className="item nacionalidade">
+        <div className='item nacionalidade'>
           <Input
-            label="Nacionalidade"
-            name="nacionalidade"
-            onChange={t => setNacionalidade(t.target.value)}
+            label='Nacionalidade'
+            name='nacionalidade'
+            onChange={(t) => setNacionalidade(t.target.value)}
             value={nacionalidade}
           />
         </div>
-        <div className="item data-nasc">
+        <div className='item data-nasc'>
           <Input
-            label="Data Nasc"
-            name="data-nasc"
+            label='Data Nasc.'
+            name='data-nasc'
             onChange={(t) => {
               setDataNasc(t.target.value)
 
@@ -186,101 +223,99 @@ export default () => {
           />
         </div>
 
-        <div className="item pai">
+        <div className='item pai'>
           <Input
-            label="Nome do Pai"
-            name="nome-pai"
-            onChange={t => setPai(t.target.value)}
+            label='Nome do Pai'
+            name='nome-pai'
+            onChange={(t) => setPai(t.target.value)}
             value={pai}
           />
         </div>
-        <div className="item mae">
+        <div className='item mae'>
           <Input
-            label="Nome da Mãe"
-            name="nome-mae"
-            onChange={t => setMae(t.target.value)}
+            label='Nome da Mãe'
+            name='nome-mae'
+            onChange={(t) => setMae(t.target.value)}
             value={mae}
           />
         </div>
-        <div className="item responsavel">
+        <div className='item responsavel'>
           <Input
-            label="Nome da Responsável Legal"
-            name="nome-resp-legal"
-            onChange={t => setResponsavel(t.target.value)}
+            label='Nome do Responsável Legal'
+            name='nome-resp-legal'
+            onChange={(t) => setResponsavel(t.target.value)}
             value={responsavel}
           />
         </div>
       </div>
 
       <p>RESIDÊNCIA</p>
-      <div className="residencia">
-        <div className="endereço">
+      <div className='residencia'>
+        <div className='endereço'>
           <Input
-            label="Endereço"
-            name="endereço"
-            onChange={t => setEndereço(t.target.value)}
+            label='Endereço'
+            name='endereço'
+            onChange={(t) => setEndereço(t.target.value)}
             value={endereco}
           />
         </div>
-        <div className="bairro">
+        <div className='bairro'>
           <Input
-            label="Bairro"
-            name="bairro"
-            onChange={t => setBairro(t.target.value)}
+            label='Bairro'
+            name='bairro'
+            onChange={(t) => setBairro(t.target.value)}
             value={bairro}
           />
         </div>
-        <div className="cidade">
+        <div className='cidade'>
           <Input
-            label="Cidade"
-            name="cidade"
-            onChange={t => setCidadeRes(t.target.value)}
+            label='Cidade'
+            name='cidade'
+            onChange={(t) => setCidadeRes(t.target.value)}
             value={cidade}
           />
         </div>
 
-        <div className="telefones">
+        <div className='telefones'>
           <textarea
-            name="telefones"
-            onChange={t => setTelefones(t.target.value)}
-            placeholder="Telefones"
-            value={telefones}
-          ></textarea>
+            name='telefones'
+            onChange={(t) => setTelefones(t.target.value)}
+            placeholder='Telefones'
+            value={telefones}></textarea>
         </div>
-        <div className="observaçoes">
+        <div className='observaçoes'>
           <textarea
-            name="observacoes"
-            onChange={t => setObservaçoes(t.target.value)}
-            placeholder="Observações"
-            value={obs}
-          ></textarea>
+            name='observacoes'
+            onChange={(t) => setObservaçoes(t.target.value)}
+            placeholder='Observações'
+            value={obs}></textarea>
         </div>
       </div>
 
       <p>PROCEDÊNCIA</p>
-      <div className="procedencia">
-        <div className="proc_escola">
+      <div className='procedencia'>
+        <div className='proc_escola'>
           <Input
-            label="Escola"
-            name="proc_escola"
-            onChange={t => setEscola(t.target.value)}
+            label='Escola'
+            name='proc_escola'
+            onChange={(t) => setEscola(t.target.value)}
             value={proc_escola}
           />
         </div>
-        <div className="cidade">
+        <div className='cidade'>
           <Input
-            label="Cidade"
-            name="cidade"
-            onChange={t => setCidadeProc(t.target.value)}
+            label='Cidade'
+            name='cidade'
+            onChange={(t) => setCidadeProc(t.target.value)}
             value={proc_cidade}
           />
         </div>
-        <div className="ano-proc">
+        <div className='ano-proc'>
           <Select
             value={proc_ano}
-            label="Ano/Série"
-            name="ano-proc"
-            onChange={e => setAnoProc(e.target.value)}
+            label='Ano/Série'
+            name='ano-proc'
+            onChange={(e) => setAnoProc(e.target.value)}
             options={[
               { value: 'Não cursou', label: 'Não cursou' },
               { value: 'Pré-escola', label: 'Pré-escola' },
@@ -288,56 +323,56 @@ export default () => {
               { value: '2º ano', label: '2º ano' },
               { value: '3º ano', label: '3º ano' },
               { value: '4º ano', label: '4º ano' },
-              { value: '5º ano', label: '5º ano' }
+              { value: '5º ano', label: '5º ano' },
             ]}
           />
         </div>
-        <div className="ex-aluno">
+        <div className='ex-aluno'>
           <Select
             value={ex_aluno}
-            label="É ex-aluno?"
-            name="ex-aluno"
-            onChange={e => setExAluno(e.target.value)}
+            label='É ex-aluno?'
+            name='ex-aluno'
+            onChange={(e) => setExAluno(e.target.value)}
             options={[
               { value: 'Não', label: 'Não' },
-              { value: 'Sim', label: 'Sim' }
+              { value: 'Sim', label: 'Sim' },
             ]}
           />
         </div>
-        <div className="ano-desejado">
+        <div className='ano-desejado'>
           <Select
             value={ano_desejado}
-            label="Ano Desejado"
-            name="ano-desejado"
-            onChange={e => setAnoDesejado(e.target.value)}
+            label='Ano Desejado'
+            name='ano-desejado'
+            onChange={(e) => setAnoDesejado(e.target.value)}
             options={[
               { value: '1º', label: '1º ano' },
               { value: '2º', label: '2º ano' },
               { value: '3º', label: '3º ano' },
               { value: '4º', label: '4º ano' },
-              { value: '5º', label: '5º ano' }
+              { value: '5º', label: '5º ano' },
             ]}
           />
         </div>
-        <div className="turma">
+        <div className='turma'>
           <Select
-            label="Turma"
-            name="turma"
-            onChange={e => setTurma(e.target.value)}
+            label='Turma'
+            name='turma'
+            onChange={(e) => setTurma(e.target.value)}
             options={[
               { value: 'A', label: 'A' },
               { value: 'B', label: 'B' },
               { value: 'C', label: 'C' },
-              { value: 'D', label: 'D' }
+              { value: 'D', label: 'D' },
             ]}
             value={turma}
           />
         </div>
       </div>
 
-      <div className="buttons">
-        <input type="submit" id="btn-matricular" value="Matricular Aluno" />
-        <input type="button" id="btn-limpar" value="Limpar Campos" />
+      <div className='buttons'>
+        <input type='submit' id='btn-matricular' value='Matricular Aluno' />
+        <input type='button' id='btn-limpar' value='Limpar Campos' />
       </div>
     </form>
   )

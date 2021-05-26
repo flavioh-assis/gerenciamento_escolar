@@ -9,21 +9,21 @@ const columns: ColDef[] = [
   {
     field: 'ano',
     headerName: 'Ano',
-    width: 90,
+    width: 100,
     align: 'center',
     headerAlign: 'center'
   },
   {
     field: 'turma',
     headerName: 'Turma',
-    width: 110,
+    width: 120,
     align: 'center',
     headerAlign: 'center'
   },
   {
     field: 'periodo',
     headerName: 'Periodo',
-    width: 120,
+    width: 130,
     sortDirection: 'asc',
     align: 'center',
     headerAlign: 'center'
@@ -31,28 +31,28 @@ const columns: ColDef[] = [
   {
     field: 'sala',
     headerName: 'Sala',
-    width: 90,
+    width: 100,
     align: 'center',
     headerAlign: 'center'
   },
   {
     field: 'professor',
     headerName: 'Professor',
-    width: 285,
+    width: 300,
     align: 'center',
     headerAlign: 'center'
   },
   {
     field: 'n_ativos',
     headerName: 'Ativos',
-    width: 85,
+    width: 90,
     align: 'center',
     headerAlign: 'center'
   },
   {
     field: 'n_total',
     headerName: 'Total',
-    width: 80,
+    width: 90,
     align: 'center',
     headerAlign: 'center'
   },
@@ -74,7 +74,7 @@ export default () => {
         rows={classes}
         columns={columns}
         pageSize={18}
-        rowHeight={35}
+        // rowHeight={35}
         autoHeight
       />
     </div>
