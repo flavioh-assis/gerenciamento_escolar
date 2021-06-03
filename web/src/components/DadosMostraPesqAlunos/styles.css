@@ -1,5 +1,6 @@
 .dados-pesquisa-alunos {
   padding: 1vh 0 1vh 0;
+  height: 1%;
 }
 
 .dados-pesquisa-alunos #titulo {
@@ -116,4 +117,5 @@
   color: black;
   margin: 0 auto 10rem auto;
   max-width: 90rem;
+  height: 1%;
 }

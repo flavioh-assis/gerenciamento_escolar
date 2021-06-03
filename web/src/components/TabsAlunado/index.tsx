@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 import { AppBar, Box, Typography, Tab, Tabs } from '@material-ui/core'
 
 import MostraAlunado from '../../components/BD/MostraAlunado'
-
-import api from '../../services/api'
 
 import { useStyles, tabStyle } from './styles'
 
@@ -26,7 +25,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box p={0}>
-          <Typography>{children}</Typography>
+          <Typography component={'div'}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -40,7 +39,7 @@ function a11yProps(index: any) {
   }
 }
 
-export default function ScrollableTabsButtonAuto() {
+const ScrollableTabsButtonAuto = (props: any) => {
   const classes = useStyles()
   const [value, setValue] = useState(0)
 
@@ -56,14 +55,6 @@ export default function ScrollableTabsButtonAuto() {
     [idx: number]: { ano: string; turma: string }
   }
 
-  const [list, setList] = useState<classeProps>([])
-
-  useEffect(() => {
-    api.get('classes').then(response => {
-      setList(response.data)
-    })
-  }, [list])
-
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
@@ -75,9 +66,8 @@ export default function ScrollableTabsButtonAuto() {
           variant="scrollable"
           scrollButtons="auto"
           aria-label="Classes"
-          // centered
         >
-          {list.map((item: { ano: string; turma: string }) => {
+          {props.classes.map((item: { ano: string; turma: string }) => {
             let classe = `${item.ano} ano ${item.turma}`
 
             return (
@@ -92,7 +82,7 @@ export default function ScrollableTabsButtonAuto() {
         </Tabs>
       </AppBar>
 
-      {list.map((item: { ano: string; turma: string }, index: number) => {
+      {props.classes.map((item: { ano: string; turma: string }, index: number) => {
         return (
           <TabPanel key={item.ano + item.turma} value={value} index={index}>
             <MostraAlunado
@@ -104,3 +94,24 @@ export default function ScrollableTabsButtonAuto() {
     </div>
   )
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+    classes: state.classe.classes,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setClasses: (newClasses: any) =>
+      dispatch({
+        type: 'SET_CLASSES',
+        payload: { classes: newClasses },
+      }),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ScrollableTabsButtonAuto)

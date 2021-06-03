@@ -1,8 +1,7 @@
 import React from 'react'
 
-import ClasseSelecionada from '../../components/ClasseSelecionada'
+import DadosClasseSelecionada from '../../components/DadosClasseSelecionada'
 import Menu from '../../components/Menu'
-import MostraClassesEditar from '../../components/BD/MostraClassesEditar'
 import Cabeçalho from '../../components/Cabeçalho'
 
 import './styles.css'
@@ -15,8 +14,7 @@ export default () => (
       <Menu />
 
       <div className="conteudo">
-        <ClasseSelecionada />
-        <MostraClassesEditar />
+        <DadosClasseSelecionada />
       </div>
 
     </div>

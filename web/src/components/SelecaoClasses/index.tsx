@@ -1,4 +1,5 @@
-import React, { useEffect, useState, FormEvent } from 'react'
+import React, { /* useEffect,  */ useState, FormEvent } from 'react'
+import { connect } from 'react-redux'
 
 import api from '../../services/api'
 import Input from '../../components/Input'
@@ -6,7 +7,7 @@ import Select from '../../components/Select'
 
 import './styles.css'
 
-export default () => {
+const SelecaoClasses = (props: any) => {
   // const [classes, setClasses] = useState([])
 
   // const [opAno, setOpAno] = useState([
@@ -43,6 +44,7 @@ export default () => {
         .then(() => {
           alert('Cadastro feito com sucesso!')
           limparCampos()
+          atualizaTabela()
         })
         .catch((error) => {
           alert(error)
@@ -58,30 +60,12 @@ export default () => {
     setProfessor('')
   }
 
-  function gerarClassesDisponiveis() {
-  //   for (let iClasses = 0; iClasses < classes.length; iClasses++) {
-  //     const selClasse = classes[iClasses]
-
-  //     let anos = ['1º', '2º', '3º', '4º', '5º']
-
-  //     for (let iAnos = 0; iAnos < anos.length; iAnos++) {
-  //       if (selClasse['ano'] == anos[iAnos]) {
-  //         let turmas = ['A', 'B', 'C', 'D']
-
-  //         if (selClasse['turma'] == turmas[iAnos]) {
-
-  //         }
-  //       } else {
-  //         // setOpAno({ value: '1º', label: '1º' })
-  //         if (!opAno.includes({ value: anos[iAnos], label: anos[iAnos] })) {
-  //           opAno.push({ value: anos[iAnos], label: anos[iAnos] })
-  //         }
-  //         // break
-  //       }
-  //     }
-  //   }
+  function atualizaTabela() {
+    api.get('classes').then((response) => {
+      props.setClasses(response.data)
+    })
   }
-
+  
   return (
     <div className='selecao-classes'>
       <form onSubmit={handleCadastrar}>
@@ -170,3 +154,45 @@ export default () => {
     </div>
   )
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+    classes: state.classe.classes,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setClasses: (newClasses: any) =>
+      dispatch({
+        type: 'SET_CLASSES',
+        payload: { classes: newClasses },
+      }),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelecaoClasses)
+
+// function gerarClassesDisponiveis() {
+//   for (let iClasses = 0; iClasses < classes.length; iClasses++) {
+//     const selClasse = classes[iClasses]
+
+//     let anos = ['1º', '2º', '3º', '4º', '5º']
+
+//     for (let iAnos = 0; iAnos < anos.length; iAnos++) {
+//       if (selClasse['ano'] == anos[iAnos]) {
+//         let turmas = ['A', 'B', 'C', 'D']
+
+//         if (selClasse['turma'] == turmas[iAnos]) {
+
+//         }
+//       } else {
+//         // setOpAno({ value: '1º', label: '1º' })
+//         if (!opAno.includes({ value: anos[iAnos], label: anos[iAnos] })) {
+//           opAno.push({ value: anos[iAnos], label: anos[iAnos] })
+//         }
+//         // break
+//       }
+//     }
+//   }
+// }

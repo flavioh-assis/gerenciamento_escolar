@@ -1,0 +1,68 @@
+.dados-classe-selecao {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr;
+  column-gap: 2rem;
+  margin: 0 auto;
+  max-width: 90rem;
+}
+
+.dados-classe-selecao .botao {
+  align-items: center;
+  background-color: var(--blue);
+  border-radius: 0.8rem;
+  border-width: 0;
+  color: #fff;
+  display: flex;
+  font: 700 2rem Archivo;
+  height: 5.6rem;
+  justify-content: center;
+  margin-top: 2.4rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  width: 11.5rem;
+}
+
+.dados-classe-selecao .botao:hover {
+  background-color: var(--green);
+  color: #000;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.dados-classe-selecao .input-block {
+  min-width: 10.5rem;
+}
+
+/* -------------------------------------- */
+.dados-mostra-classes-editar {
+  background: #ccc;
+  margin: 3vh auto 0 auto;
+  max-width: 100rem;
+  height: 1%;
+}
+
+.dados-mostra-classes-editar .excluir_icon {
+  height: 2.5rem;
+}
+
+.dados-mostra-classes-editar .excluir {
+  height: 4rem;
+  min-width: 6rem;
+}
+
+.dados-mostra-classes-editar .excluir:hover {
+  background-color: #d62d2d;
+}
+
+.dados-mostra-classes-editar .editar_icon {
+  height: 2.5rem;
+}
+
+.dados-mostra-classes-editar .editar {
+  height: 4rem;
+  min-width: 6rem;
+}
+
+.dados-mostra-classes-editar .editar:hover {
+  background-color: #cc7500;
+}
