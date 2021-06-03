@@ -67,6 +67,8 @@ export default class AlunosController {
         'situacao'
       )
 
+    console.log('alunos selected')
+
     return res.json(alunos)
   }
 
@@ -160,6 +162,8 @@ export default class AlunosController {
       await trx.rollback()
       console.log(err)
 
+      console.log('alunos created')
+
       return res.status(400).json({
         error: 'Erro ao matricular aluno.',
       })
@@ -170,12 +174,13 @@ export default class AlunosController {
     try {
       const newRM = await db('tbAlunos').max('id')
 
+      console.log('rm selected')
+
       return res.json(newRM[0]['max'] + 1)
 
     } catch (error) {
-
       return res.status(400).json({
-        error: 'Erro ao retornar um novo RM.'
+        error: 'Erro ao retornar um novo RM.',
       })
     }
   }

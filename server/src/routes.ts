@@ -10,7 +10,8 @@ const classesController = new ClassesController()
 
 routes.get('/classes', classesController.index)
 routes.post('/classes', classesController.create)
-// routes.delete('/classes', classesController.delete)
+routes.delete('/classes', classesController.delete)
+routes.put('/classes', classesController.update)
 
 routes.get('/alunos', alunosController.index)
 routes.get('/alunos_rm', alunosController.rm)
