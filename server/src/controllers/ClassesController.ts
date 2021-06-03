@@ -44,7 +44,7 @@ export default class ClassesController {
 
       await trx.commit()
 
-        console.log('created')
+      console.log('created')
 
       return res.status(201).json({})
     } catch (err) {
@@ -105,8 +105,67 @@ export default class ClassesController {
       console.log(err)
 
       return res.status(400).json({
-        error: err
+        error: err,
       })
     }
+  }
+
+  async disp(req: Request, res: Response) {
+    const { ano } = req.body
+
+    const anos = ['1º', '2º', '3º', '4º', '5º']
+    let disp = new Array()
+    let sel = new Array()
+
+    anos.forEach(async (ano) => {
+      await db('tbClasses')
+        .where('ano', ano)
+        .count('turma')
+        .then((res) => {
+          const countAno = res[0]['count'] as Number
+
+          if (countAno > 0) {
+            sel.push(ano)
+          }
+
+          if (countAno < 4) {
+            disp.push(ano)
+          }
+        })
+      if (ano == '5º') {
+        return res.json({
+          sel: sel,
+          disp: disp,
+        })
+      }
+    })
+
+    // if (ano) {
+    // const alunos = await db('tbAlunos')
+    //   .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
+    //   .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
+    //   .where('nome', 'ilike', `${nome}%`)
+    //   .andWhere('tbAlunos.ra', 'like', `${ra}`)
+    //   .andWhere('nee', 'ilike', `${nee}`)
+    //   .andWhere('ano', 'like', `${ano}`)
+    //   .andWhere('turma', 'like', `${turma}`)
+    //   .andWhere('professor', 'ilike', `${professor}%`)
+    //   .select(
+    //     'tbAlunos.id as id',
+    //     'num_chamada',
+    //     'nome',
+    //     'ra',
+    //     'nee',
+    //     'nasc_data',
+    //     'ano',
+    //     'turma',
+    //     'professor',
+    //     'situacao'
+    //   )
+    // res.status(201).json({
+    //   disp: '',
+    //   sel: '',
+    // })
+    // }
   }
 }

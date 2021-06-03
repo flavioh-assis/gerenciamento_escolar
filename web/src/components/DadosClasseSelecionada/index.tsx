@@ -1,7 +1,7 @@
 import React, { useEffect, useState, FormEvent } from 'react'
 import { connect } from 'react-redux'
 import { ColDef, DataGrid, GridApi, CellValue } from '@material-ui/data-grid'
-import { Button } from '@material-ui/core'
+import { Button, useScrollTrigger } from '@material-ui/core'
 
 import api from '../../services/api'
 import EditarIcon from '../../assets/images/edit_icon.png'
@@ -19,8 +19,17 @@ const DadosClasseSelecionada = (props: any) => {
   const [sala, setSala] = useState('')
   const [professor, setProfessor] = useState('')
 
+  const [disponiveis, setDisponiveis] = useState(Array)
+  const [disabled, setDisabled] = useState({
+    ano: true,
+    turma: true,
+    periodo: true,
+    sala: true,
+    professor: true,
+  })
+
   const erro = `Não é possível excluir uma classe com aluno ativo.
-  Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão.`
+Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão.`
 
   const columns: ColDef[] = [
     { field: 'id', headerName: 'ID', width: 50, hide: true },
@@ -100,36 +109,18 @@ const DadosClasseSelecionada = (props: any) => {
           setSala(newsala)
           setProfessor(newprofessor)
 
-          // if ((thisRow['n_ativos'] as number) > 0) {
-          //   alert(erro)
-          // } else {
-          //   const newid = thisRow['id']
-          //   const newano = thisRow['ano']
-          //   const newturma = thisRow['turma']
-          //   const newperiodo = thisRow['periodo']
-          //   const newsala = thisRow['sala']
-          //   const newprofessor = thisRow['professor']
+          if (![...props.disp].includes(newano)) {
+            setDisponiveis([...props.disp, newano].sort())
+          } else {
+            setDisponiveis(props.disp)
+          }
 
-          //   api
-          //     .put('classes', {
-          //       id: newid,
-          //       ano: newano,
-          //       turma: newturma,
-          //       periodo: newperiodo,
-          //       sala: newsala,
-          //       professor: newprofessor,
-          //     })
-          //     .then(() => {
-          //       alert('Dados alterados com sucesso!')
-          //       atualizaClasses()
-          //     })
-          //     .catch(() => alert('ERRO! Algo deu errado.'))
-          // }
+          setSelectDisabled(false)
         }
 
         return (
           <Button className='editar' onClick={onClick}>
-            <img alt='Eeditar' className='editar_icon' src={EditarIcon} />
+            <img alt='Editar' className='editar_icon' src={EditarIcon} />
           </Button>
         )
       },
@@ -196,9 +187,12 @@ const DadosClasseSelecionada = (props: any) => {
         periodo: periodo,
         sala: sala,
         professor: professor,
-      }).then(() => {
+      })
+      .then(() => {
         alert('Dados alterados com sucesso!')
         atualizaTabela()
+        props.setUpDisp(true)
+        setSelectDisabled(true)
       })
       .catch((err) => alert(err.response.request._response))
   }
@@ -209,6 +203,33 @@ const DadosClasseSelecionada = (props: any) => {
     })
   }
 
+  function atualizaDisponiveis() {
+    // verificar quantos anos existem no banco
+    api.get('classes/disp').then((resp) => {
+      props.setDisp(resp.data.disp)
+      props.setSel(resp.data.sel)
+      // alert(JSON.stringify(resp.data,null,1))
+    })
+    props.setUpDisp(false)
+  }
+
+  function setSelectDisabled(dis:boolean) {
+    setDisabled({
+      ano: dis,
+      turma: dis,
+      periodo: dis,
+      sala: dis,
+      professor: dis,
+    })
+
+  }
+
+  useEffect(() => {
+    if (props.upDisp) {
+      atualizaDisponiveis()
+    }
+  })
+
   return (
     <>
       <div className='dados-classe-selecao'>
@@ -216,25 +237,20 @@ const DadosClasseSelecionada = (props: any) => {
           name='ano'
           label='Ano'
           value={ano}
+          disabled={disabled.ano}
           onChange={(t) => {
             setAno(t.target.value)
           }}
-          options={
-            // opAno
-            [
-              { value: '1º', label: '1º' },
-              { value: '2º', label: '2º' },
-              { value: '3º', label: '3º' },
-              { value: '4º', label: '4º' },
-              { value: '5º', label: '5º' },
-            ]
-          }
+          options={disponiveis.map((x: any) => {
+            return { value: x, label: x }
+          })}
         />
 
         <Select
           name='turma'
           label='Turma'
           value={turma}
+          disabled={disabled.turma}
           onChange={(t) => {
             setTurma(t.target.value)
           }}
@@ -250,6 +266,7 @@ const DadosClasseSelecionada = (props: any) => {
           name='periodo'
           label='Periodo'
           value={periodo}
+          disabled={disabled.periodo}
           onChange={(t) => {
             setPeriodo(t.target.value)
           }}
@@ -263,6 +280,7 @@ const DadosClasseSelecionada = (props: any) => {
           name='sala'
           label='Sala'
           value={sala}
+          disabled={disabled.sala}
           onChange={(t) => {
             setSala(t.target.value)
           }}
@@ -285,6 +303,7 @@ const DadosClasseSelecionada = (props: any) => {
           id='professor'
           onChange={(t) => setProfessor(t.target.value)}
           value={professor}
+          disabled={disabled.professor}
         />
         <input
           type='button'
@@ -308,15 +327,33 @@ const DadosClasseSelecionada = (props: any) => {
 const mapStateToProps = (state: any) => {
   return {
     classes: state.classe.classes,
+    disp: state.classe.disp,
+    sel: state.classe.sel,
+    upDisp: state.classe.upDisp,
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setClasses: (newClasses: any) =>
+    setClasses: (NEW: []) =>
       dispatch({
         type: 'SET_CLASSES',
-        payload: { classes: newClasses },
+        payload: { classes: NEW },
+      }),
+    setDisp: (NEW: []) =>
+      dispatch({
+        type: 'SET_DISP',
+        payload: { disp: NEW },
+      }),
+    setSel: (NEW: []) =>
+      dispatch({
+        type: 'SET_SEL',
+        payload: { disp: NEW },
+      }),
+    setUpDisp: (NEW: boolean) =>
+      dispatch({
+        type: 'SET_UPDISP',
+        payload: { disp: NEW },
       }),
   }
 }

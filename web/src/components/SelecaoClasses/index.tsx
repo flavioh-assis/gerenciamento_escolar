@@ -172,27 +172,3 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelecaoClasses)
-
-// function gerarClassesDisponiveis() {
-//   for (let iClasses = 0; iClasses < classes.length; iClasses++) {
-//     const selClasse = classes[iClasses]
-
-//     let anos = ['1º', '2º', '3º', '4º', '5º']
-
-//     for (let iAnos = 0; iAnos < anos.length; iAnos++) {
-//       if (selClasse['ano'] == anos[iAnos]) {
-//         let turmas = ['A', 'B', 'C', 'D']
-
-//         if (selClasse['turma'] == turmas[iAnos]) {
-
-//         }
-//       } else {
-//         // setOpAno({ value: '1º', label: '1º' })
-//         if (!opAno.includes({ value: anos[iAnos], label: anos[iAnos] })) {
-//           opAno.push({ value: anos[iAnos], label: anos[iAnos] })
-//         }
-//         // break
-//       }
-//     }
-//   }
-// }

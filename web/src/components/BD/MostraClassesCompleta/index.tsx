@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { DataGrid, ColDef } from '@material-ui/data-grid'
+
+import api from '../../../services/api'
 
 import './styles.css'
 
@@ -60,6 +62,20 @@ const columns: ColDef[] = [
 ]
 
 const MostraClassesCompleta = (props: any) => {
+  
+  function atualizaTabela() {
+    api.get('classes').then((response) => {
+      props.setClasses(response.data)
+    })
+    props.setUpdate(false)
+  }
+
+  useEffect(() => {
+    if (props.update) {
+      atualizaTabela()
+    }
+  })
+
   return (
     <div className='mostra-classes-completa'>
       <DataGrid
@@ -76,6 +92,7 @@ const MostraClassesCompleta = (props: any) => {
 const mapStateToProps = (state: any) => {
   return {
     classes: state.classe.classes,
+    update: state.classe.update,
   }
 }
 
@@ -85,6 +102,11 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: 'SET_CLASSES',
         payload: { classes: newClasses },
+      }),
+    setUpdate: (updated: any) =>
+      dispatch({
+        type: 'SET_UPDATE',
+        payload: { update: updated },
       }),
   }
 }

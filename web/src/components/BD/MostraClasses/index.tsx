@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { ColDef, DataGrid } from '@material-ui/data-grid'
-
-import api from '../../../services/api'
 
 import './styles.css'
 
@@ -46,27 +44,16 @@ const columns: ColDef[] = [
     width: 360,
   },
   {
+    headerName: 'Ativos',
+    align: 'center',
     field: 'n_ativos',
-    width: 30,
-    hide: true,
+    headerAlign: 'center',
+    width: 90,
   },
 ]
 
 const MostraClasse = (props: any) => {
   
-  function atualizaTabela() {
-    api.get('classes').then((response) => {
-      props.setClasses(response.data)
-    })
-    props.setUpdate(false)
-  }
-
-  useEffect(() => {
-    if (props.update) {
-      atualizaTabela()
-    }
-  })
-
   return (
     <div className='mostra-classes'>
       <DataGrid
@@ -82,23 +69,7 @@ const MostraClasse = (props: any) => {
 const mapStateToProps = (state: any) => {
   return {
     classes: state.classe.classes,
-    update: state.classe.update,
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setClasses: (newClasses: any) =>
-      dispatch({
-        type: 'SET_CLASSES',
-        payload: { classes: newClasses },
-      }),
-    setUpdate: (updated: any) =>
-      dispatch({
-        type: 'SET_UPDATE',
-        payload: { update: updated },
-      }),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MostraClasse)
+export default connect(mapStateToProps)(MostraClasse)
