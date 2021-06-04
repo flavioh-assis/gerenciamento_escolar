@@ -111,61 +111,82 @@ export default class ClassesController {
   }
 
   async disp(req: Request, res: Response) {
-    const { ano } = req.body
+    const { ano, periodo } = req.query
 
-    const anos = ['1º', '2º', '3º', '4º', '5º']
     let disp = new Array()
-    let sel = new Array()
 
-    anos.forEach(async (ano) => {
-      await db('tbClasses')
-        .where('ano', ano)
-        .count('turma')
-        .then((res) => {
-          const countAno = res[0]['count'] as Number
+    if (ano) {
+      console.log('TURMA');
+      
+      const turmas = ['A', 'B', 'C', 'D']
 
-          if (countAno > 0) {
-            sel.push(ano)
-          }
+      turmas.forEach(async (turma) => {
+        await db('tbClasses')
+          .where('ano', ano as string)
+          .andWhere('turma', turma)
+          .count('turma')
+          .then((res) => {
+            const countAno = res[0]['count'] as Number
 
-          if (countAno < 4) {
-            disp.push(ano)
-          }
-        })
-      if (ano == '5º') {
-        return res.json({
-          sel: sel,
-          disp: disp,
-        })
-      }
-    })
+            if (countAno == 0) {
+              disp.push(turma)
+            }
+          })
+        if (turma == 'D') {
+          console.log(disp)
 
-    // if (ano) {
-    // const alunos = await db('tbAlunos')
-    //   .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
-    //   .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
-    //   .where('nome', 'ilike', `${nome}%`)
-    //   .andWhere('tbAlunos.ra', 'like', `${ra}`)
-    //   .andWhere('nee', 'ilike', `${nee}`)
-    //   .andWhere('ano', 'like', `${ano}`)
-    //   .andWhere('turma', 'like', `${turma}`)
-    //   .andWhere('professor', 'ilike', `${professor}%`)
-    //   .select(
-    //     'tbAlunos.id as id',
-    //     'num_chamada',
-    //     'nome',
-    //     'ra',
-    //     'nee',
-    //     'nasc_data',
-    //     'ano',
-    //     'turma',
-    //     'professor',
-    //     'situacao'
-    //   )
-    // res.status(201).json({
-    //   disp: '',
-    //   sel: '',
-    // })
-    // }
+          return res.json(disp)
+        }
+      })
+    } else if (periodo) {
+      console.log('SALA');
+      
+      const salas = ['01', '02', '03', '04', '05', '06', '07', '08', '09']
+
+      salas.forEach(async (sala) => {
+        await db('tbClasses')
+          .where('periodo', periodo as string)
+          .andWhere('sala', sala)
+          .count('sala')
+          .then((res) => {
+            const count = res[0]['count'] as Number
+
+            if (count == 0) {
+              disp.push(sala)
+            }
+          })
+        if (sala == '09') {
+          console.log(disp)
+
+          return res.json(disp)
+        }
+      })
+    } else {
+      const anos = ['1º', '2º', '3º', '4º', '5º']
+      let sel = new Array()
+
+      anos.forEach(async (ano) => {
+        await db('tbClasses')
+          .where('ano', ano)
+          .count('turma')
+          .then((res) => {
+            const countAno = res[0]['count'] as Number
+
+            if (countAno > 0) {
+              sel.push(ano)
+            }
+
+            if (countAno < 4) {
+              disp.push(ano)
+            }
+          })
+        if (ano == '5º') {
+          return res.json({
+            sel: sel,
+            disp: disp,
+          })
+        }
+      })
+    }
   }
 }

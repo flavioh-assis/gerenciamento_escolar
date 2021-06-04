@@ -1,4 +1,4 @@
-import React, { /* useEffect,  */ useState, FormEvent } from 'react'
+import React, { useEffect, useState, FormEvent } from 'react'
 import { connect } from 'react-redux'
 
 import api from '../../services/api'
@@ -6,6 +6,7 @@ import Input from '../../components/Input'
 import Select from '../../components/Select'
 
 import './styles.css'
+import { stringNumberComparer } from '@material-ui/data-grid'
 
 const SelecaoClasses = (props: any) => {
   // const [classes, setClasses] = useState([])
@@ -27,6 +28,35 @@ const SelecaoClasses = (props: any) => {
   const [sala, setSala] = useState('')
   const [professor, setProfessor] = useState('')
 
+  const [turmasDisp, setTurmasDisp] = useState(Array())
+  const [salasDisp, setSalasDisp] = useState(Array())
+
+  useEffect(() => {
+    if (props.upDisp) {
+      atualizaDisponiveis()
+    }
+  })
+
+  function atualizaDisponiveis() {
+    api.get('classes/disp').then((resp) => {
+      props.setDisp(resp.data.disp)
+      props.setSel(resp.data.sel)
+    })
+    props.setUpDisp(false)
+  }
+
+  function atualizaTurmas(ano: string) {
+    api.get(`classes/disp?ano=${ano}`).then((resp) => {
+      setTurmasDisp(resp.data)
+    })
+  }
+
+  function atualizaSalas(periodo: string) {
+    api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
+      setSalasDisp(resp.data)
+    })
+  }
+
   function handleCadastrar(e: FormEvent) {
     e.preventDefault()
 
@@ -43,8 +73,9 @@ const SelecaoClasses = (props: any) => {
         })
         .then(() => {
           alert('Cadastro feito com sucesso!')
-          limparCampos()
           atualizaTabela()
+          atualizaDisponiveis()
+          limparCampos()
         })
         .catch((error) => {
           alert(error)
@@ -65,7 +96,7 @@ const SelecaoClasses = (props: any) => {
       props.setClasses(response.data)
     })
   }
-  
+
   return (
     <div className='selecao-classes'>
       <form onSubmit={handleCadastrar}>
@@ -75,17 +106,12 @@ const SelecaoClasses = (props: any) => {
           value={ano}
           onChange={(t) => {
             setAno(t.target.value)
+            atualizaTurmas(t.target.value)
+            setTurma('')
           }}
-          options={
-            // opAno
-            [
-              { value: '1º', label: '1º' },
-              { value: '2º', label: '2º' },
-              { value: '3º', label: '3º' },
-              { value: '4º', label: '4º' },
-              { value: '5º', label: '5º' },
-            ]
-          }
+          options={props.disp.map((x: any) => {
+            return { value: x, label: x }
+          })}
         />
 
         <Select
@@ -94,13 +120,11 @@ const SelecaoClasses = (props: any) => {
           value={turma}
           onChange={(t) => {
             setTurma(t.target.value)
+            setPeriodo('')
           }}
-          options={[
-            { value: 'A', label: 'A' },
-            { value: 'B', label: 'B' },
-            { value: 'C', label: 'C' },
-            { value: 'D', label: 'D' },
-          ]}
+          options={turmasDisp.map((x: any) => {
+            return { value: x, label: x }
+          })}
         />
 
         <Select
@@ -109,6 +133,8 @@ const SelecaoClasses = (props: any) => {
           value={periodo}
           onChange={(t) => {
             setPeriodo(t.target.value)
+            atualizaSalas(t.target.value)
+            setSala('')
           }}
           options={[
             { value: 'Manhã', label: 'Manhã' },
@@ -123,17 +149,9 @@ const SelecaoClasses = (props: any) => {
           onChange={(t) => {
             setSala(t.target.value)
           }}
-          options={[
-            { value: '01', label: '01' },
-            { value: '02', label: '02' },
-            { value: '03', label: '03' },
-            { value: '04', label: '04' },
-            { value: '05', label: '05' },
-            { value: '06', label: '06' },
-            { value: '07', label: '07' },
-            { value: '08', label: '08' },
-            { value: '09', label: '09' },
-          ]}
+          options={salasDisp.map((x: any) => {
+            return { value: x, label: x }
+          })}
         />
 
         <Input
@@ -158,6 +176,9 @@ const SelecaoClasses = (props: any) => {
 const mapStateToProps = (state: any) => {
   return {
     classes: state.classe.classes,
+    disp: state.classe.disp,
+    sel: state.classe.sel,
+    upDisp: state.classe.upDisp,
   }
 }
 
@@ -167,6 +188,21 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: 'SET_CLASSES',
         payload: { classes: newClasses },
+      }),
+    setDisp: (NEW: []) =>
+      dispatch({
+        type: 'SET_DISP',
+        payload: { disp: NEW },
+      }),
+    setSel: (NEW: []) =>
+      dispatch({
+        type: 'SET_SEL',
+        payload: { disp: NEW },
+      }),
+    setUpDisp: (NEW: boolean) =>
+      dispatch({
+        type: 'SET_UPDISP',
+        payload: { disp: NEW },
       }),
   }
 }

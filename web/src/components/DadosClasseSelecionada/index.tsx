@@ -20,6 +20,9 @@ const DadosClasseSelecionada = (props: any) => {
   const [professor, setProfessor] = useState('')
 
   const [disponiveis, setDisponiveis] = useState(Array)
+  const [turmasDisp, setTurmasDisp] = useState(Array())
+  const [salasDisp, setSalasDisp] = useState(Array())
+
   const [disabled, setDisabled] = useState({
     ano: true,
     turma: true,
@@ -109,11 +112,17 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
           setSala(newsala)
           setProfessor(newprofessor)
 
+          atualizaTurmas2(newano, newturma)
+          atualizaSalas2(newperiodo, newsala)
+
           if (![...props.disp].includes(newano)) {
             setDisponiveis([...props.disp, newano].sort())
           } else {
             setDisponiveis(props.disp)
           }
+
+          setTurmasDisp([...turmasDisp, newturma].sort())
+          setSalasDisp([...salasDisp, newsala].sort())
 
           setSelectDisabled(false)
         }
@@ -176,6 +185,59 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
     },
   ]
 
+  useEffect(() => {
+    if (props.upDisp) {
+      atualizaDisponiveis()
+    }
+  })
+
+  function atualizaTabela() {
+    api.get('classes').then((response) => {
+      props.setClasses(response.data)
+    })
+  }
+
+  function atualizaDisponiveis() {
+    api.get('classes/disp').then((resp) => {
+      props.setDisp(resp.data.disp)
+      props.setSel(resp.data.sel)
+    })
+    props.setUpDisp(false)
+  }
+
+  function atualizaTurmas(ano: string) {
+    api.get(`classes/disp?ano=${ano}`).then((resp) => {
+      setTurmasDisp(resp.data)
+    })
+  }
+
+  function atualizaTurmas2(ano: string, turma: string) {
+    api.get(`classes/disp?ano=${ano}`).then((resp) => {
+      setTurmasDisp([...resp.data, turma].sort())
+    })
+  }
+
+  function atualizaSalas(periodo: string) {
+    api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
+      setSalasDisp(resp.data)
+    })
+  }
+
+
+  function atualizaSalas2(periodo: string, sala: string) {
+    api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
+      setSalasDisp([...resp.data, sala].sort())
+    })
+  }
+
+  function limparCampos() {
+    setAno('')
+    setTurma('')
+    setPeriodo('')
+    setSala('')
+    setProfessor('')
+  }
+
   function handleSalvar(e: FormEvent) {
     e.preventDefault()
 
@@ -192,25 +254,10 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
         alert('Dados alterados com sucesso!')
         atualizaTabela()
         props.setUpDisp(true)
+        limparCampos()
         setSelectDisabled(true)
       })
       .catch((err) => alert(err.response.request._response))
-  }
-
-  function atualizaTabela() {
-    api.get('classes').then((response) => {
-      props.setClasses(response.data)
-    })
-  }
-
-  function atualizaDisponiveis() {
-    // verificar quantos anos existem no banco
-    api.get('classes/disp').then((resp) => {
-      props.setDisp(resp.data.disp)
-      props.setSel(resp.data.sel)
-      // alert(JSON.stringify(resp.data,null,1))
-    })
-    props.setUpDisp(false)
   }
 
   function setSelectDisabled(dis:boolean) {
@@ -224,12 +271,6 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
 
   }
 
-  useEffect(() => {
-    if (props.upDisp) {
-      atualizaDisponiveis()
-    }
-  })
-
   return (
     <>
       <div className='dados-classe-selecao'>
@@ -240,6 +281,8 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
           disabled={disabled.ano}
           onChange={(t) => {
             setAno(t.target.value)
+            atualizaTurmas(t.target.value)
+            setTurma('')
           }}
           options={disponiveis.map((x: any) => {
             return { value: x, label: x }
@@ -254,12 +297,9 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
           onChange={(t) => {
             setTurma(t.target.value)
           }}
-          options={[
-            { value: 'A', label: 'A' },
-            { value: 'B', label: 'B' },
-            { value: 'C', label: 'C' },
-            { value: 'D', label: 'D' },
-          ]}
+          options={turmasDisp.map((x: any) => {
+            return { value: x, label: x }
+          })}
         />
 
         <Select
@@ -269,6 +309,8 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
           disabled={disabled.periodo}
           onChange={(t) => {
             setPeriodo(t.target.value)
+            atualizaSalas(t.target.value)
+            setSala('')
           }}
           options={[
             { value: 'Manhã', label: 'Manhã' },
@@ -284,17 +326,9 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
           onChange={(t) => {
             setSala(t.target.value)
           }}
-          options={[
-            { value: '01', label: '01' },
-            { value: '02', label: '02' },
-            { value: '03', label: '03' },
-            { value: '04', label: '04' },
-            { value: '05', label: '05' },
-            { value: '06', label: '06' },
-            { value: '07', label: '07' },
-            { value: '08', label: '08' },
-            { value: '09', label: '09' },
-          ]}
+          options={salasDisp.map((x: any) => {
+            return { value: x, label: x }
+          })}
         />
 
         <Input

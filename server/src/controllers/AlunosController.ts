@@ -44,6 +44,12 @@ export default class AlunosController {
       var professor = filters.professor as string
     }
 
+    if (!filters.bairro) {
+      var bairro = '%'
+    } else {
+      var bairro = filters.bairro as string
+    }
+
     const alunos = await db('tbAlunos')
       .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
       .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
@@ -54,6 +60,7 @@ export default class AlunosController {
       .andWhere('ano', 'like', `${ano}`)
       .andWhere('turma', 'like', `${turma}`)
       .andWhere('professor', 'ilike', `${professor}%`)
+      .andWhere('bairro', 'ilike', `%${bairro}%`)
       .select(
         'tbAlunos.id as id',
         'num_chamada',
@@ -64,7 +71,8 @@ export default class AlunosController {
         'ano',
         'turma',
         'professor',
-        'situacao'
+        'situacao',
+        'bairro'
       )
 
     console.log('alunos selected')
