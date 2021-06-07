@@ -70,7 +70,9 @@ export default class ClassesController {
           trx.commit()
         })
 
-      return res.status(201)
+        console.log('deleted')
+
+      return res.status(201).json({})
     } catch (error) {
       await trx.rollback()
       console.log(error)
@@ -116,8 +118,6 @@ export default class ClassesController {
     let disp = new Array()
 
     if (ano) {
-      console.log('TURMA');
-      
       const turmas = ['A', 'B', 'C', 'D']
 
       turmas.forEach(async (turma) => {
@@ -133,14 +133,10 @@ export default class ClassesController {
             }
           })
         if (turma == 'D') {
-          console.log(disp)
-
           return res.json(disp)
         }
       })
     } else if (periodo) {
-      console.log('SALA');
-      
       const salas = ['01', '02', '03', '04', '05', '06', '07', '08', '09']
 
       salas.forEach(async (sala) => {
@@ -156,8 +152,6 @@ export default class ClassesController {
             }
           })
         if (sala == '09') {
-          console.log(disp)
-
           return res.json(disp)
         }
       })

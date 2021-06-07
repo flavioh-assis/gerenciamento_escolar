@@ -31,8 +31,7 @@ const DadosClasseSelecionada = (props: any) => {
     professor: true,
   })
 
-  const erro = `Não é possível excluir uma classe com aluno ativo.
-Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão.`
+  const erro = `Não é possível excluir uma classe com aluno ativo.`
 
   const columns: ColDef[] = [
     { field: 'id', headerName: 'ID', width: 50, hide: true },
@@ -158,20 +157,9 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
             alert(erro)
           } else {
             const ok = window.confirm('Deseja excluir essa Classe?')
-            const exSucesso = `A Classe ${thisRow['ano']} ${thisRow['turma']} foi excluída com sucesso!`
 
             if (ok) {
-              api
-                .delete('classes', {
-                  data: {
-                    id: thisRow['id'],
-                  },
-                })
-                .then(() => {
-                  // atualizaClasses()
-                  alert(exSucesso)
-                })
-                .catch(() => alert('ERRO! Não foi possível excluir a Classe.'))
+              excluiClasse(thisRow['id'] as Number)
             }
           }
         }
@@ -223,7 +211,6 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
     })
   }
 
-
   function atualizaSalas2(periodo: string, sala: string) {
     api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
       setSalasDisp([...resp.data, sala].sort())
@@ -236,6 +223,20 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
     setPeriodo('')
     setSala('')
     setProfessor('')
+  }
+
+  function excluiClasse(id: Number) {
+    api
+      .delete('classes', {
+        data: {
+          id: id,
+        },
+      })
+      .then(() => {
+        atualizaTabela()
+        alert(`A Classe foi excluída com sucesso!`)
+      })
+      .catch(() => alert('ERRO! Não foi possível excluir a Classe.'))
   }
 
   function handleSalvar(e: FormEvent) {
@@ -260,7 +261,7 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
       .catch((err) => alert(err.response.request._response))
   }
 
-  function setSelectDisabled(dis:boolean) {
+  function setSelectDisabled(dis: boolean) {
     setDisabled({
       ano: dis,
       turma: dis,
@@ -268,7 +269,6 @@ Faça o REMANEJAMENTO de todos os alunos para um outra classe antes da exclusão
       sala: dis,
       professor: dis,
     })
-
   }
 
   return (

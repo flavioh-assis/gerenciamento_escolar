@@ -6,21 +6,8 @@ import Input from '../../components/Input'
 import Select from '../../components/Select'
 
 import './styles.css'
-import { stringNumberComparer } from '@material-ui/data-grid'
 
 const SelecaoClasses = (props: any) => {
-  // const [classes, setClasses] = useState([])
-
-  // const [opAno, setOpAno] = useState([
-  //   { value: '', label: '' }
-  // ])
-  // const [itensAno, setItemsAno] = useState([])
-  // const [itensTurma, setItemsTurma] = useState([])
-  // const [itensPeriodo, setItemsPeriodo] = useState([])
-  // const [itensSala, setItemsSala] = useState([])
-
-  // const [itemsManha, setItemsManha] = useState([])
-  // const [itemsTarde, setItemsTarde] = useState([])
 
   const [ano, setAno] = useState('')
   const [turma, setTurma] = useState('')
