@@ -64,5 +64,5 @@
 }
 
 .dados-mostra-classes-editar .editar:hover {
-  background-color: #cc7500;
+  background-color: var(--blue);
 }

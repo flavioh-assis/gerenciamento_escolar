@@ -1,11 +1,11 @@
 import React, { useEffect, useState, FormEvent } from 'react'
 import { connect } from 'react-redux'
 import { ColDef, DataGrid, GridApi, CellValue } from '@material-ui/data-grid'
-import { Button, useScrollTrigger } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 
 import api from '../../services/api'
-import EditarIcon from '../../assets/images/edit_icon.png'
-import ExcluirIcon from '../../assets/images/trash_icon.png'
+import EditarIcon from '../../assets/images/icons/edit_icon.png'
+import ExcluirIcon from '../../assets/images/icons/trash_icon.png'
 import Input from '../Input'
 import Select from '../Select'
 

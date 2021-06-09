@@ -4,3 +4,16 @@
   max-width: 100rem;
   height: 1%;
 }
+
+#mostra-alunado .go_to_icon {
+  height: 1.8rem;
+}
+
+#mostra-alunado .go_to {
+  height: 2.8rem;
+  min-width: 6rem;
+}
+
+#mostra-alunado .go_to:hover {
+  background-color: var(--blue);
+}
