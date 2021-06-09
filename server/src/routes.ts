@@ -16,6 +16,7 @@ routes.put('/classes', classesController.update)
 
 routes.get('/alunos', alunosController.index)
 routes.get('/alunos_rm', alunosController.rm)
+routes.get('/alunos_id', alunosController.id)
 routes.post('/alunos', alunosController.create)
 
 export default routes

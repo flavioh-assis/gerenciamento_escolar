@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { ColDef, DataGrid, ValueGetterParams } from '@material-ui/data-grid'
 import api from '../../services/api'
-// import { Link } from 'react-router-dom'
 
 import Input from '../Input'
 import Select from '../Select'

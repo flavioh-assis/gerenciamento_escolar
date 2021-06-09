@@ -185,6 +185,27 @@ export default class AlunosController {
       console.log('rm selected')
 
       return res.json(newRM[0]['max'] + 1)
+    } catch (error) {
+      return res.status(400).json({
+        error: 'Erro ao retornar um novo RM.',
+      })
+    }
+  }
+
+  async id(req: Request, res: Response) {
+    try {
+      const filters = req.query
+
+      const aluno = await db('tbAlunos')
+      .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
+      .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
+
+      .where('tbAlunos.id', `${filters.id}`)
+      .select('*')
+
+      console.log('aluno selected by id')
+
+      return res.json(aluno)
 
     } catch (error) {
       return res.status(400).json({

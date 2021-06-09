@@ -39,18 +39,11 @@ const DadosAlunosAtualizar = (props: any) => {
         alert(
           'Cadastro feito com sucesso!\nO RM gerado foi o ' + res.data.rm + '.'
         )
-        newRM()
         limparCampos()
       })
       .catch((error) => {
         alert('Deu ruim: ' + error)
       })
-  }
-
-  function newRM() {
-    api.get('/alunos_rm').then((res) => {
-      setRm(res.data)
-    })
   }
 
   function limparCampos() {
@@ -78,41 +71,75 @@ const DadosAlunosAtualizar = (props: any) => {
     setTurma('')
   }
 
+  function selectAluno() {
+    api.get(`alunos_id?id=${props.idAluno}`).then((res) => {
+      const aluno = res.data[0]
+
+      setNome(aluno['nome'])
+      setRa(aluno['ra'])
+      setRm(props.idAluno)
+      setNee(aluno['nee'])
+
+      setLocalidade(aluno['nasc_cidade'])
+      setUfNasc(aluno['nasc_uf'])
+      setNacionalidade(aluno['nacionalidade'])
+      setDataNasc(aluno['nasc_data'])
+
+      setPai(aluno['pai'])
+      setMae(aluno['mae'])
+      setResponsavel(aluno['responsavel'])
+
+      setEndereço(aluno['endereco'])
+      setBairro(aluno['bairro'])
+      setCidadeRes(aluno['cidade'])
+
+      setTelefones(aluno['telefones'])
+      setObservaçoes(aluno['obs'])
+
+      setEscola(aluno['proc_escola'])
+      setCidadeProc(aluno['proc_cidade'])
+      setAnoProc(aluno['proc_ano'])
+      setExAluno(aluno['ex_aluno'])
+      setAnoDesejado(aluno['ano_desejado'])
+      // setTurma(aluno['XXX'])
+    })
+  }
+
   useEffect(() => {
-    newRM()
+    selectAluno()
   }, [])
 
-  const [nome, setNome] = useState('Flavio Henrique de Assis Silva')
-  const [ra, setRa] = useState('144.937.520-X')
+  const [nome, setNome] = useState('')
+  const [ra, setRa] = useState('')
   const [rm, setRm] = useState('')
   const [nee, setNee] = useState('')
 
-  const [nasc_cidade, setLocalidade] = useState('Ribeirão Preto')
-  const [nasc_uf, setUfNasc] = useState('SP')
-  const [nacionalidade, setNacionalidade] = useState('Brasileira')
+  const [nasc_cidade, setLocalidade] = useState('')
+  const [nasc_uf, setUfNasc] = useState('')
+  const [nacionalidade, setNacionalidade] = useState('')
   const [nasc_data, setDataNasc] = useState('')
 
-  const [pai, setPai] = useState('Magno Onofre de Assis Silva')
-  const [mae, setMae] = useState('Elisabete Guilherme de Assis Silva')
+  const [pai, setPai] = useState('')
+  const [mae, setMae] = useState('')
   const [responsavel, setResponsavel] = useState('')
 
-  const [endereco, setEndereço] = useState('Rua Cardeal Leme, 300')
-  const [bairro, setBairro] = useState('Vila Virgínia')
-  const [cidade, setCidadeRes] = useState('Ribeirão Preto')
+  const [endereco, setEndereço] = useState('')
+  const [bairro, setBairro] = useState('')
+  const [cidade, setCidadeRes] = useState('')
 
-  const [telefones, setTelefones] = useState('99617-1234 (mãe)')
-  const [obs, setObservaçoes] = useState('Bl 9 Ap 32 - Cond. Delboux A')
+  const [telefones, setTelefones] = useState('')
+  const [obs, setObservaçoes] = useState('')
 
-  const [proc_escola, setEscola] = useState('EMEB. Antônio Joaquim da Silva')
-  const [proc_cidade, setCidadeProc] = useState('Cravinhos')
-  const [proc_ano, setAnoProc] = useState('Pré-escola')
-  const [ex_aluno, setExAluno] = useState('Não')
-  const [ano_desejado, setAnoDesejado] = useState('1º')
-  const [turma, setTurma] = useState('A')
+  const [proc_escola, setEscola] = useState('')
+  const [proc_cidade, setCidadeProc] = useState('')
+  const [proc_ano, setAnoProc] = useState('')
+  const [ex_aluno, setExAluno] = useState('')
+  const [ano_desejado, setAnoDesejado] = useState('')
+  const [turma, setTurma] = useState('')
 
   return (
     <form onSubmit={handleCadastrar} className='dados-alunos-atualizar'>
-      <p>IDENTIFICAÇÃO{props.idAluno}</p>
+      <p>IDENTIFICAÇÃO</p>
       <div className='identificaçao'>
         <div className='item aluno'>
           <Input
@@ -299,7 +326,7 @@ const DadosAlunosAtualizar = (props: any) => {
       <div className='procedencia'>
         <div className='proc_escola'>
           <Input
-            label='Escola'
+            label='Escola Anterior'
             name='proc_escola'
             onChange={(t) => setEscola(t.target.value)}
             value={proc_escola}
@@ -355,20 +382,6 @@ const DadosAlunosAtualizar = (props: any) => {
               { value: '4º', label: '4º ano' },
               { value: '5º', label: '5º ano' },
             ]}
-          />
-        </div>
-        <div className='turma'>
-          <Select
-            label='Turma'
-            name='turma'
-            onChange={(e) => setTurma(e.target.value)}
-            options={[
-              { value: 'A', label: 'A' },
-              { value: 'B', label: 'B' },
-              { value: 'C', label: 'C' },
-              { value: 'D', label: 'D' },
-            ]}
-            value={turma}
           />
         </div>
       </div>
