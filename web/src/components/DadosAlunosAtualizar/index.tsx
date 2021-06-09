@@ -1,4 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 
 import api from '../../services/api'
 import Input from '../Input'
@@ -6,7 +7,7 @@ import Select from '../Select'
 
 import './styles.css'
 
-export default (props?:any) => {
+const DadosAlunosAtualizar = (props: any) => {
   function handleCadastrar(e: FormEvent) {
     e.preventDefault()
 
@@ -35,7 +36,9 @@ export default (props?:any) => {
         turma,
       })
       .then((res) => {
-        alert('Cadastro feito com sucesso!\nO RM gerado foi o '+ res.data.rm +'.')
+        alert(
+          'Cadastro feito com sucesso!\nO RM gerado foi o ' + res.data.rm + '.'
+        )
         newRM()
         limparCampos()
       })
@@ -108,8 +111,8 @@ export default (props?:any) => {
   const [turma, setTurma] = useState('A')
 
   return (
-    <form onSubmit={handleCadastrar} className='dados-alunos'>
-      <p>IDENTIFICAÇÃO</p>
+    <form onSubmit={handleCadastrar} className='dados-alunos-atualizar'>
+      <p>IDENTIFICAÇÃO{props.idAluno}</p>
       <div className='identificaçao'>
         <div className='item aluno'>
           <Input
@@ -377,3 +380,24 @@ export default (props?:any) => {
     </form>
   )
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+    idAluno: state.classe.idAluno,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setIdAluno: (NEW: number) =>
+      dispatch({
+        type: 'SET_IDALUNO',
+        payload: { idAluno: NEW },
+      }),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DadosAlunosAtualizar)

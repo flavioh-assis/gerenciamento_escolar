@@ -4,6 +4,7 @@ const initialState = {
   disp: [],
   update: true,
   upDisp: true,
+  idAluno: null,
 }
 
 const ClassesReducer = (state = initialState, action) => {
@@ -22,6 +23,9 @@ const ClassesReducer = (state = initialState, action) => {
 
     case 'SET_UPDISP':
       return { ...state, upDisp: action.payload.upDisp }
+
+    case 'SET_IDALUNO':
+      return { ...state, idAluno: action.payload.idAluno }
 
     default:
       break
