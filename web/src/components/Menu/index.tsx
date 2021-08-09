@@ -8,7 +8,7 @@ export default () => (
     <div className="menu-div">
       <p>Alunos</p>
       <Link to="/alunado">Alunado</Link>
-      <Link to="/atualizar-dados">Atualizar Dados</Link>
+      {/* <Link to="/atualizar-dados">Atualizar Dados</Link> */}
       <Link to="/matricular-aluno">Matricular</Link>
       <Link to="/pesquisar-aluno">Pesquisar</Link>
     </div>

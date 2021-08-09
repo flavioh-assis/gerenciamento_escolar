@@ -1,9 +1,9 @@
 .dados-classe-selecao {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 2.5fr 1fr;
   column-gap: 2rem;
   margin: 0 auto;
-  max-width: 90rem;
+  max-width: 100rem;
 }
 
 .dados-classe-selecao .botao {
@@ -19,7 +19,6 @@
   margin-top: 2.4rem;
   text-decoration: none;
   transition: background-color 0.3s;
-  width: 11.5rem;
 }
 
 .dados-classe-selecao .botao:hover {

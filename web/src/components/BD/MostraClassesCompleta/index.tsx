@@ -39,8 +39,8 @@ const columns: ColDef[] = [
   },
   {
     field: 'professor',
-    headerName: 'Professor',
-    width: 300,
+    headerName: 'Professor(a)',
+    width: 320,
     align: 'center',
     headerAlign: 'center',
   },
@@ -60,9 +60,8 @@ const columns: ColDef[] = [
   },
   { field: 'situaçao', headerName: 'Situaçao', width: 90, hide: true },
 ]
-
+const onlyPortfolio = true
 const MostraClassesCompleta = (props: any) => {
-  
   function atualizaTabela() {
     api.get('classes').then((response) => {
       props.setClasses(response.data)
@@ -71,8 +70,10 @@ const MostraClassesCompleta = (props: any) => {
   }
 
   useEffect(() => {
-    if (props.update) {
-      atualizaTabela()
+    if (!onlyPortfolio) {
+      if (props.update) {
+        atualizaTabela()
+      }
     }
   })
 
@@ -82,7 +83,7 @@ const MostraClassesCompleta = (props: any) => {
         rows={props.classes}
         columns={columns}
         pageSize={18}
-        // rowHeight={35}
+        rowHeight={40}
         autoHeight
       />
     </div>

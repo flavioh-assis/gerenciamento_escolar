@@ -73,6 +73,7 @@ const DadosMostraPesqAlunos: React.FC = () => {
     professor: '',
     bairro: '',
   })
+  const onlyPortfolio = true
 
   function fazerFiltro() {
     let filter = '?'
@@ -98,11 +99,17 @@ const DadosMostraPesqAlunos: React.FC = () => {
   }
 
   function atualizarGrid() {
-    let filter = fazerFiltro()
+    if (!onlyPortfolio) {
+      let filter = fazerFiltro()
 
-    api.get(`alunos${filter}`).then((response) => {
-      setAlunos(response.data)
-    })
+      api.get(`alunos${filter}`).then((response) => {
+        setAlunos(response.data)
+      })
+    } else {
+      alert(
+        'Sem conexão com o Banco de Dados! Projeto apenas para portfólio.'
+      )
+    }
   }
 
   function limparCampos() {
@@ -210,7 +217,6 @@ const DadosMostraPesqAlunos: React.FC = () => {
           id='btn-pesquisar'
           value='Pesquisar'
           onClick={atualizarGrid}
-          // onClick={() => alert(JSON.stringify(dados, null, 1))}
         />
         <input
           type='button'

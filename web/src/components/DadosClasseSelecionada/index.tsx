@@ -20,8 +20,8 @@ const DadosClasseSelecionada = (props: any) => {
   const [professor, setProfessor] = useState('')
 
   const [disponiveis, setDisponiveis] = useState(Array)
-  const [turmasDisp, setTurmasDisp] = useState(Array())
-  const [salasDisp, setSalasDisp] = useState(Array())
+  const [turmasDisp, setTurmasDisp] = useState(Array)
+  const [salasDisp, setSalasDisp] = useState(Array)
 
   const [disabled, setDisabled] = useState({
     ano: true,
@@ -30,8 +30,8 @@ const DadosClasseSelecionada = (props: any) => {
     sala: true,
     professor: true,
   })
-
   const erro = `Não é possível excluir uma classe com aluno ativo.`
+  const onlyPortfolio = true
 
   const columns: ColDef[] = [
     { field: 'id', headerName: 'ID', width: 50, hide: true },
@@ -174,7 +174,7 @@ const DadosClasseSelecionada = (props: any) => {
   ]
 
   useEffect(() => {
-    if (props.upDisp) {
+    if (props.upDisp && !onlyPortfolio) {
       atualizaDisponiveis()
     }
   })
@@ -194,27 +194,35 @@ const DadosClasseSelecionada = (props: any) => {
   }
 
   function atualizaTurmas(ano: string) {
-    api.get(`classes/disp?ano=${ano}`).then((resp) => {
-      setTurmasDisp(resp.data)
-    })
+    if (!onlyPortfolio) {
+      api.get(`classes/disp?ano=${ano}`).then((resp) => {
+        setTurmasDisp(resp.data)
+      })
+    }
   }
 
   function atualizaTurmas2(ano: string, turma: string) {
-    api.get(`classes/disp?ano=${ano}`).then((resp) => {
-      setTurmasDisp([...resp.data, turma].sort())
-    })
+    if (!onlyPortfolio) {
+      api.get(`classes/disp?ano=${ano}`).then((resp) => {
+        setTurmasDisp([...resp.data, turma].sort())
+      })
+    }
   }
 
   function atualizaSalas(periodo: string) {
-    api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
-      setSalasDisp(resp.data)
-    })
+    if (!onlyPortfolio) {
+      api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
+        setSalasDisp(resp.data)
+      })
+    }
   }
 
   function atualizaSalas2(periodo: string, sala: string) {
-    api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
-      setSalasDisp([...resp.data, sala].sort())
-    })
+    if (!onlyPortfolio) {
+      api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
+        setSalasDisp([...resp.data, sala].sort())
+      })
+    }
   }
 
   function limparCampos() {
@@ -242,23 +250,29 @@ const DadosClasseSelecionada = (props: any) => {
   function handleSalvar(e: FormEvent) {
     e.preventDefault()
 
-    api
-      .put('classes', {
-        id: id,
-        ano: ano,
-        turma: turma,
-        periodo: periodo,
-        sala: sala,
-        professor: professor,
-      })
-      .then(() => {
-        alert('Dados alterados com sucesso!')
-        atualizaTabela()
-        props.setUpDisp(true)
-        limparCampos()
-        setSelectDisabled(true)
-      })
-      .catch((err) => alert(err.response.request._response))
+    if (!onlyPortfolio) {
+      api
+        .put('classes', {
+          id: id,
+          ano: ano,
+          turma: turma,
+          periodo: periodo,
+          sala: sala,
+          professor: professor,
+        })
+        .then(() => {
+          alert('Dados alterados com sucesso!')
+          atualizaTabela()
+          props.setUpDisp(true)
+          limparCampos()
+          setSelectDisabled(true)
+        })
+        .catch((err) => alert(err.response.request._response))
+    } else {
+      alert(
+        'Sem conexão com o Banco de Dados! Projeto apenas para portfólio.'
+      )
+    }
   }
 
   function setSelectDisabled(dis: boolean) {
@@ -351,6 +365,7 @@ const DadosClasseSelecionada = (props: any) => {
           rows={props.classes}
           columns={columns}
           pageSize={9}
+          rowHeight={40}
           autoHeight
         />
       </div>

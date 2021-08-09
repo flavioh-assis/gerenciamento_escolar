@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { AppBar, Box, Typography, Tab, Tabs } from '@material-ui/core'
 

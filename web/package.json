@@ -1,38 +1,31 @@
 {
   "name": "ger_escolar",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "author": "Flavio Assis",
-  "description": "App Para Gerar Relatórios de Frequência da MVMI",
-  "main": "public/electron.js",
+  "description": "Gerenciador Escolar para 1º ao 5º ano do Ensino Fundamental",
   "homepage": "./",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/data-grid": "^4.0.0-alpha.10",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "axios": "^0.21.1",
+    "browserslist": "^4.16.7",
+    "caniuse-lite": "^1.0.30001249",
     "material-ui": "^0.20.2",
-    "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.2",
     "redux": "^4.1.0",
-    "text-mask": "^0.0.2",
     "typescript": "~3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"

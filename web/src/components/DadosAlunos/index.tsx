@@ -6,106 +6,134 @@ import Select from '../Select'
 
 import './styles.css'
 
-export default (props?:any) => {
+export default () => {
+  const onlyPortfolio = true
+
+  const initialState = {
+    dadosAluno: {
+      nome: '',
+      ra: '',
+      rm: '1',
+      nee: '',
+      nasc_cidade: '',
+      nasc_uf: '',
+      nacionalidade: '',
+      nasc_data: '',
+      pai: '',
+      mae: '',
+      responsavel: '',
+      endereco: '',
+      bairro: '',
+      cidade: '',
+      telefones: '',
+      obs: '',
+      proc_escola: '',
+      proc_cidade: '',
+      proc_ano: '',
+      ex_aluno: '',
+      ano_desejado: '',
+      turma: '',
+    },
+  }
+  const [dadosAluno, setDadosAluno] = useState({
+    nome: 'Flavio',
+    ra: '144.937.520-X',
+    rm: '6521',
+    nee: '',
+    nasc_cidade: 'Ribeirão Preto',
+    nasc_uf: 'SP',
+    nacionalidade: 'Brasileira',
+    nasc_data: '07/05/1993', //deveria ser Date()
+    pai: 'Magno Onofre de Assis Silva',
+    mae: 'Elisabete Guilherme de Assis Silva',
+    responsavel: '',
+    endereco: 'Rua Cardeal Leme, 300',
+    bairro: 'Vila Virgínia',
+    cidade: 'Ribeirão Preto',
+    telefones: '99617-1234 (mãe)',
+    obs: 'Bl 9 Ap 32 - Cond. Delboux A',
+    proc_escola: 'EMEB. Antônio Joaquim da Silva',
+    proc_cidade: 'Cravinhos',
+    proc_ano: 'Pré-escola',
+    ex_aluno: 'Não',
+    ano_desejado: '1º',
+    turma: 'A',
+  })
+  const UFs = [
+    'AC',
+    'AL',
+    'AM',
+    'AP',
+    'BA',
+    'CE',
+    'DF',
+    'ES',
+    'GO',
+    'MG',
+    'MA',
+    'MS',
+    'MT',
+    'PA',
+    'PB',
+    'PE',
+    'PI',
+    'PR',
+    'RJ',
+    'RN',
+    'RO',
+    'RR',
+    'RS',
+    'SP',
+    'SC',
+    'SE',
+    'TO',
+    'Ext.',
+  ]
+
+  useEffect(() => {
+    if (!onlyPortfolio) {
+      newRM()
+    }
+  })
+
+  function clearFields() {
+    setDadosAluno(initialState.dadosAluno)
+  }
+
   function handleCadastrar(e: FormEvent) {
     e.preventDefault()
 
-    api
-      .post('alunos', {
-        nome,
-        ra,
-        nasc_cidade,
-        nasc_uf,
-        nacionalidade,
-        nasc_data,
-        nee,
-        pai,
-        mae,
-        responsavel,
-        endereco,
-        bairro,
-        cidade,
-        telefones,
-        obs,
-        proc_escola,
-        proc_cidade,
-        proc_ano,
-        ex_aluno,
-        ano_desejado,
-        turma,
-      })
-      .then((res) => {
-        alert('Cadastro feito com sucesso!\nO RM gerado foi o '+ res.data.rm +'.')
-        newRM()
-        limparCampos()
-      })
-      .catch((error) => {
-        alert('Deu ruim: ' + error)
-      })
+    if (!onlyPortfolio) {
+      api
+        .post('alunos', {
+          ...dadosAluno,
+        })
+        .then((res) => {
+          alert(
+            'Cadastro feito com sucesso!\nO RM gerado foi o ' +
+              res.data.rm +
+              '.'
+          )
+          newRM()
+          clearFields()
+        })
+        .catch((error) => {
+          alert('Deu ruim: ' + error)
+        })
+    } else {
+      alert('Sem conexão com o Banco de Dados! Projeto apenas para portfólio.')
+    }
   }
 
   function newRM() {
     api.get('/alunos_rm').then((res) => {
-      setRm(res.data)
+      setValue({ rm: res.data })
     })
   }
 
-  function limparCampos() {
-    setNome('')
-    setRa('')
-    setRm('')
-    setNee('')
-    setLocalidade('')
-    setUfNasc('')
-    setNacionalidade('')
-    setDataNasc('')
-    setPai('')
-    setMae('')
-    setResponsavel('')
-    setEndereço('')
-    setBairro('')
-    setCidadeRes('')
-    setTelefones('')
-    setObservaçoes('')
-    setEscola('')
-    setCidadeProc('')
-    setAnoProc('')
-    setExAluno('')
-    setAnoDesejado('')
-    setTurma('')
+  function setValue(value: object) {
+    setDadosAluno(Object.assign({}, dadosAluno, value))
   }
-
-  useEffect(() => {
-    newRM()
-  }, [])
-
-  const [nome, setNome] = useState('Flavio Henrique de Assis Silva')
-  const [ra, setRa] = useState('144.937.520-X')
-  const [rm, setRm] = useState('')
-  const [nee, setNee] = useState('')
-
-  const [nasc_cidade, setLocalidade] = useState('Ribeirão Preto')
-  const [nasc_uf, setUfNasc] = useState('SP')
-  const [nacionalidade, setNacionalidade] = useState('Brasileira')
-  const [nasc_data, setDataNasc] = useState('')
-
-  const [pai, setPai] = useState('Magno Onofre de Assis Silva')
-  const [mae, setMae] = useState('Elisabete Guilherme de Assis Silva')
-  const [responsavel, setResponsavel] = useState('')
-
-  const [endereco, setEndereço] = useState('Rua Cardeal Leme, 300')
-  const [bairro, setBairro] = useState('Vila Virgínia')
-  const [cidade, setCidadeRes] = useState('Ribeirão Preto')
-
-  const [telefones, setTelefones] = useState('99617-1234 (mãe)')
-  const [obs, setObservaçoes] = useState('Bl 9 Ap 32 - Cond. Delboux A')
-
-  const [proc_escola, setEscola] = useState('EMEB. Antônio Joaquim da Silva')
-  const [proc_cidade, setCidadeProc] = useState('Cravinhos')
-  const [proc_ano, setAnoProc] = useState('Pré-escola')
-  const [ex_aluno, setExAluno] = useState('Não')
-  const [ano_desejado, setAnoDesejado] = useState('1º')
-  const [turma, setTurma] = useState('A')
 
   return (
     <form onSubmit={handleCadastrar} className='dados-alunos'>
@@ -115,8 +143,8 @@ export default (props?:any) => {
           <Input
             label='Nome do Aluno'
             name='nome-aluno'
-            onChange={(t) => setNome(t.target.value)}
-            value={nome}
+            onChange={(t) => setValue({ nome: t.target.value })}
+            value={dadosAluno.nome}
           />
         </div>
         <div className='item ra'>
@@ -124,8 +152,8 @@ export default (props?:any) => {
             label='RA'
             name='ra'
             className='ra'
-            onChange={(t) => setRa(t.target.value)}
-            value={ra}
+            onChange={(t) => setValue({ ra: t.target.value })}
+            value={dadosAluno.ra}
           />
         </div>
         <div className='item rm'>
@@ -133,17 +161,17 @@ export default (props?:any) => {
             label='RM'
             name='rm'
             className='item rm'
-            onChange={(t) => setRm(t.target.value)}
-            value={rm}
+            onChange={(t) => setValue({ rm: t.target.value })}
+            value={dadosAluno.rm}
             disabled
           />
         </div>
         <div className='item nee'>
           <Select
-            value={nee}
+            value={dadosAluno.nee}
             label='Deficiência'
             name='nee'
-            onChange={(e) => setNee(e.target.value)}
+            onChange={(e) => setValue({ nee: e.target.value })}
             options={[
               { value: '', label: 'Não Possui' },
               { value: 'Autismo', label: 'Autismo' },
@@ -158,54 +186,27 @@ export default (props?:any) => {
           <Input
             label='Cidade'
             name='localidade'
-            onChange={(t) => setLocalidade(t.target.value)}
-            value={nasc_cidade}
+            onChange={(t) => setValue({ nasc_cidade: t.target.value })}
+            value={dadosAluno.nasc_cidade}
           />
         </div>
         <div className='item uf-nasc'>
           <Select
-            value={nasc_uf}
+            value={dadosAluno.nasc_uf}
             label='UF'
             name='uf-nasc'
-            onChange={(e) => setUfNasc(e.target.value)}
-            options={[
-              { value: 'AC', label: 'AC' },
-              { value: 'AL', label: 'AL' },
-              { value: 'AM', label: 'AM' },
-              { value: 'AP', label: 'AP' },
-              { value: 'BA', label: 'BA' },
-              { value: 'CE', label: 'CE' },
-              { value: 'DF', label: 'DF' },
-              { value: 'ES', label: 'ES' },
-              { value: 'GO', label: 'GO' },
-              { value: 'MG', label: 'MG' },
-              { value: 'MA', label: 'MA' },
-              { value: 'MS', label: 'MS' },
-              { value: 'MT', label: 'MT' },
-              { value: 'PA', label: 'PA' },
-              { value: 'PB', label: 'PB' },
-              { value: 'PE', label: 'PE' },
-              { value: 'PI', label: 'PI' },
-              { value: 'PR', label: 'PR' },
-              { value: 'RJ', label: 'RJ' },
-              { value: 'RN', label: 'RN' },
-              { value: 'RO', label: 'RO' },
-              { value: 'RR', label: 'RR' },
-              { value: 'RS', label: 'RS' },
-              { value: 'SP', label: 'SP' },
-              { value: 'SC', label: 'SC' },
-              { value: 'SE', label: 'SE' },
-              { value: 'TO', label: 'TO' },
-              { value: 'EX', label: 'Est.' },
-            ]}
+            onChange={(e) => setValue({ nasc_uf: e.target.value })}
+            options={UFs.map((UF: string) => {
+              return { value: UF, label: UF }
+            })}
           />
         </div>
         <div className='item nacionalidade'>
           <Input
             label='Nacionalidade'
             name='nacionalidade'
-            onChange={(t) => setNacionalidade(t.target.value)}
-            value={nacionalidade}
+            onChange={(t) => setValue({ nacionalidade: t.target.value })}
+            value={dadosAluno.nacionalidade}
           />
         </div>
         <div className='item data-nasc'>
@@ -213,13 +214,14 @@ export default (props?:any) => {
             label='Data Nasc.'
             name='data-nasc'
             onChange={(t) => {
-              setDataNasc(t.target.value)
-
-              if ([1, 4].includes(nasc_data.length)) {
-                setDataNasc(t.target.value + '/')
+              // deveria ter REGEX
+              if ([1, 4].includes(dadosAluno.nasc_data.length)) {
+                setValue({ nasc_data: t.target.value + '/' })
+              } else {
+                setValue({ nasc_data: t.target.value })
               }
             }}
-            value={nasc_data}
+            value={dadosAluno.nasc_data}
           />
         </div>
 
@@ -227,24 +229,26 @@ export default (props?:any) => {
           <Input
             label='Nome do Pai'
             name='nome-pai'
-            onChange={(t) => setPai(t.target.value)}
-            value={pai}
+            onChange={(t) => setValue({ pai: t.target.value })}
+            value={dadosAluno.pai}
           />
         </div>
         <div className='item mae'>
           <Input
             label='Nome da Mãe'
             name='nome-mae'
-            onChange={(t) => setMae(t.target.value)}
-            value={mae}
+            onChange={(t) => setValue({ mae: t.target.value })}
+            value={dadosAluno.mae}
           />
         </div>
         <div className='item responsavel'>
           <Input
             label='Nome do Responsável Legal'
             name='nome-resp-legal'
-            onChange={(t) => setResponsavel(t.target.value)}
-            value={responsavel}
+            onChange={(t) => {
+              setValue({ responsavel: t.target.value })
+            }}
+            value={dadosAluno.responsavel}
           />
         </div>
       </div>
@@ -255,40 +259,42 @@ export default (props?:any) => {
           <Input
             label='Endereço'
             name='endereço'
-            onChange={(t) => setEndereço(t.target.value)}
-            value={endereco}
+            onChange={(t) => setValue({ endereco: t.target.value })}
+            value={dadosAluno.endereco}
           />
         </div>
         <div className='bairro'>
           <Input
             label='Bairro'
             name='bairro'
-            onChange={(t) => setBairro(t.target.value)}
-            value={bairro}
+            onChange={(t) => setValue({ bairro: t.target.value })}
+            value={dadosAluno.bairro}
           />
         </div>
         <div className='cidade'>
           <Input
             label='Cidade'
             name='cidade'
-            onChange={(t) => setCidadeRes(t.target.value)}
-            value={cidade}
+            onChange={(t) => setValue({ cidade: t.target.value })}
+            value={dadosAluno.cidade}
           />
         </div>
 
         <div className='telefones'>
           <textarea
             name='telefones'
-            onChange={(t) => setTelefones(t.target.value)}
+            onChange={(t) => setValue({ telefones: t.target.value })}
             placeholder='Telefones'
-            value={telefones}></textarea>
+            value={dadosAluno.telefones}
+          ></textarea>
         </div>
         <div className='observaçoes'>
           <textarea
             name='observacoes'
-            onChange={(t) => setObservaçoes(t.target.value)}
+            onChange={(t) => setValue({ obs: t.target.value })}
             placeholder='Observações'
-            value={obs}></textarea>
+            value={dadosAluno.obs}
+          ></textarea>
         </div>
       </div>
 
@@ -298,24 +304,24 @@ export default (props?:any) => {
           <Input
             label='Escola'
             name='proc_escola'
-            onChange={(t) => setEscola(t.target.value)}
-            value={proc_escola}
+            onChange={(t) => setValue({ proc_escola: t.target.value })}
+            value={dadosAluno.proc_escola}
           />
         </div>
         <div className='cidade'>
           <Input
             label='Cidade'
             name='cidade'
-            onChange={(t) => setCidadeProc(t.target.value)}
-            value={proc_cidade}
+            onChange={(t) => setValue({ proc_cidade: t.target.value })}
+            value={dadosAluno.proc_cidade}
           />
         </div>
         <div className='ano-proc'>
           <Select
-            value={proc_ano}
+            value={dadosAluno.proc_ano}
             label='Ano/Série'
             name='ano-proc'
-            onChange={(e) => setAnoProc(e.target.value)}
+            onChange={(e) => setValue({ proc_ano: e.target.value })}
             options={[
               { value: 'Não cursou', label: 'Não cursou' },
               { value: 'Pré-escola', label: 'Pré-escola' },
@@ -329,10 +335,10 @@ export default (props?:any) => {
         </div>
         <div className='ex-aluno'>
           <Select
-            value={ex_aluno}
+            value={dadosAluno.ex_aluno}
             label='É ex-aluno?'
             name='ex-aluno'
-            onChange={(e) => setExAluno(e.target.value)}
+            onChange={(e) => setValue({ ex_aluno: e.target.value })}
             options={[
               { value: 'Não', label: 'Não' },
               { value: 'Sim', label: 'Sim' },
@@ -341,10 +347,10 @@ export default (props?:any) => {
         </div>
         <div className='ano-desejado'>
           <Select
-            value={ano_desejado}
+            value={dadosAluno.ano_desejado}
             label='Ano Desejado'
             name='ano-desejado'
-            onChange={(e) => setAnoDesejado(e.target.value)}
+            onChange={(e) => setValue({ ano_desejado: e.target.value })}
             options={[
               { value: '1º', label: '1º ano' },
               { value: '2º', label: '2º ano' },
@@ -358,21 +364,26 @@ export default (props?:any) => {
           <Select
             label='Turma'
             name='turma'
-            onChange={(e) => setTurma(e.target.value)}
+            onChange={(e) => setValue({ turma: e.target.value })}
             options={[
               { value: 'A', label: 'A' },
               { value: 'B', label: 'B' },
               { value: 'C', label: 'C' },
               { value: 'D', label: 'D' },
             ]}
-            value={turma}
+            value={dadosAluno.turma}
           />
         </div>
       </div>
 
       <div className='buttons'>
         <input type='submit' id='btn-matricular' value='Matricular Aluno' />
-        <input type='button' id='btn-limpar' value='Limpar Campos' />
+        <input
+          type='button'
+          id='btn-limpar'
+          value='Limpar Campos'
+          onClick={clearFields}
+        />
       </div>
     </form>
   )

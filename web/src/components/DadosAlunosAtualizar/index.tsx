@@ -107,7 +107,7 @@ const DadosAlunosAtualizar = (props: any) => {
 
   useEffect(() => {
     selectAluno()
-  }, [])
+  })
 
   const [nome, setNome] = useState('')
   const [ra, setRa] = useState('')

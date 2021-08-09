@@ -59,7 +59,7 @@ const MostraClasse = (props: any) => {
       <DataGrid
         rows={props.classes}
         columns={columns}
-        pageSize={9}
+        pageSize={6}
         autoHeight
       />
     </div>

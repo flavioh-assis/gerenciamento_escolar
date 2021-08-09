@@ -8,18 +8,28 @@ import Select from '../../components/Select'
 import './styles.css'
 
 const SelecaoClasses = (props: any) => {
-
   const [ano, setAno] = useState('')
   const [turma, setTurma] = useState('')
   const [periodo, setPeriodo] = useState('')
   const [sala, setSala] = useState('')
   const [professor, setProfessor] = useState('')
 
-  const [turmasDisp, setTurmasDisp] = useState(Array())
-  const [salasDisp, setSalasDisp] = useState(Array())
+  const [turmasDisp, setTurmasDisp] = useState(['A', 'B', 'C', 'D'])
+  const [salasDisp, setSalasDisp] = useState([
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+  ])
+  const onlyPortfolio = true
 
   useEffect(() => {
-    if (props.upDisp) {
+    if (props.upDisp && !onlyPortfolio) {
       atualizaDisponiveis()
     }
   })
@@ -32,16 +42,26 @@ const SelecaoClasses = (props: any) => {
     props.setUpDisp(false)
   }
 
+  function atualizaTabela() {
+    // api.get('classes').then((response) => {
+    //   props.setClasses(response.data)
+    // })
+  }
+
   function atualizaTurmas(ano: string) {
-    api.get(`classes/disp?ano=${ano}`).then((resp) => {
-      setTurmasDisp(resp.data)
-    })
+    if (!onlyPortfolio) {
+      api.get(`classes/disp?ano=${ano}`).then((resp) => {
+        setTurmasDisp(resp.data)
+      })
+    }
   }
 
   function atualizaSalas(periodo: string) {
-    api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
-      setSalasDisp(resp.data)
-    })
+    if (!onlyPortfolio) {
+      api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
+        setSalasDisp(resp.data)
+      })
+    }
   }
 
   function handleCadastrar(e: FormEvent) {
@@ -49,6 +69,10 @@ const SelecaoClasses = (props: any) => {
 
     if ([ano, turma, periodo, sala].includes('')) {
       alert('ERRO! Preencha os campos ANO, TURMA, PERÍODO e SALA.')
+    } else if (onlyPortfolio) {
+      alert(
+        'Sem conexão com o Banco de Dados! Projeto apenas para portfólio.'
+      )
     } else {
       api
         .post('classes', {
@@ -76,12 +100,6 @@ const SelecaoClasses = (props: any) => {
     setPeriodo('')
     setSala('')
     setProfessor('')
-  }
-
-  function atualizaTabela() {
-    api.get('classes').then((response) => {
-      props.setClasses(response.data)
-    })
   }
 
   return (
