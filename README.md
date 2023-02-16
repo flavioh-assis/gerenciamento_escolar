@@ -11,6 +11,7 @@ Foi baseado no projeto [Proffy](https://github.com/rocketseat-education/nlw-02-o
 
   * TypeScript
   * ReactJS
+  * Redux
   * CSS
   * Node.js
   * Postgres
