@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:15.2-alpine
+    container_name: gerenciamento_escolar
+    environment:
+      POSTGRES_DB: db_gerenciamento_escolar
+      POSTGRES_PASSWORD: 1234567
+    ports:
+      - 5433:5432
+    volumes:
+      - ./.data/postgresql/data:/var/lib/postgresql/data
+
+volumes:
+  volume_gerenciamento_escolar:
+    external: true
