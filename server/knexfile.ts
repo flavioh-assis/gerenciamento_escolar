@@ -15,4 +15,4 @@ const knexConfig = {
   },
 };
 
-export { knexConfig };
+module.exports = knexConfig;

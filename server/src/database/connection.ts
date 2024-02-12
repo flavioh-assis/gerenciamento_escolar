@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import knex from 'knex';
-import { knexConfig } from '../../knexfile';
+import knexConfig = require('../../knexfile');
 
 const db = knex({
   ...knexConfig,
