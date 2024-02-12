@@ -9,17 +9,17 @@
     "knex:down": "knex --knexfile knexfile.ts migrate:down",
     "knex:migrate:rb": "knex --knexfile knexfile.ts migrate:rollback"
   },
-  "devDependencies": {
-    "@types/express": "^4.17.8",
-    "ts-node-dev": "^1.0.0-pre.63",
-    "typescript": "^4.0.3"
-  },
   "dependencies": {
+    "dotenv": "^16.4.2",
     "express": "^4.17.1",
     "knex": "^0.21.19",
     "moment": "^2.29.1",
     "pg": "^8.4.1",
-    "react-data-table-component": "^6.11.5",
-    "styled-components": "^5.2.1"
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.8",
+    "ts-node-dev": "^1.0.0-pre.63",
+    "typescript": "^4.0.3"
   }
 }
