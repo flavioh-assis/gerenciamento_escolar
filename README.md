@@ -7,6 +7,12 @@ uma escola municipal de 1º ao 5º ano do ensino fundamental situada em Cravinho
 
 Foi baseado no projeto [Proffy](https://github.com/rocketseat-education/nlw-02-omnistack) da [Rocketseat](https://github.com/rocketseat-education).
 
+# Refatorações
+
+Em 11/02/2024 foi iniciado a fase de refatoração do projeto, visando colocar em prática o que eu aprendi desde a última atualização do projeto em 09/06/2021.
+Alterações realizadas:
+ * Em breve
+
 # Tecnologias
 
   * TypeScript
