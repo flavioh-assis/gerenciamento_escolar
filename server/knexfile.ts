@@ -1,14 +1,18 @@
-import path from 'path'
+import 'dotenv/config';
+import path from 'path';
 
-module.exports = {
+const knexConfig = {
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    database : 'db_mvmi',
-    user : 'postgres',
-    password : 'postgres',
+    host: process.env.DB_URL,
+    port: Number(process.env.DB_PORT),
+    database: process.env.DB_DATABASE,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
   },
   migrations: {
-    directory: path.resolve(__dirname, 'src', 'database', 'migrations')
-  }
-}
+    directory: path.resolve(__dirname, 'src', 'database', 'migrations'),
+  },
+};
+
+export { knexConfig };
