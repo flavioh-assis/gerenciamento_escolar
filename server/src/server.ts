@@ -13,4 +13,4 @@ app.use(function (_, res, next) {
 app.use(express.json());
 app.use(routes);
 
-app.listen(process.env.API_PORT);
+app.listen(process.env.API_PORT, () => console.log(`Api listening to port ${process.env.API_PORT}`));
