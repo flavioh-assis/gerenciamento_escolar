@@ -1,0 +1,23 @@
+export type Student = {
+  id: number;
+  nome: string;
+  ra: string;
+  nasc_cidade: string;
+  nasc_uf: string;
+  nacionalidade: string;
+  nasc_data: string;
+  nee: string;
+  pai: string;
+  mae: string;
+  responsavel: string;
+  endereco: string;
+  bairro: string;
+  cidade: string;
+  telefones: string;
+  obs: string;
+  proc_escola: string;
+  proc_cidade: string;
+  proc_ano: string;
+  ex_aluno: string;
+  ano_desejado: string;
+};

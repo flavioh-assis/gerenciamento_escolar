@@ -1,216 +1,181 @@
-import { Request, Response } from 'express'
-import db from '../database/connection'
-import moment from 'moment'
+import { Request, Response } from 'express';
+import db from '../database/connection';
+import { Table } from '../enum/database';
+import { Student } from '../type/student';
+
+function getFilterValues(req: Request) {
+  const { ano, bairro, nee, nome, professor, ra, turma } = req.query;
+
+  const values = {
+    name: (nome as string) || '',
+    studentRegistration: (ra as string) || '%',
+    disability: (nee as string) == 'Qualquer' ? '%a' : (nee as string) || '',
+    grade: (ano as string) || '%',
+    group: (turma as string) || '%',
+    teacher: (professor as string) || '',
+    neighborhood: (bairro as string) || '',
+  };
+
+  console.log('-> Filter values:', values);
+
+  return values;
+}
 
 export default class AlunosController {
   async index(req: Request, res: Response) {
-    const filters = req.query
-
-    if (!filters.nome) {
-      var nome = '%'
-    } else {
-      var nome = filters.nome as string
-    }
-
-    if (!filters.ra) {
-      var ra = '%'
-    } else {
-      var ra = filters.ra as string
-    }
-
-    if (!filters.nee) {
-      var nee = '%'
-    } else if (filters.nee == 'Qualquer') {
-      var nee = '%a%'
-    } else {
-      var nee = filters.nee as string
-    }
-
-    if (!filters.ano) {
-      var ano = '%'
-    } else {
-      var ano = filters.ano as string
-    }
-
-    if (!filters.turma) {
-      var turma = '%'
-    } else {
-      var turma = filters.turma as string
-    }
-
-    if (!filters.professor) {
-      var professor = '%'
-    } else {
-      var professor = filters.professor as string
-    }
-
-    if (!filters.bairro) {
-      var bairro = '%'
-    } else {
-      var bairro = filters.bairro as string
-    }
-
-    const alunos = await db('tbAlunos')
-      .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
-      .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
-
-      .where('nome', 'ilike', `${nome}%`)
-      .andWhere('tbAlunos.ra', 'like', `${ra}`)
-      .andWhere('nee', 'ilike', `${nee}`)
-      .andWhere('ano', 'like', `${ano}`)
-      .andWhere('turma', 'like', `${turma}`)
-      .andWhere('professor', 'ilike', `${professor}%`)
-      .andWhere('bairro', 'ilike', `%${bairro}%`)
-      .select(
-        'tbAlunos.id as id',
-        'num_chamada',
-        'nome',
-        'ra',
-        'nee',
-        'nasc_data',
-        'ano',
-        'turma',
-        'professor',
-        'situacao',
-        'bairro'
-      )
-
-    console.log('alunos selected')
-
-    return res.json(alunos)
-  }
-
-  async create(req: Request, res: Response) {
-    const {
-      nome,
-      ra,
-      nasc_cidade,
-      nasc_uf,
-      nacionalidade,
-      nasc_data,
-      nee,
-      pai,
-      mae,
-      responsavel,
-      endereco,
-      bairro,
-      cidade,
-      telefones,
-      obs,
-      proc_escola,
-      proc_cidade,
-      proc_ano,
-      ex_aluno,
-      ano_desejado,
-      turma,
-    } = req.body
-
-    const toDate = new Date()
-    const today = moment(toDate).format('DD/MM/YYYY')
-
-    const yearNasc = nasc_data.substr(6, 4)
-
-    const trx = await db.transaction()
+    console.log('-> STUDENTS - GET BY FILTER - QUERY:', req.query);
 
     try {
-      const id_classe = trx('tbClasses')
-        .where('ano', '=', `${ano_desejado}`)
-        .andWhere('turma', '=', `${turma}`)
-        .distinct('id')
+      const { disability, grade, group, name, neighborhood, studentRegistration, teacher } = getFilterValues(req);
 
-      const id_aluno = await trx('tbAlunos')
-        .insert({
-          nome,
-          ra,
-          nasc_cidade,
-          nasc_uf,
-          nacionalidade,
-          nasc_data,
-          nee,
-          pai,
-          mae,
-          responsavel,
-          endereco,
-          bairro,
-          cidade,
-          telefones,
-          obs,
-          proc_escola,
-          proc_cidade,
-          proc_ano,
-          ex_aluno,
-          ano_desejado,
-        })
-        .returning('id')
+      const alunos = await db(Table.STUDENT)
+        .join(Table.ENROLLMENT, `${Table.ENROLLMENT}.id_aluno`, '=', `${Table.STUDENT}.id`)
+        .join(Table.CLASS, `${Table.CLASS}.id`, '=', `${Table.ENROLLMENT}.id_classe`)
 
-      const n_chamada = await trx('tbClasses')
+        .where('nome', 'ilike', `${name}%`)
+        .andWhere('ra', 'like', `${studentRegistration}`)
+        .andWhere('nee', 'ilike', `${disability}%`)
+        .andWhere('ano', 'like', `${grade}`)
+        .andWhere('turma', 'like', `${group}`)
+        .andWhere('professor', 'ilike', `${teacher}%`)
+        .andWhere('bairro', 'ilike', `%${neighborhood}%`)
+        .select(
+          'tbAlunos.id as id',
+          'num_chamada',
+          'nome',
+          'ra',
+          'nee',
+          'nasc_data',
+          'ano',
+          'turma',
+          'professor',
+          'situacao',
+          'bairro',
+        );
+
+      console.log(`-> ${alunos.length} Students selected`);
+
+      return res.json(alunos);
+    } catch (error) {
+      res.status(500).json({
+        error: 'Something went wrong. It was not possible to do the search.',
+      });
+    }
+  }
+
+  async create({ body }: Request, res: Response) {
+    console.log('-> STUDENTS - POST CREATE - BODY:', body);
+
+    const trx = await db.transaction();
+
+    try {
+      const { turma: group, rm, ...studentData } = body;
+      const student: Student = { ...studentData };
+
+      const today = new Date().toLocaleString('pt-br', {
+        dateStyle: 'short',
+      });
+
+      const yearNasc = Number(student.nasc_data.slice(6));
+
+      const resultIdClass = await db(Table.CLASS)
+        .where('ano', '=', `${student.ano_desejado}`)
+        .andWhere('turma', '=', `${group}`)
+        .select('id');
+
+      if (!resultIdClass.length) {
+        throw new Error(`Class ${student.ano_desejado} ${group} doesn't exists.`);
+      }
+      const idClass = resultIdClass[0]['id'] as number;
+
+      const resultIdStudent = await trx(Table.STUDENT).insert(student).returning('id');
+      const idStudent = resultIdStudent[0]['id'] as number;
+
+      const resultNumChamada = await trx(Table.CLASS)
         .increment('n_ativos', 1)
         .increment('n_total', 1)
-        .where('id', '=', id_classe)
-        .returning('n_total')
+        .where('id', '=', idClass)
+        .returning('n_total');
+      const n_chamada = resultNumChamada[0]['n_total'] as number;
 
-      await trx('tbMatriculas')
-        .insert({
-          id_aluno: id_aluno[0],
-          data_inicio: today,
-          data_fim: null,
-          situacao: 'ATIVO',
-          num_chamada: n_chamada[0],
-          idade: (2021 - yearNasc) as Number,
-          id_classe,
-        })
-        .returning('id')
+      await trx(Table.ENROLLMENT).insert({
+        id_aluno: idStudent,
+        data_inicio: today,
+        data_fim: null,
+        situacao: 'ATIVO',
+        num_chamada: n_chamada,
+        idade: new Date().getFullYear() - yearNasc,
+        id_classe: idClass,
+      });
 
-      await trx.commit()
+      await trx.commit();
+
+      console.log(`-> Student created with id ${idStudent}`);
 
       return res.status(201).json({
-        rm: id_aluno[0],
-      })
-    } catch (err) {
-      await trx.rollback()
-      console.log(err)
+        rm: idStudent,
+      });
+    } catch (error) {
+      await trx.rollback();
 
-      console.log('alunos created')
+      console.log(`-> Error: Student not created. ${error}`);
 
-      return res.status(400).json({
-        error: 'Erro ao matricular aluno.',
-      })
+      return res.status(500).json({
+        error: 'Something went wrong. It was not possible to create the Student.',
+      });
     }
   }
 
-  async rm(req: Request, res: Response) {
+  async rm(_: Request, res: Response) {
+    console.log('-> STUDENTS - GET AVAILABLE ENROLLMENT REGISTRATION');
+
     try {
-      const newRM = await db('tbAlunos').max('id')
+      const result = await db(Table.STUDENT).max('id').limit(1);
 
-      console.log('rm selected')
+      const lastEnrollmentRegistration = (result[0]['max'] as number) || 0;
+      const availableEnrollmentRegistration = lastEnrollmentRegistration + 1;
 
-      return res.json(newRM[0]['max'] + 1)
+      console.log('-> Available Enrollment Registration:', availableEnrollmentRegistration);
+
+      return res.json(availableEnrollmentRegistration);
     } catch (error) {
-      return res.status(400).json({
-        error: 'Erro ao retornar um novo RM.',
-      })
+      console.log(`-> Error: Student not created. ${error}`);
+
+      return res.status(500).json({
+        error: 'Something went wrong. It was not possible to get the available Enrollment Registration.',
+      });
     }
   }
 
-  async id(req: Request, res: Response) {
+  async id({ params }: Request, res: Response) {
+    const { id } = params;
+    console.log('-> STUDENTS - GET BY ID - PARAMS:', params);
+
     try {
-      const filters = req.query
+      const student: Student[] = await db(Table.STUDENT)
+        .join(`${Table.ENROLLMENT}`, `${Table.ENROLLMENT}.id_aluno`, `${Table.STUDENT}.id`)
+        .join(`${Table.CLASS}`, `${Table.CLASS}.id`, `${Table.ENROLLMENT}.id_classe`)
 
-      const aluno = await db('tbAlunos')
-      .join('tbMatriculas', 'tbMatriculas.id_aluno', '=', 'tbAlunos.id')
-      .join('tbClasses', 'tbClasses.id', '=', 'tbMatriculas.id_classe')
+        .where(`${Table.STUDENT}.id`, `${id}`)
+        .select('*');
 
-      .where('tbAlunos.id', `${filters.id}`)
-      .select('*')
+      if (student.length == 0) {
+        console.log('-> Error: Student not found');
 
-      console.log('aluno selected by id')
+        return res.status(404).json({
+          error: 'Student not found.',
+        });
+      }
 
-      return res.json(aluno)
+      console.log('-> OK: Student selected by id', student[0]);
 
+      return res.json(student[0]);
     } catch (error) {
-      return res.status(400).json({
-        error: 'Erro ao retornar um novo RM.',
-      })
+      console.log(`-> Error: Student not found. ${error}`);
+
+      return res.status(500).json({
+        error: 'Something went wrong. It was not possible to search for the Student.',
+      });
     }
   }
 }
