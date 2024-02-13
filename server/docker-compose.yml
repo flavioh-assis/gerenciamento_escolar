@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 services:
   postgres:
@@ -10,8 +10,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - ./.data/postgresql/data:/var/lib/postgresql/data
+      - vol_gerenciamento_escolar:/var/lib/postgresql/data
 
 volumes:
-  volume_gerenciamento_escolar:
-    external: true
+  vol_gerenciamento_escolar:
