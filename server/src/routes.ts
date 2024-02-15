@@ -11,7 +11,7 @@ const classesController = new ClassesController();
 routes.get('/classes', classesController.index);
 routes.get('/classes/disp', classesController.disp);
 routes.post('/classes', classesController.create);
-routes.delete('/classes', classesController.delete);
+routes.delete('/classes/:id', classesController.delete);
 routes.put('/classes', classesController.update);
 
 routes.get('/alunos', alunosController.index);

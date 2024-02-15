@@ -1,35 +1,73 @@
-import { Request, Response } from 'express'
-import db from '../database/connection'
+import { Request, Response } from 'express';
+import { Table } from '../enum/database';
+import db from '../database/connection';
+
+type FetchResult = {
+  [key: string]: string;
+}[];
+
+type ResultGrades = {
+  ano: string;
+}[];
+
+const Options = {
+  CLASSROOMS: ['01', '02', '03', '04', '05', '06', '07', '08', '09'],
+  GRADES: ['1º', '2º', '3º', '4º', '5º'],
+  GROUPS: ['A', 'B', 'C', 'D'],
+};
+
+async function getAvailableGroups(grade: string) {
+  const field = 'turma';
+  const resultGroups: FetchResult = await db(Table.CLASS).select(field).where('ano', grade);
+
+  return await getAvailableItems(field, resultGroups, Options.GROUPS);
+}
+
+async function getAvailableClassrooms(period: string) {
+  const field = 'sala';
+  const resultClassrooms: FetchResult = await db(Table.CLASS).select(field).where('periodo', period);
+
+  return await getAvailableItems(field, resultClassrooms, Options.CLASSROOMS);
+}
+
+async function getAvailableItems(field: string, fetchResult: FetchResult, options: string[]): Promise<string[]> {
+  return options.reduce((availableItems: string[], item: string) => {
+    const itemExistsInDatabase = Boolean(fetchResult.find(x => x[field] === item));
+
+    if (!itemExistsInDatabase) {
+      availableItems.push(item);
+    }
+
+    return availableItems;
+  }, []);
+}
 
 export default class ClassesController {
-  async index(req: Request, res: Response) {
-    const currentYear = new Date().getFullYear()
+  async index({ query }: Request, res: Response) {
+    const schoolYear = query.schoolYear || new Date().getFullYear();
 
     try {
-      const classes = await db('tbClasses')
-        .where('ano_letivo', '=', currentYear)
-        .orderBy('ano')
-        .orderBy('turma')
+      const classes = await db(Table.CLASS).where('ano_letivo', schoolYear).orderBy('ano').orderBy('turma');
 
-      console.log('selected')
+      console.log(`-> ${classes.length} Class(es) selected`);
 
-      return res.json(classes)
-    } catch (err) {
-      return res.status(400).json({
-        error: err,
-      })
+      return res.json(classes);
+    } catch (error) {
+      return res.status(500).json({
+        error: 'Something went wrong. It was not possible to retrieve the data.',
+      });
     }
   }
 
-  async create(req: Request, res: Response) {
-    const currentYear = new Date().getFullYear()
+  async create({ body }: Request, res: Response) {
+    const schoolYear = body.schoolYear || new Date().getFullYear();
 
-    const { ano, turma, periodo, sala, professor } = req.body
+    const { ano, turma, periodo, sala, professor } = body;
 
-    const trx = await db.transaction()
+    const trx = await db.transaction();
 
     try {
-      await trx('tbClasses')
+      const result = await trx(Table.CLASS)
         .insert({
           ano,
           turma,
@@ -38,56 +76,61 @@ export default class ClassesController {
           professor,
           n_ativos: 0,
           n_total: 0,
-          ano_letivo: currentYear,
+          ano_letivo: schoolYear,
         })
-        .returning('id')
+        .returning('*');
 
-      await trx.commit()
+      await trx.commit();
 
-      console.log('created')
+      const newClass = result[0];
 
-      return res.status(201).json({})
-    } catch (err) {
-      await trx.rollback()
-      console.log(err)
+      console.log(`-> Class created with id ${newClass.id}`);
 
-      return res.status(400).json({
-        error: err,
-      })
+      return res.status(201).json(newClass);
+    } catch (error) {
+      await trx.rollback();
+
+      console.log(`-> Error to create the Class. ${error}`);
+
+      return res.status(500).json({
+        error: 'Something went wrong. It was not possible to create the Class.',
+      });
     }
   }
 
-  async delete(req: Request, res: Response) {
-    const { id } = req.body
+  async delete({ params }: Request, res: Response) {
+    const { id } = params;
 
-    const trx = await db.transaction()
+    const trx = await db.transaction();
 
     try {
-      await trx('tbClasses')
+      await trx(Table.CLASS)
         .where('id', id)
         .del()
         .then(() => {
-          trx.commit()
-        })
+          trx.commit();
+        });
 
-        console.log('deleted')
+      console.log(`-> Class with id ${id} deleted`);
 
-      return res.status(201).json({})
+      return res.status(204).send();
     } catch (error) {
-      await trx.rollback()
-      console.log(error)
+      await trx.rollback();
+      console.log(error);
 
-      return res.status(400)
+      return res.status(500).json({
+        error: 'Something went wrong. It was not possible to delete the Class.',
+      });
     }
   }
 
-  async update(req: Request, res: Response) {
-    const { id, ano, turma, periodo, sala, professor } = req.body
+  async update({ body }: Request, res: Response) {
+    const { id, ano, turma, periodo, sala, professor } = body;
 
-    const trx = await db.transaction()
+    const trx = await db.transaction();
 
     try {
-      await trx('tbClasses')
+      await trx(Table.CLASS)
         .update({
           ano,
           turma,
@@ -96,91 +139,57 @@ export default class ClassesController {
           professor,
         })
         .where('id', id)
+        .then(() => {
+          trx.commit();
+        });
 
-      await trx.commit()
+      console.log(`-> Class with id ${id} updated`);
 
-      console.log('updated')
+      return res.status(204).send();
+    } catch (error) {
+      await trx.rollback();
 
-      return res.status(201).json({})
-    } catch (err) {
-      await trx.rollback()
-      console.log(err)
+      console.log(`-> Error to update the Class with id. ${error}`);
 
-      return res.status(400).json({
-        error: err,
-      })
+      return res.status(500).json({
+        error: 'Something went wrong. It was not possible to update the Class data.',
+      });
     }
   }
 
-  async disp(req: Request, res: Response) {
-    const { ano, periodo } = req.query
-
-    let disp = new Array()
+  async disp({ query }: Request, res: Response) {
+    const { ano, periodo } = query;
 
     if (ano) {
-      const turmas = ['A', 'B', 'C', 'D']
+      const availableGroups = await getAvailableGroups(ano as string);
 
-      turmas.forEach(async (turma) => {
-        await db('tbClasses')
-          .where('ano', ano as string)
-          .andWhere('turma', turma)
-          .count('turma')
-          .then((res) => {
-            const countAno = res[0]['count'] as Number
+      console.log(`-> Available groups:`, availableGroups);
 
-            if (countAno == 0) {
-              disp.push(turma)
-            }
-          })
-        if (turma == 'D') {
-          return res.json(disp)
-        }
-      })
-    } else if (periodo) {
-      const salas = ['01', '02', '03', '04', '05', '06', '07', '08', '09']
-
-      salas.forEach(async (sala) => {
-        await db('tbClasses')
-          .where('periodo', periodo as string)
-          .andWhere('sala', sala)
-          .count('sala')
-          .then((res) => {
-            const count = res[0]['count'] as Number
-
-            if (count == 0) {
-              disp.push(sala)
-            }
-          })
-        if (sala == '09') {
-          return res.json(disp)
-        }
-      })
-    } else {
-      const anos = ['1º', '2º', '3º', '4º', '5º']
-      let sel = new Array()
-
-      anos.forEach(async (ano) => {
-        await db('tbClasses')
-          .where('ano', ano)
-          .count('turma')
-          .then((res) => {
-            const countAno = res[0]['count'] as Number
-
-            if (countAno > 0) {
-              sel.push(ano)
-            }
-
-            if (countAno < 4) {
-              disp.push(ano)
-            }
-          })
-        if (ano == '5º') {
-          return res.json({
-            sel: sel,
-            disp: disp,
-          })
-        }
-      })
+      return res.json(availableGroups);
     }
+
+    if (periodo) {
+      const availableRooms = await getAvailableClassrooms(periodo as string);
+
+      console.log(`-> Available classrooms:`, availableRooms);
+
+      return res.json(availableRooms);
+    }
+
+    const resultGrades: ResultGrades = await db(Table.CLASS).select('ano');
+
+    const availableGrades = Options.GRADES.reduce((acc: string[], grade: string) => {
+      const gradeCountInDatabase = resultGrades.filter(x => x.ano === grade).length;
+
+      if (gradeCountInDatabase < Options.GROUPS.length) {
+        acc.push(grade);
+      }
+
+      return acc;
+    }, []);
+
+    console.log(`-> Available grades:`, availableGrades);
+
+    return res.json(availableGrades);
   }
 }
