@@ -58,7 +58,7 @@ export default class AlunosController {
       return res.json(alunos);
     } catch (error) {
       res.status(500).json({
-        error: 'Something went wrong. It was not possible to do the search.',
+        error: 'Something went wrong. It was not possible to retrieve the data.',
       });
     }
   }
