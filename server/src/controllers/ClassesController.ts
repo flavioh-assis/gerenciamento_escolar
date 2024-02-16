@@ -124,8 +124,9 @@ export default class ClassesController {
     }
   }
 
-  async update({ body }: Request, res: Response) {
-    const { id, ano, turma, periodo, sala, professor } = body;
+  async update({ body, params }: Request, res: Response) {
+    const { id } = params;
+    const { ano, turma, periodo, sala, professor } = body;
 
     const trx = await db.transaction();
 
@@ -157,7 +158,7 @@ export default class ClassesController {
     }
   }
 
-  async disp({ query }: Request, res: Response) {
+  async available({ query }: Request, res: Response) {
     const { ano, periodo } = query;
 
     if (ano) {
@@ -178,14 +179,14 @@ export default class ClassesController {
 
     const resultGrades: ResultGrades = await db(Table.CLASS).select('ano');
 
-    const availableGrades = Options.GRADES.reduce((acc: string[], grade: string) => {
+    const availableGrades = Options.GRADES.reduce((available: string[], grade: string) => {
       const gradeCountInDatabase = resultGrades.filter(x => x.ano === grade).length;
 
       if (gradeCountInDatabase < Options.GROUPS.length) {
-        acc.push(grade);
+        available.push(grade);
       }
 
-      return acc;
+      return available;
     }, []);
 
     console.log(`-> Available grades:`, availableGrades);

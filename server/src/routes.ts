@@ -9,13 +9,12 @@ const alunosController = new AlunosController();
 const classesController = new ClassesController();
 
 routes.get('/classes', classesController.index);
-routes.get('/classes/disp', classesController.disp);
+routes.get('/classes/available', classesController.available);
 routes.post('/classes', classesController.create);
+routes.put('/classes/:id', classesController.update);
 routes.delete('/classes/:id', classesController.delete);
-routes.put('/classes', classesController.update);
 
 routes.get('/alunos', alunosController.index);
-routes.get('/alunos_rm', alunosController.rm);
 routes.get('/alunos/:id', alunosController.id);
 routes.post('/alunos', alunosController.create);
 
