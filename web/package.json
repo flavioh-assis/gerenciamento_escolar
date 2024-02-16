@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/data-grid": "4.0.0-alpha.37",
+    "@tanstack/react-query": "4.36.1",
     "axios": "^1.6.7",
     "browserslist": "^4.23.0",
     "caniuse-lite": "^1.0.30001587",
