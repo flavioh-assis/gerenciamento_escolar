@@ -76,7 +76,7 @@ export default class AlunosController {
         dateStyle: 'short',
       });
 
-      const yearNasc = Number(student.nasc_data.slice(6));
+      const birthYear = Number(student.nasc_data.slice(6));
 
       const resultIdClass = await db(Table.CLASS)
         .where('ano', '=', `${student.ano_desejado}`)
@@ -94,7 +94,7 @@ export default class AlunosController {
       const resultNumChamada = await trx(Table.CLASS)
         .increment('n_ativos', 1)
         .increment('n_total', 1)
-        .where('id', '=', idClass)
+        .where('id', idClass)
         .returning('n_total');
       const n_chamada = resultNumChamada[0]['n_total'] as number;
 
@@ -104,7 +104,7 @@ export default class AlunosController {
         data_fim: null,
         situacao: 'ATIVO',
         num_chamada: n_chamada,
-        idade: new Date().getFullYear() - yearNasc,
+        idade: new Date().getFullYear() - birthYear,
         id_classe: idClass,
       });
 
@@ -113,7 +113,7 @@ export default class AlunosController {
       console.log(`-> Student created with id ${idStudent}`);
 
       return res.status(201).json({
-        rm: idStudent,
+        enrollmentRegistration: idStudent,
       });
     } catch (error) {
       await trx.rollback();
@@ -122,27 +122,6 @@ export default class AlunosController {
 
       return res.status(500).json({
         error: 'Something went wrong. It was not possible to create the Student.',
-      });
-    }
-  }
-
-  async rm(_: Request, res: Response) {
-    console.log('-> STUDENTS - GET AVAILABLE ENROLLMENT REGISTRATION');
-
-    try {
-      const result = await db(Table.STUDENT).max('id').limit(1);
-
-      const lastEnrollmentRegistration = (result[0]['max'] as number) || 0;
-      const availableEnrollmentRegistration = lastEnrollmentRegistration + 1;
-
-      console.log('-> Available Enrollment Registration:', availableEnrollmentRegistration);
-
-      return res.json(availableEnrollmentRegistration);
-    } catch (error) {
-      console.log(`-> Error: Student not created. ${error}`);
-
-      return res.status(500).json({
-        error: 'Something went wrong. It was not possible to get the available Enrollment Registration.',
       });
     }
   }
