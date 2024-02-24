@@ -1,7 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-
-import './styles.css'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './styles.css';
 
 export default () => (
   <div className="menu">
@@ -15,9 +14,7 @@ export default () => (
 
     <div className="menu-div">
       <p>Classes</p>
-      <Link to="/alterar-classe">Alterar</Link>
-      <Link to="/cadastrar-classe">Cadastrar</Link>
-      <Link to="/listar-classes">Listar</Link>
+      <Link to="/gerenciar-classe">Gerenciar</Link>
     </div>
   </div>
-)
+);
