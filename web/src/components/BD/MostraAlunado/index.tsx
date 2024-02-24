@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { ColDef, DataGrid, GridApi, CellValue } from '@material-ui/data-grid'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { GridColDef, DataGrid } from '@material-ui/data-grid';
+import { Link } from 'react-router-dom';
+import GoToIcon from '../../../assets/images/icons/go_to_icon.png';
+import { api } from '../../../services/api';
 
-import api from '../../../services/api'
-import GoToIcon from '../../../assets/images/icons/go_to_icon.png'
+import './styles.css';
 
-import './styles.css'
-
-const MostraAlunado = (props: any) => {
-  const query = `alunos${props.filter}`
-  // const [alunos, setAlunos] = useState([]) //usar em produção
-  const [alunos, setAlunos] = useState([
+export const MostraAlunado = (props: any) => {
+  const alunosPortifolio = [
     {
       id: 1,
       num_chamada: 1,
@@ -262,8 +259,11 @@ const MostraAlunado = (props: any) => {
       nee: 'Autismo',
       dados: '',
     },
-  ])
-  const columns: ColDef[] = [
+  ];
+
+  const [alunos, setAlunos] = useState([]);
+
+  const columns: GridColDef[] = [
     {
       field: 'num_chamada',
       headerName: 'Nº',
@@ -312,65 +312,58 @@ const MostraAlunado = (props: any) => {
       width: 85,
       align: 'center',
       headerAlign: 'center',
-      disableClickEventBubbling: true,
-      renderCell: (params) => {
+      // disableClickEventBubbling: true,
+      renderCell: params => {
         const onClick = () => {
-          if (!onlyPortfolio) {
-            const gApi: GridApi = params.api
-            const fields = gApi
-              .getAllColumns()
-              .map((c) => c.field)
-              .filter((c) => c !== '__check__' && !!c)
-            const thisRow: Record<string, CellValue> = {}
-
-            fields.forEach((f) => {
-              thisRow[f] = params.getValue(f)
-            })
-
-            props.setIdAluno(thisRow['id'])
-          } else {
-            alert(
-              'Sem conexão com o Banco de Dados! Projeto apenas para portfólio.'
-            )
-          }
-        }
+          // if (!onlyPortfolio) {
+          //   const gApi: GridApi = params.api;
+          //   const fields = gApi
+          //     .getAllColumns()
+          //     .map(c => c.field)
+          //     .filter(c => c !== '__check__' && !!c);
+          //   const thisRow: Record<string, CellValue> = {};
+          //   fields.forEach(f => {
+          //     thisRow[f] = params.getValue(f);
+          //   });
+          //   props.setIdAluno(thisRow['id']);
+          // } else {
+          //   alert('Sem conexão com o Banco de Dados! Projeto apenas para portfólio.');
+          // }
+        };
 
         return (
-          <Link to='/atualizar-dados' className='go_to' onClick={onClick}>
-            <img alt='Go To' className='go_to_icon' src={GoToIcon} />
+          <Link to="/atualizar-dados" className="go_to" onClick={onClick}>
+            <img alt="Go To" className="go_to_icon" src={GoToIcon} />
           </Link>
-        )
+        );
       },
     },
-  ]
-  const onlyPortfolio = true
+  ];
 
   useEffect(() => {
-    if (!onlyPortfolio) {
-      api.get(query).then((response) => {
-        setAlunos(response.data)
-      })
-    }
-  })
+    const getAlunosFromApi = async () => {
+      const { data: students } = await api.get(`alunos${props.filter}`).catch(() => ({
+        data: alunosPortifolio,
+      }));
+
+      setAlunos(students);
+    };
+
+    getAlunosFromApi();
+  }, []);
 
   return (
-    <div id='mostra-alunado'>
-      <DataGrid
-        rows={alunos}
-        columns={columns}
-        pageSize={10}
-        rowHeight={35}
-        autoHeight
-      />
+    <div id="mostra-alunado">
+      <DataGrid rows={alunos} columns={columns} pageSize={10} rowHeight={35} autoHeight />
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state: any) => {
   return {
     idAluno: state.classe.idAluno,
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
@@ -379,7 +372,7 @@ const mapDispatchToProps = (dispatch: any) => {
         type: 'SET_IDALUNO',
         payload: { idAluno: NEW },
       }),
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(MostraAlunado)
+export default connect(mapStateToProps, mapDispatchToProps)(MostraAlunado);

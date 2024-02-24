@@ -1,13 +1,13 @@
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useState } from 'react';
 
-import api from '../../services/api'
-import Input from '../Input'
-import Select from '../Select'
+import { api } from '../../services/api';
+import Input from '../Input';
+import Select from '../Select';
 
-import './styles.css'
+import './styles.css';
 
 export default () => {
-  const onlyPortfolio = true
+  const onlyPortfolio = false;
 
   const initialState = {
     dadosAluno: {
@@ -34,11 +34,11 @@ export default () => {
       ano_desejado: '',
       turma: '',
     },
-  }
+  };
   const [dadosAluno, setDadosAluno] = useState({
     nome: 'Flavio',
     ra: '144.937.520-X',
-    rm: '6521',
+    rm: '--',
     nee: '',
     nasc_cidade: 'Ribeirão Preto',
     nasc_uf: 'SP',
@@ -58,7 +58,7 @@ export default () => {
     ex_aluno: 'Não',
     ano_desejado: '1º',
     turma: 'A',
-  })
+  });
   const UFs = [
     'AC',
     'AL',
@@ -88,90 +88,78 @@ export default () => {
     'SE',
     'TO',
     'Ext.',
-  ]
-
-  useEffect(() => {
-    if (!onlyPortfolio) {
-      newRM()
-    }
-  })
+  ];
 
   function clearFields() {
-    setDadosAluno(initialState.dadosAluno)
+    setDadosAluno(initialState.dadosAluno);
   }
 
   function handleCadastrar(e: FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!onlyPortfolio) {
       api
         .post('alunos', {
           ...dadosAluno,
         })
-        .then((res) => {
+        .then(res => {
           alert(
             'Cadastro feito com sucesso!\nO RM gerado foi o ' +
-              res.data.rm +
+              res.data.enrollmentRegistration +
               '.'
-          )
-          newRM()
-          clearFields()
+          );
+          clearFields();
         })
-        .catch((error) => {
-          alert('Deu ruim: ' + error)
-        })
+        .catch(error => {
+          alert('Deu ruim: ' + error);
+        });
     } else {
-      alert('Sem conexão com o Banco de Dados! Projeto apenas para portfólio.')
+      alert('Sem conexão com o Banco de Dados! Projeto apenas para portfólio.');
     }
   }
 
-  function newRM() {
-    api.get('/alunos_rm').then((res) => {
-      setValue({ rm: res.data })
-    })
-  }
-
   function setValue(value: object) {
-    setDadosAluno(Object.assign({}, dadosAluno, value))
+    setDadosAluno(Object.assign({}, dadosAluno, value));
   }
 
   return (
-    <form onSubmit={handleCadastrar} className='dados-alunos'>
+    <form onSubmit={handleCadastrar} className="dados-alunos">
       <p>IDENTIFICAÇÃO</p>
-      <div className='identificaçao'>
-        <div className='item aluno'>
+
+      <div className="identificaçao">
+        <div className="item aluno">
           <Input
-            label='Nome do Aluno'
-            name='nome-aluno'
-            onChange={(t) => setValue({ nome: t.target.value })}
+            label="Nome do Aluno"
+            name="nome-aluno"
+            onChange={t => setValue({ nome: t.target.value })}
             value={dadosAluno.nome}
           />
         </div>
-        <div className='item ra'>
+        <div className="item ra">
           <Input
-            label='RA'
-            name='ra'
-            className='ra'
-            onChange={(t) => setValue({ ra: t.target.value })}
+            label="RA"
+            name="ra"
+            className="ra"
+            onChange={t => setValue({ ra: t.target.value })}
             value={dadosAluno.ra}
           />
         </div>
-        <div className='item rm'>
+        <div className="item rm">
           <Input
-            label='RM'
-            name='rm'
-            className='item rm'
-            onChange={(t) => setValue({ rm: t.target.value })}
+            label="RM"
+            name="rm"
+            className="item rm"
+            onChange={t => setValue({ rm: t.target.value })}
             value={dadosAluno.rm}
             disabled
           />
         </div>
-        <div className='item nee'>
+        <div className="item nee">
           <Select
             value={dadosAluno.nee}
-            label='Deficiência'
-            name='nee'
-            onChange={(e) => setValue({ nee: e.target.value })}
+            label="Deficiência"
+            name="nee"
+            onChange={e => setValue({ nee: e.target.value })}
             options={[
               { value: '', label: 'Não Possui' },
               { value: 'Autismo', label: 'Autismo' },
@@ -182,71 +170,71 @@ export default () => {
           />
         </div>
 
-        <div className='item localidade'>
+        <div className="item localidade">
           <Input
-            label='Cidade'
-            name='localidade'
-            onChange={(t) => setValue({ nasc_cidade: t.target.value })}
+            label="Cidade"
+            name="localidade"
+            onChange={t => setValue({ nasc_cidade: t.target.value })}
             value={dadosAluno.nasc_cidade}
           />
         </div>
-        <div className='item uf-nasc'>
+        <div className="item uf-nasc">
           <Select
             value={dadosAluno.nasc_uf}
-            label='UF'
-            name='uf-nasc'
-            onChange={(e) => setValue({ nasc_uf: e.target.value })}
+            label="UF"
+            name="uf-nasc"
+            onChange={e => setValue({ nasc_uf: e.target.value })}
             options={UFs.map((UF: string) => {
-              return { value: UF, label: UF }
+              return { value: UF, label: UF };
             })}
           />
         </div>
-        <div className='item nacionalidade'>
+        <div className="item nacionalidade">
           <Input
-            label='Nacionalidade'
-            name='nacionalidade'
-            onChange={(t) => setValue({ nacionalidade: t.target.value })}
+            label="Nacionalidade"
+            name="nacionalidade"
+            onChange={t => setValue({ nacionalidade: t.target.value })}
             value={dadosAluno.nacionalidade}
           />
         </div>
-        <div className='item data-nasc'>
+        <div className="item data-nasc">
           <Input
-            label='Data Nasc.'
-            name='data-nasc'
-            onChange={(t) => {
+            label="Data Nasc."
+            name="data-nasc"
+            onChange={t => {
               // deveria ter REGEX
               if ([1, 4].includes(dadosAluno.nasc_data.length)) {
-                setValue({ nasc_data: t.target.value + '/' })
+                setValue({ nasc_data: t.target.value + '/' });
               } else {
-                setValue({ nasc_data: t.target.value })
+                setValue({ nasc_data: t.target.value });
               }
             }}
             value={dadosAluno.nasc_data}
           />
         </div>
 
-        <div className='item pai'>
+        <div className="item pai">
           <Input
-            label='Nome do Pai'
-            name='nome-pai'
-            onChange={(t) => setValue({ pai: t.target.value })}
+            label="Nome do Pai"
+            name="nome-pai"
+            onChange={t => setValue({ pai: t.target.value })}
             value={dadosAluno.pai}
           />
         </div>
-        <div className='item mae'>
+        <div className="item mae">
           <Input
-            label='Nome da Mãe'
-            name='nome-mae'
-            onChange={(t) => setValue({ mae: t.target.value })}
+            label="Nome da Mãe"
+            name="nome-mae"
+            onChange={t => setValue({ mae: t.target.value })}
             value={dadosAluno.mae}
           />
         </div>
-        <div className='item responsavel'>
+        <div className="item responsavel">
           <Input
-            label='Nome do Responsável Legal'
-            name='nome-resp-legal'
-            onChange={(t) => {
-              setValue({ responsavel: t.target.value })
+            label="Nome do Responsável Legal"
+            name="nome-resp-legal"
+            onChange={t => {
+              setValue({ responsavel: t.target.value });
             }}
             value={dadosAluno.responsavel}
           />
@@ -254,74 +242,74 @@ export default () => {
       </div>
 
       <p>RESIDÊNCIA</p>
-      <div className='residencia'>
-        <div className='endereço'>
+      <div className="residencia">
+        <div className="endereço">
           <Input
-            label='Endereço'
-            name='endereço'
-            onChange={(t) => setValue({ endereco: t.target.value })}
+            label="Endereço"
+            name="endereço"
+            onChange={t => setValue({ endereco: t.target.value })}
             value={dadosAluno.endereco}
           />
         </div>
-        <div className='bairro'>
+        <div className="bairro">
           <Input
-            label='Bairro'
-            name='bairro'
-            onChange={(t) => setValue({ bairro: t.target.value })}
+            label="Bairro"
+            name="bairro"
+            onChange={t => setValue({ bairro: t.target.value })}
             value={dadosAluno.bairro}
           />
         </div>
-        <div className='cidade'>
+        <div className="cidade">
           <Input
-            label='Cidade'
-            name='cidade'
-            onChange={(t) => setValue({ cidade: t.target.value })}
+            label="Cidade"
+            name="cidade"
+            onChange={t => setValue({ cidade: t.target.value })}
             value={dadosAluno.cidade}
           />
         </div>
 
-        <div className='telefones'>
+        <div className="telefones">
           <textarea
-            name='telefones'
-            onChange={(t) => setValue({ telefones: t.target.value })}
-            placeholder='Telefones'
+            name="telefones"
+            onChange={t => setValue({ telefones: t.target.value })}
+            placeholder="Telefones"
             value={dadosAluno.telefones}
           ></textarea>
         </div>
-        <div className='observaçoes'>
+        <div className="observaçoes">
           <textarea
-            name='observacoes'
-            onChange={(t) => setValue({ obs: t.target.value })}
-            placeholder='Observações'
+            name="observacoes"
+            onChange={t => setValue({ obs: t.target.value })}
+            placeholder="Observações"
             value={dadosAluno.obs}
           ></textarea>
         </div>
       </div>
 
       <p>PROCEDÊNCIA</p>
-      <div className='procedencia'>
-        <div className='proc_escola'>
+      <div className="procedencia">
+        <div className="proc_escola">
           <Input
-            label='Escola'
-            name='proc_escola'
-            onChange={(t) => setValue({ proc_escola: t.target.value })}
+            label="Escola"
+            name="proc_escola"
+            onChange={t => setValue({ proc_escola: t.target.value })}
             value={dadosAluno.proc_escola}
           />
         </div>
-        <div className='cidade'>
+        <div className="cidade">
           <Input
-            label='Cidade'
-            name='cidade'
-            onChange={(t) => setValue({ proc_cidade: t.target.value })}
+            label="Cidade"
+            name="cidade"
+            onChange={t => setValue({ proc_cidade: t.target.value })}
             value={dadosAluno.proc_cidade}
           />
         </div>
-        <div className='ano-proc'>
+        <div className="ano-proc">
           <Select
             value={dadosAluno.proc_ano}
-            label='Ano/Série'
-            name='ano-proc'
-            onChange={(e) => setValue({ proc_ano: e.target.value })}
+            label="Ano/Série"
+            name="ano-proc"
+            onChange={e => setValue({ proc_ano: e.target.value })}
             options={[
               { value: 'Não cursou', label: 'Não cursou' },
               { value: 'Pré-escola', label: 'Pré-escola' },
@@ -333,24 +321,24 @@ export default () => {
             ]}
           />
         </div>
-        <div className='ex-aluno'>
+        <div className="ex-aluno">
           <Select
             value={dadosAluno.ex_aluno}
-            label='É ex-aluno?'
-            name='ex-aluno'
-            onChange={(e) => setValue({ ex_aluno: e.target.value })}
+            label="É ex-aluno?"
+            name="ex-aluno"
+            onChange={e => setValue({ ex_aluno: e.target.value })}
             options={[
               { value: 'Não', label: 'Não' },
               { value: 'Sim', label: 'Sim' },
             ]}
           />
         </div>
-        <div className='ano-desejado'>
+        <div className="ano-desejado">
           <Select
             value={dadosAluno.ano_desejado}
-            label='Ano Desejado'
-            name='ano-desejado'
-            onChange={(e) => setValue({ ano_desejado: e.target.value })}
+            label="Ano Desejado"
+            name="ano-desejado"
+            onChange={e => setValue({ ano_desejado: e.target.value })}
             options={[
               { value: '1º', label: '1º ano' },
               { value: '2º', label: '2º ano' },
@@ -360,11 +348,11 @@ export default () => {
             ]}
           />
         </div>
-        <div className='turma'>
+        <div className="turma">
           <Select
-            label='Turma'
-            name='turma'
-            onChange={(e) => setValue({ turma: e.target.value })}
+            label="Turma"
+            name="turma"
+            onChange={e => setValue({ turma: e.target.value })}
             options={[
               { value: 'A', label: 'A' },
               { value: 'B', label: 'B' },
@@ -376,15 +364,10 @@ export default () => {
         </div>
       </div>
 
-      <div className='buttons'>
-        <input type='submit' id='btn-matricular' value='Matricular Aluno' />
-        <input
-          type='button'
-          id='btn-limpar'
-          value='Limpar Campos'
-          onClick={clearFields}
-        />
+      <div className="buttons">
+        <input type="submit" id="btn-matricular" value="Matricular Aluno" />
+        <input type="button" id="btn-limpar" value="Limpar Campos" onClick={clearFields} />
       </div>
     </form>
-  )
-}
+  );
+};
