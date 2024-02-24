@@ -27,3 +27,11 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
+.selecao-classes .botao:disabled {
+  background-color: #006;
+  color: var(--gray);
+  opacity: 0.7;
+  cursor: not-allowed;
+  text-decoration: none;
+}

@@ -1,215 +1,104 @@
-import React, { useEffect, useState, FormEvent } from 'react'
-import { connect } from 'react-redux'
+import React, { FormEvent } from 'react';
+import Input from '../../components/Input';
+import Select from '../../components/Select';
+import { Period } from '../../types';
+import './styles.css';
 
-import api from '../../services/api'
-import Input from '../../components/Input'
-import Select from '../../components/Select'
+type Props = {
+  grade: string;
+  group: string;
+  period: '' | Period;
+  classroom: string;
+  teacher: string;
+  availableGrades: string[];
+  availableGroups: string[];
+  availableRooms: string[];
+  availablePeriods: Period[];
+  idClassEdit: number;
+  handleChangeClassroom: (room: string) => void;
+  handleChangeGrade: (grade: string) => void;
+  handleChangeGroup: (group: string) => void;
+  handleChangePeriod: (period: string) => void;
+  handleChangeTeacher: (teacher: string) => void;
+  handleSubmit: (e: FormEvent) => void;
+};
 
-import './styles.css'
+export const ClassSelection = ({
+  classroom,
+  grade,
+  group,
+  period,
+  teacher,
+  availableGrades,
+  availableGroups,
+  availableRooms,
+  availablePeriods,
+  idClassEdit,
+  handleChangeClassroom,
+  handleChangeGrade,
+  handleChangeGroup,
+  handleChangePeriod,
+  handleChangeTeacher,
+  handleSubmit,
+}: Props) => {
+  const buildOptions = (availableItems: string[]) => {
+    return availableItems.map(item => ({ value: item, label: item }));
+  };
 
-const SelecaoClasses = (props: any) => {
-  const [ano, setAno] = useState('')
-  const [turma, setTurma] = useState('')
-  const [periodo, setPeriodo] = useState('')
-  const [sala, setSala] = useState('')
-  const [professor, setProfessor] = useState('')
-
-  const [turmasDisp, setTurmasDisp] = useState(['A', 'B', 'C', 'D'])
-  const [salasDisp, setSalasDisp] = useState([
-    '01',
-    '02',
-    '03',
-    '04',
-    '05',
-    '06',
-    '07',
-    '08',
-    '09',
-  ])
-  const onlyPortfolio = true
-
-  useEffect(() => {
-    if (props.upDisp && !onlyPortfolio) {
-      atualizaDisponiveis()
-    }
-  })
-
-  function atualizaDisponiveis() {
-    api.get('classes/disp').then((resp) => {
-      props.setDisp(resp.data.disp)
-      props.setSel(resp.data.sel)
-    })
-    props.setUpDisp(false)
-  }
-
-  function atualizaTabela() {
-    // api.get('classes').then((response) => {
-    //   props.setClasses(response.data)
-    // })
-  }
-
-  function atualizaTurmas(ano: string) {
-    if (!onlyPortfolio) {
-      api.get(`classes/disp?ano=${ano}`).then((resp) => {
-        setTurmasDisp(resp.data)
-      })
-    }
-  }
-
-  function atualizaSalas(periodo: string) {
-    if (!onlyPortfolio) {
-      api.get(`classes/disp?periodo=${periodo}`).then((resp) => {
-        setSalasDisp(resp.data)
-      })
-    }
-  }
-
-  function handleCadastrar(e: FormEvent) {
-    e.preventDefault()
-
-    if ([ano, turma, periodo, sala].includes('')) {
-      alert('ERRO! Preencha os campos ANO, TURMA, PERÍODO e SALA.')
-    } else if (onlyPortfolio) {
-      alert(
-        'Sem conexão com o Banco de Dados! Projeto apenas para portfólio.'
-      )
-    } else {
-      api
-        .post('classes', {
-          ano,
-          turma,
-          periodo,
-          sala,
-          professor,
-        })
-        .then(() => {
-          alert('Cadastro feito com sucesso!')
-          atualizaTabela()
-          atualizaDisponiveis()
-          limparCampos()
-        })
-        .catch((error) => {
-          alert(error)
-        })
-    }
-  }
-
-  function limparCampos() {
-    setAno('')
-    setTurma('')
-    setPeriodo('')
-    setSala('')
-    setProfessor('')
-  }
+  const gradeOptions = buildOptions(availableGrades);
+  const groupOptions = buildOptions(availableGroups);
+  const periodOptions = buildOptions(availablePeriods);
+  const roomOptions = buildOptions(availableRooms);
 
   return (
-    <div className='selecao-classes'>
-      <form onSubmit={handleCadastrar}>
+    <div className="selecao-classes">
+      <form onSubmit={handleSubmit}>
         <Select
-          name='ano'
-          label='Ano'
-          value={ano}
-          onChange={(t) => {
-            setAno(t.target.value)
-            atualizaTurmas(t.target.value)
-            setTurma('')
-          }}
-          options={props.disp.map((x: any) => {
-            return { value: x, label: x }
-          })}
+          name="ano"
+          label="Ano"
+          value={grade}
+          onChange={e => handleChangeGrade(e.target.value)}
+          options={gradeOptions}
         />
 
         <Select
-          name='turma'
-          label='Turma'
-          value={turma}
-          onChange={(t) => {
-            setTurma(t.target.value)
-            setPeriodo('')
-          }}
-          options={turmasDisp.map((x: any) => {
-            return { value: x, label: x }
-          })}
+          name="turma"
+          label="Turma"
+          value={group}
+          onChange={e => handleChangeGroup(e.target.value)}
+          options={groupOptions}
         />
 
         <Select
-          name='periodo'
-          label='Periodo'
-          value={periodo}
-          onChange={(t) => {
-            setPeriodo(t.target.value)
-            atualizaSalas(t.target.value)
-            setSala('')
-          }}
-          options={[
-            { value: 'Manhã', label: 'Manhã' },
-            { value: 'Tarde', label: 'Tarde' },
-          ]}
+          name="periodo"
+          label="Periodo"
+          value={period}
+          onChange={e => handleChangePeriod(e.target.value)}
+          options={periodOptions}
         />
 
         <Select
-          name='sala'
-          label='Sala'
-          value={sala}
-          onChange={(t) => {
-            setSala(t.target.value)
-          }}
-          options={salasDisp.map((x: any) => {
-            return { value: x, label: x }
-          })}
+          name="sala"
+          label="Sala"
+          value={classroom}
+          onChange={e => handleChangeClassroom(e.target.value)}
+          options={roomOptions}
         />
 
         <Input
-          label='Professor'
-          name='professor'
-          id='professor'
-          value={professor}
-          onChange={(t) => setProfessor(t.target.value)}
+          name="professor"
+          label="Professor"
+          value={teacher}
+          onChange={e => handleChangeTeacher(e.target.value)}
         />
 
         <input
-          type='submit'
-          className='botao'
-          onClick={handleCadastrar}
-          value='Cadastrar'
+          type="submit"
+          className="botao"
+          disabled={[grade, group, period, classroom].includes('')}
+          value={idClassEdit === 0 ? 'Cadastrar' : 'Salvar'}
         />
       </form>
     </div>
-  )
-}
-
-const mapStateToProps = (state: any) => {
-  return {
-    classes: state.classe.classes,
-    disp: state.classe.disp,
-    sel: state.classe.sel,
-    upDisp: state.classe.upDisp,
-  }
-}
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    setClasses: (newClasses: any) =>
-      dispatch({
-        type: 'SET_CLASSES',
-        payload: { classes: newClasses },
-      }),
-    setDisp: (NEW: []) =>
-      dispatch({
-        type: 'SET_DISP',
-        payload: { disp: NEW },
-      }),
-    setSel: (NEW: []) =>
-      dispatch({
-        type: 'SET_SEL',
-        payload: { disp: NEW },
-      }),
-    setUpDisp: (NEW: boolean) =>
-      dispatch({
-        type: 'SET_UPDISP',
-        payload: { disp: NEW },
-      }),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SelecaoClasses)
+  );
+};
