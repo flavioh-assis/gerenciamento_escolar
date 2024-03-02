@@ -41,3 +41,13 @@ export type SearchStudentResult = {
   situacao: string;
   periodo: string;
 };
+
+export type StudentFilter = {
+  nome: string;
+  ra: string;
+  nee: string;
+  ano: string;
+  turma: string;
+  professor: string;
+  periodo: Period | '';
+};

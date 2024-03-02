@@ -1,15 +1,11 @@
-.dados-pesquisa-alunos {
-  padding: 1vh 0 1vh 0;
-  height: 1%;
-}
-
-.dados-pesquisa-alunos #titulo {
+.dados-pesquisa-alunos h2 {
   font: 600 2.5rem Poppins;
   text-align: center;
   margin: 2rem auto 0 auto;
 }
 
-.dados-pesquisa-alunos .input-block input, .select-block select {
+.dados-pesquisa-alunos .input-block input,
+.select-block select {
   padding: 0 1rem;
 }
 
@@ -22,19 +18,20 @@
   grid-template-areas:
     'aluno aluno aluno aluno aluno aluno ra ra nee nee'
     'ano turma professor professor professor professor bairro bairro bairro bairro';
-  margin: 0 auto;
+  margin: 0 auto 5vh auto;
   max-width: 100rem;
-  padding: 0 .5rem .5rem .5rem;
+  padding: 0.5rem;
 }
 
 .dados-pesquisa-alunos .buttons {
   align-items: center;
   display: flex;
-  justify-content: center;
-  margin: 3rem auto 3rem auto;
+  justify-content: flex-end;
+  margin: 0 auto 5vh auto;
+  max-width: 100rem;
 }
 
-.dados-pesquisa-alunos .buttons input {
+.dados-pesquisa-alunos .buttons button {
   align-items: center;
   border-radius: 0.8rem;
   border-width: 0;
@@ -45,6 +42,12 @@
   text-decoration: none;
   transition: background-color 0.3s;
   width: 11.5rem;
+}
+
+.dados-pesquisa-alunos .mostra-alunos-pesquisa {
+  color: black;
+  margin: 0 auto;
+  max-width: 100rem;
 }
 
 #btn-pesquisar {
@@ -111,11 +114,4 @@
 
 .nee {
   grid-area: nee;
-}
-
-.mostra-alunos-pesquisa {
-  color: black;
-  margin: 0 auto 10rem auto;
-  max-width: 100rem;
-  height: 1%;
 }

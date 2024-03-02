@@ -1,152 +1,50 @@
-import React, { useState } from 'react';
-import { api } from '../../services/api';
-// import { Table } from "@material-ui/core";
+import React from 'react';
 import Input from '../Input';
 import Select from '../Select';
-
+import { Options } from '../../constants';
+import { Period, SearchStudentResult } from '../../types';
 import './styles.css';
 
-// const columns: ColDef[] = [
-//   {
-//     field: "nome",
-//     headerName: "Nome Completo",
-//     width: 270,
-//     align: "center",
-//     headerAlign: "center",
-//   },
-//   {
-//     field: "classe",
-//     headerName: "Classe",
-//     width: 91,
-//     align: "center",
-//     headerAlign: "center",
-//     valueGetter: (params: ValueGetterParams) => {
-//       return `${params.getValue("ano")} ano ${params.getValue("turma")}`;
-//     },
-//   },
-//   { // ano, data_nasc, num_chamada, professor,
-//     field: "ra",
-//     headerName: "R.A.",
-//     width: 133,
-//     align: "center",
-//     headerAlign: "center",
-//   },
-//   {
-//     field: "id",
-//     headerName: "R.M.",
-//     width: 64,
-//     align: "center",
-//     headerAlign: "center",
-//   },
-//   {
-//     field: "nee",
-//     headerName: "Deficiência",
-//     width: 124,
-//     align: "center",
-//     headerAlign: "center",
-//   },
-//   {
-//     field: "bairro",
-//     headerName: "Bairro",
-//     width: 180,
-//     align: "center",
-//     headerAlign: "center",
-//   },
-//   {
-//     field: "dados",
-//     headerName: "-",
-//     width: 87,
-//     align: "center",
-//     headerAlign: "center",
-//   },
-// ];
+type Props = {
+  disability: string;
+  grade: string;
+  group: string;
+  name: string;
+  period: Period | '';
+  studentRegistration: string;
+  students: SearchStudentResult[];
+  teacher: string;
+  clearFields: () => void;
+  handleChange: (value: object) => void;
+  handleSubmit: () => void;
+};
 
-const DadosMostraPesqAlunos: React.FC = () => {
-  const dadosInitialState = {
-    aluno: '',
-    ra: '',
-    nee: '',
-    ano: '',
-    turma: '',
-    professor: '',
-    bairro: '',
-  };
-
-  const [alunos, setAlunos] = useState<
-    {
-      id: number;
-      num_chamada: number;
-      nome: string;
-      ra: string;
-      nee: string;
-      nasc_data: string;
-      ano: string;
-      turma: string;
-      professor: string;
-      situacao: string;
-      bairro: string;
-    }[]
-  >([]);
-  const [dados, setDados] = useState(dadosInitialState);
-  const onlyPortfolio = false;
-
-  function fazerFiltro() {
-    let filterBuilder = '?';
-
-    if (dados.aluno) {
-      filterBuilder += `nome=${dados.aluno}`;
-    }
-    if (dados.ra) {
-      filterBuilder += `&ra=${dados.ra}`;
-    }
-    if (dados.nee) {
-      filterBuilder += `&nee=${dados.nee}`;
-    }
-    if (dados.ano) {
-      filterBuilder += `&ano=${dados.ano}`;
-    }
-    if (dados.turma) {
-      filterBuilder += `&turma=${dados.turma}`;
-    }
-    if (dados.professor) {
-      filterBuilder += `&professor=${dados.professor}`;
-    }
-    if (dados.bairro) {
-      filterBuilder += `&bairro=${dados.bairro}`;
-    }
-
-    const filter = filterBuilder.length > 1 ? filterBuilder : '';
-
-    return filter;
-  }
-
-  function atualizarGrid() {
-    if (!onlyPortfolio) {
-      let filter = fazerFiltro();
-
-      api.get(`alunos${filter}`).then(response => {
-        setAlunos(response.data);
-      });
-    } else {
-      alert('Sem conexão com o Banco de Dados! Projeto apenas para portfólio.');
-    }
-  }
-
-  function limparCampos() {
-    setDados(dadosInitialState);
-  }
+export const FormTableStudents = ({
+  disability,
+  grade,
+  group,
+  name,
+  period,
+  studentRegistration,
+  students,
+  teacher,
+  clearFields,
+  handleChange,
+  handleSubmit,
+}: Props) => {
+  const { DISABITIES, GRADES, GROUPS, PERIODS } = Options;
 
   return (
     <div className="dados-pesquisa-alunos">
-      <p id="titulo">INSIRA UM OU MAIS DADOS</p>
+      <h2 id="titulo">INSIRA UM OU MAIS DADOS</h2>
 
       <div className="dados">
         <div className="item aluno">
           <Input
             label="Nome do Aluno(a)"
             name="nome-aluno"
-            value={dados.aluno}
-            onChange={t => setDados({ ...dados, aluno: t.target.value })}
+            value={name}
+            onChange={t => handleChange({ nome: t.target.value })}
           />
         </div>
         <div className="item ra">
@@ -154,24 +52,17 @@ const DadosMostraPesqAlunos: React.FC = () => {
             label="RA"
             name="ra"
             className="ra"
-            value={dados.ra}
-            onChange={t => setDados({ ...dados, ra: t.target.value })}
+            value={studentRegistration}
+            onChange={t => handleChange({ ra: t.target.value })}
           />
         </div>
         <div className="item nee">
           <Select
             label="Deficiência"
             name="nee"
-            value={dados.nee}
-            onChange={t => setDados({ ...dados, nee: t.target.value })}
-            options={[
-              { value: '', label: 'Indeferente' },
-              { value: 'Qualquer', label: 'Qualquer Tipo' },
-              { value: 'Autismo', label: 'Autismo' },
-              { value: 'Cadeirante', label: 'Cadeirante' },
-              { value: 'Intelectual', label: 'Intelectual' },
-              { value: 'Múltipla', label: 'Múltipla' },
-            ]}
+            value={disability}
+            onChange={t => handleChange({ nee: t.target.value })}
+            options={DISABITIES}
           />
         </div>
 
@@ -179,81 +70,96 @@ const DadosMostraPesqAlunos: React.FC = () => {
           <Select
             label="Ano"
             name="ano"
-            value={dados.ano}
-            onChange={t => setDados({ ...dados, ano: t.target.value })}
-            options={[
-              { value: '', label: '-----' },
-              { value: '1º', label: '1º' },
-              { value: '2º', label: '2º' },
-              { value: '3º', label: '3º' },
-              { value: '4º', label: '4º' },
-              { value: '5º', label: '5º' },
-            ]}
+            value={grade}
+            onChange={t => handleChange({ ano: t.target.value })}
+            options={GRADES}
           />
         </div>
         <div className="item turma">
           <Select
             label="Turma"
             name="turma"
-            value={dados.turma}
-            onChange={t => setDados({ ...dados, turma: t.target.value })}
-            options={[
-              { value: '', label: '-----' },
-              { value: 'A', label: 'A' },
-              { value: 'B', label: 'B' },
-              { value: 'C', label: 'C' },
-              { value: 'D', label: 'D' },
-            ]}
+            value={group}
+            onChange={t => handleChange({ turma: t.target.value })}
+            options={GROUPS}
           />
         </div>
         <div className="item professor">
           <Input
             label="Professor(a)"
             name="professor"
-            value={dados.professor}
-            onChange={t => setDados({ ...dados, professor: t.target.value })}
+            value={teacher}
+            onChange={t => handleChange({ professor: t.target.value })}
           />
         </div>
         <div className="item bairro">
-          <Input
-            label="Bairro"
-            name="bairro"
-            value={dados.bairro}
-            onChange={t => setDados({ ...dados, bairro: t.target.value })}
+          <Select
+            label="Período"
+            name="periodo"
+            value={period}
+            onChange={t => handleChange({ periodo: t.target.value })}
+            options={PERIODS}
           />
         </div>
       </div>
 
       <div className="buttons">
-        <input type="button" id="btn-pesquisar" value="Pesquisar" onClick={atualizarGrid} />
-        <input type="button" id="btn-limpar" value="Limpar Campos" onClick={limparCampos} />
+        <button id="btn-pesquisar" onClick={handleSubmit}>
+          Pesquisar
+        </button>
+
+        <button id="btn-limpar" onClick={clearFields}>
+          Limpar Campos
+        </button>
       </div>
 
       <div className="mostra-alunos-pesquisa">
-        {alunos.length ? (
-          alunos.map(aluno => (
-            <div
-              key={aluno.id}
-              style={{
-                background: 'white',
-                padding: '10px',
-                borderRadius: '5px',
-                marginBottom: '5px',
-              }}
-            >
-              <p>RM: {aluno.id}</p>
-              <p>Nome: {aluno.nome}</p>
-              <p>
-                Classe: {aluno.ano} ano {aluno.turma}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p>Sem resultados</p>
-        )}
+        <table
+          style={{
+            background: 'white',
+            padding: '10px',
+            borderCollapse: 'collapse',
+            width: '100%',
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>RM</th>
+              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>Nome</th>
+              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>
+                Classe
+              </th>
+              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>
+                Professor
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {students.length ? (
+              students.map((s, index) => (
+                <tr key={index}>
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{s.id}</td>
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{s.nome}</td>
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>
+                    {s.ano} ano {s.turma}
+                  </td>
+                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{s.professor}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={4}
+                  style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}
+                >
+                  Sem resultados
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 };
-
-export default DadosMostraPesqAlunos;
