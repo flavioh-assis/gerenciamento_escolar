@@ -64,6 +64,8 @@ export default class ClassesController {
 
     const { ano, turma, periodo, sala, professor } = body;
 
+    if ([ano, turma, periodo, sala].includes('')) return;
+
     const trx = await db.transaction();
 
     try {

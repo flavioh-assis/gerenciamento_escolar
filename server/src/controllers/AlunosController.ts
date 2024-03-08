@@ -4,16 +4,16 @@ import { Table } from '../enum/database';
 import { Student } from '../type/student';
 
 function getFilterValues(req: Request) {
-  const { ano, bairro, nee, nome, professor, ra, turma } = req.query;
+  const { ano, nee, nome, periodo, professor, ra, turma } = req.query;
 
   const values = {
     name: (nome as string) || '',
     studentRegistration: (ra as string) || '%',
-    disability: (nee as string) == 'Qualquer' ? '%a' : (nee as string) || '',
+    disability: (nee as string) === 'Qualquer' ? '%a' : (nee as string) || '',
     grade: (ano as string) || '%',
     group: (turma as string) || '%',
     teacher: (professor as string) || '',
-    neighborhood: (bairro as string) || '',
+    period: (periodo as string) || '',
   };
 
   console.log('-> Filter values:', values);
@@ -26,7 +26,7 @@ export default class AlunosController {
     console.log('-> STUDENTS - GET BY FILTER - QUERY:', req.query);
 
     try {
-      const { disability, grade, group, name, neighborhood, studentRegistration, teacher } = getFilterValues(req);
+      const { disability, grade, group, name, period, studentRegistration, teacher } = getFilterValues(req);
 
       const alunos = await db(Table.STUDENT)
         .join(Table.ENROLLMENT, `${Table.ENROLLMENT}.id_aluno`, '=', `${Table.STUDENT}.id`)
@@ -38,7 +38,7 @@ export default class AlunosController {
         .andWhere('ano', 'like', `${grade}`)
         .andWhere('turma', 'like', `${group}`)
         .andWhere('professor', 'ilike', `${teacher}%`)
-        .andWhere('bairro', 'ilike', `%${neighborhood}%`)
+        .andWhere('periodo', 'like', `%${period}%`)
         .select(
           'tbAlunos.id as id',
           'num_chamada',
@@ -50,7 +50,7 @@ export default class AlunosController {
           'turma',
           'professor',
           'situacao',
-          'bairro',
+          'periodo',
         );
 
       console.log(`-> ${alunos.length} Students selected`);
@@ -69,7 +69,7 @@ export default class AlunosController {
     const trx = await db.transaction();
 
     try {
-      const { turma: group, rm, ...studentData } = body;
+      const { turma: group, ...studentData } = body;
       const student: Student = { ...studentData };
 
       const today = new Date().toLocaleString('pt-br', {
