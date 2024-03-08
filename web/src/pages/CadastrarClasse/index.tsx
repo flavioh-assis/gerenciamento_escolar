@@ -7,6 +7,14 @@ import { Class, Fields, Period } from '../../types';
 import { api } from '../../services/api';
 import './styles.css';
 
+export const getClasses = async () => {
+  const { data: classes } = await api.get('/classes').catch(() => ({
+    data: [],
+  }));
+
+  return classes as any[];
+};
+
 export default () => {
   const initialValue: Fields = {
     grade: '',
@@ -47,14 +55,6 @@ export default () => {
     }));
 
     return rooms as string[];
-  };
-
-  const getClasses = async () => {
-    const { data: classes } = await api.get('/classes').catch(() => ({
-      data: [],
-    }));
-
-    return classes as any[];
   };
 
   const updateAvailableGrades = async () => {
@@ -223,6 +223,7 @@ export default () => {
   useEffect(() => {
     updateClasses();
     updateAvailableGrades();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
