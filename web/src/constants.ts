@@ -29,32 +29,77 @@ export const States = [
   'Ext.',
 ];
 
-export const Options = {
+export const buildSelectOption = (value: string, label?: string) => {
+  return { value: value, label: label ?? value };
+};
+
+const EMPTY_SELECT_OPTION = buildSelectOption('', '-----');
+
+enum Disability {
+  AUTISM = 'Autismo',
+  INTELLECTUAL = 'Intelectual',
+  MULTIPLE = 'Múltipla',
+  WHEELCHAIR = 'Cadeirante',
+}
+
+const Disabilities = [
+  Disability.AUTISM,
+  Disability.INTELLECTUAL,
+  Disability.MULTIPLE,
+  Disability.WHEELCHAIR,
+];
+
+const buildDisabilityOptions = () => {
+  return Disabilities.sort().map(x => buildSelectOption(x));
+};
+
+enum Grade {
+  FIRST = '1º',
+  SECOND = '2º',
+  THIRD = '3º',
+  FORTH = '4º',
+  FIFTH = '5º',
+}
+
+const Grades = [Grade.FIRST, Grade.SECOND, Grade.THIRD, Grade.FORTH, Grade.FIFTH];
+
+const buildGradeOptions = () => {
+  return Grades.map(x => buildSelectOption(x));
+};
+
+enum Group {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+}
+
+const GROUPS = [Group.A, Group.B, Group.C, Group.D];
+
+const buildGroupOptions = () => {
+  return GROUPS.map(x => buildSelectOption(x));
+};
+
+enum Period {
+  MORNING = 'Manhã',
+  AFTERNOON = 'Tarde',
+}
+
+export const SearchOptions = {
   DISABITIES: [
-    { value: '', label: 'Indeferente' },
-    { value: 'Qualquer', label: 'Qualquer Tipo' },
-    { value: 'Autismo', label: 'Autismo' },
-    { value: 'Cadeirante', label: 'Cadeirante' },
-    { value: 'Intelectual', label: 'Intelectual' },
-    { value: 'Múltipla', label: 'Múltipla' },
+    EMPTY_SELECT_OPTION,
+    buildSelectOption('Qualquer', 'Qualquer Tipo'),
+    ...buildDisabilityOptions(),
   ],
-  GRADES: [
-    { value: '', label: '-----' },
-    { value: '1º', label: '1º' },
-    { value: '2º', label: '2º' },
-    { value: '3º', label: '3º' },
-    { value: '4º', label: '4º' },
-    { value: '5º', label: '5º' },
-  ],
-  GROUPS: [
-    { value: '', label: '-----' },
-    { value: 'A', label: 'A' },
-    { value: 'B', label: 'B' },
-    { value: 'C', label: 'C' },
-    { value: 'D', label: 'D' },
-  ],
+  GRADES: [EMPTY_SELECT_OPTION, ...buildGradeOptions()],
+  GROUPS: [EMPTY_SELECT_OPTION, ...buildGroupOptions()],
   PERIODS: [
-    { value: 'Manhã', label: 'Manhã' },
-    { value: 'Tarde', label: 'Tarde' },
+    EMPTY_SELECT_OPTION,
+    buildSelectOption(Period.MORNING),
+    buildSelectOption(Period.AFTERNOON),
   ],
+};
+
+export const EnrollOptions = {
+  DISABITIES: [buildSelectOption('', 'Não Possui'), ...buildDisabilityOptions()],
 };

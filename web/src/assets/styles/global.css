@@ -72,6 +72,41 @@ textarea {
   }
 } */
 
+.button {
+  align-items: center;
+  border-radius: 0.8rem;
+  border-width: 0;
+  display: flex;
+  font: 700 2rem Archivo;
+  height: 5.6rem;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.btn-clear {
+  color: var(--black);
+  width: 20rem;
+}
+
+.btn-clear:hover {
+  background: #ddd;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.btn-submit {
+  background: var(--blue);
+  color: #fff;
+  width: 20rem;
+}
+
+.btn-submit:hover {
+  background-color: #3071f3;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .MuiDataGrid-columnsContainer {
   background: var(--blue);
   color: #fff;

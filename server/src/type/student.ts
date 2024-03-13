@@ -10,8 +10,5 @@ export type Student = {
   pai: string;
   mae: string;
   responsavel: string;
-  proc_escola: string;
-  proc_cidade: string;
-  proc_ano: string;
   ano_desejado: string;
 };

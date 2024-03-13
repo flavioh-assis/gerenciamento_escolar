@@ -1,7 +1,7 @@
 import React from 'react';
 import Input from '../Input';
 import Select from '../Select';
-import { Options } from '../../constants';
+import { SearchOptions } from '../../constants';
 import { Period, SearchStudentResult } from '../../types';
 import './styles.css';
 
@@ -32,8 +32,6 @@ export const FormTableStudents = ({
   handleChange,
   handleSubmit,
 }: Props) => {
-  const { DISABITIES, GRADES, GROUPS, PERIODS } = Options;
-
   return (
     <div className="dados-pesquisa-alunos">
       <h2 id="titulo">INSIRA UM OU MAIS DADOS</h2>
@@ -62,7 +60,7 @@ export const FormTableStudents = ({
             name="nee"
             value={disability}
             onChange={t => handleChange({ nee: t.target.value })}
-            options={DISABITIES}
+            options={SearchOptions.DISABITIES}
           />
         </div>
 
@@ -72,7 +70,7 @@ export const FormTableStudents = ({
             name="ano"
             value={grade}
             onChange={t => handleChange({ ano: t.target.value })}
-            options={GRADES}
+            options={SearchOptions.GRADES}
           />
         </div>
         <div className="item turma">
@@ -81,7 +79,7 @@ export const FormTableStudents = ({
             name="turma"
             value={group}
             onChange={t => handleChange({ turma: t.target.value })}
-            options={GROUPS}
+            options={SearchOptions.GROUPS}
           />
         </div>
         <div className="item professor">
@@ -98,7 +96,7 @@ export const FormTableStudents = ({
             name="periodo"
             value={period}
             onChange={t => handleChange({ periodo: t.target.value })}
-            options={PERIODS}
+            options={SearchOptions.PERIODS}
           />
         </div>
       </div>
@@ -116,7 +114,7 @@ export const FormTableStudents = ({
       <div className="mostra-alunos-pesquisa">
         <table
           style={{
-            background: 'white',
+            background: '#eee',
             padding: '10px',
             borderCollapse: 'collapse',
             width: '100%',
@@ -124,12 +122,12 @@ export const FormTableStudents = ({
         >
           <thead>
             <tr>
-              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>RM</th>
-              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>Nome</th>
-              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>
+              <th style={{ padding: '8px', border: '1px solid #bbb', textAlign: 'left' }}>RM</th>
+              <th style={{ padding: '8px', border: '1px solid #bbb', textAlign: 'left' }}>Nome</th>
+              <th style={{ padding: '8px', border: '1px solid #bbb', textAlign: 'left' }}>
                 Classe
               </th>
-              <th style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'left' }}>
+              <th style={{ padding: '8px', border: '1px solid #bbb', textAlign: 'left' }}>
                 Professor
               </th>
             </tr>
@@ -139,19 +137,19 @@ export const FormTableStudents = ({
             {students.length ? (
               students.map((s, index) => (
                 <tr key={index}>
-                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{s.id}</td>
-                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{s.nome}</td>
-                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>
+                  <td style={{ padding: '8px', border: '1px solid #bbb' }}>{s.id}</td>
+                  <td style={{ padding: '8px', border: '1px solid #bbb' }}>{s.nome}</td>
+                  <td style={{ padding: '8px', border: '1px solid #bbb' }}>
                     {s.ano} ano {s.turma}
                   </td>
-                  <td style={{ padding: '8px', border: '1px solid #ddd' }}>{s.professor}</td>
+                  <td style={{ padding: '8px', border: '1px solid #bbb' }}>{s.professor}</td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td
                   colSpan={4}
-                  style={{ padding: '8px', border: '1px solid #ddd', textAlign: 'center' }}
+                  style={{ padding: '8px', border: '1px solid #bbb', textAlign: 'center' }}
                 >
                   Sem resultados
                 </td>

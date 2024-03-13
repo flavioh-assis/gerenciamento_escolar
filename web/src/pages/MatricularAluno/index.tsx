@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DadosAlunos } from '../../components/DadosAlunos';
 import Menu from '../../components/Menu';
 import Cabeçalho from '../../components/Cabeçalho';
@@ -19,38 +19,39 @@ export default () => {
     pai: '',
     mae: '',
     responsavel: '',
-    proc_escola: '',
-    proc_cidade: '',
-    proc_ano: '',
     ano_desejado: '',
     turma: '',
   };
   const [classes, setClasses] = useState<Object[]>([]);
-  const [formStudentValues, setFormStudentValues] = useState<FormStudentValues>(initialState);
 
-  const clearFields = () => {
-    setFormStudentValues(initialState);
+  const clearFields = (elements: HTMLFormControlsCollection) => {
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i] as HTMLInputElement | HTMLSelectElement;
+      element.value = '';
+    }
   };
 
-  const handleChange = (value: Object) => {
-    setFormStudentValues(Object.assign({}, formStudentValues, value));
-  };
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const formData = initialState;
+    const elements = e.currentTarget.elements;
+
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i] as HTMLInputElement | HTMLSelectElement;
+      if (element.id) {
+        formData[element.id as keyof FormStudentValues] = element.value;
+      }
+    }
+
     api
-      .post('alunos', {
-        ...formStudentValues,
-      })
+      .post('alunos', formData)
       .then(({ data }) => {
-        alert(
-          'Cadastro feito com sucesso!\nO RM gerado foi o ' + data.enrollmentRegistration + '.'
-        );
-        clearFields();
+        alert(`Cadastro feito com sucesso!\nO RM gerado foi o ${data.enrollmentRegistration}.`);
+        clearFields(elements);
       })
       .catch(error => {
-        alert('Deu ruim: ' + error);
+        alert(`Deu ruim: ${error}`);
       });
   };
 
@@ -71,13 +72,7 @@ export default () => {
         <Menu />
 
         <div className="matricular-aluno">
-          <DadosAlunos
-            classes={classes}
-            clearFields={clearFields}
-            formStudentValues={formStudentValues}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
+          <DadosAlunos classes={classes} handleSubmit={handleSubmit} />
         </div>
       </div>
     </div>

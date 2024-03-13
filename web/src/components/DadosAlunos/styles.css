@@ -31,68 +31,22 @@
     'pai pai pai pai mae mae mae mae resp resp resp resp';
 }
 
-.procedencia {
-  grid-template-columns: 2.5fr 1.5fr 1fr 1fr 1fr;
-  grid-template-areas: 'escola cidade ano-proc ano-desejado turma';
+.matricula {
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'ano-desejado turma';
   margin: 0 auto 2vh auto;
 }
 
 .dados-alunos .buttons {
   align-items: center;
   display: flex;
+  gap: 2rem;
   justify-content: flex-end;
   margin: 5vh auto 5vh auto;
 }
 
-.dados-alunos .buttons input {
-  align-items: center;
-  border-radius: 0.8rem;
-  border-width: 0;
-  display: flex;
-  font: 700 2rem Archivo;
-  height: 5.6rem;
-  justify-content: center;
-  text-decoration: none;
-  transition: background-color 0.3s;
-  width: 11.5rem;
-}
-
-#btn-matricular {
-  background: var(--green);
-  color: var(--blue);
-  margin-right: 1rem;
-  width: 20rem;
-}
-
-#btn-matricular:hover {
-  background: #52e728;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-#btn-limpar {
-  background: var(--blue);
-  color: #fff;
-  margin-left: 1rem;
-  width: 20rem;
-}
-
-#btn-limpar:hover {
-  background-color: #3071f3;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 .turma {
   grid-area: turma;
-}
-
-.escola {
-  grid-area: escola;
-}
-
-.ano-proc {
-  grid-area: ano-proc;
 }
 
 .ano-desejado {
