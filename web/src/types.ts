@@ -46,5 +46,5 @@ export type StudentFilter = {
   ano: string;
   turma: string;
   professor: string;
-  periodo: Period | '';
+  periodo: string;
 };

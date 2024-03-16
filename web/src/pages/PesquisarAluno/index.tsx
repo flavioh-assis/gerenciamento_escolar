@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Cabeçalho from '../../components/Cabeçalho';
 import Menu from '../../components/Menu';
-import { FormTableStudents } from '../../components/DadosMostraPesqAlunos';
+import { FormSearchStudents, TableSearchStudents } from '../../components';
 import { SearchStudentResult, StudentFilter } from '../../types';
+import { keyBelongsToObject } from '../../utils';
 import { api } from '../../services/api';
 import './styles.css';
 
@@ -17,35 +18,50 @@ const SearchStudents = () => {
     periodo: '',
   };
   const [students, setStudents] = useState<SearchStudentResult[]>([]);
-  const [filterValues, setFilterValues] = useState(filterInitialState);
-  const { ano, nee, nome, periodo, professor, ra, turma } = filterValues;
 
-  const buildFilter = () => {
-    const filters = [];
+  const buildFilter = (formData: StudentFilter) => {
+    const filters = Object.keys(formData).reduce((acc: string[], key) => {
+      const value = formData[key as keyof StudentFilter];
+      acc.push(`${key}=${value}`);
 
-    for (const key in filterValues) {
-      if (filterValues[key as keyof StudentFilter]) {
-        filters.push(`${key}=${filterValues[key as keyof StudentFilter]}`);
+      return acc;
+    }, []);
+
+    return filters.length ? buildFilterString(filters) : '';
+  };
+
+  const buildFilterString = (filters: string[]) => {
+    return '?' + filters.join('&');
+  };
+
+  const clearStudents = () => {
+    setStudents([]);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = {} as StudentFilter;
+    const elements = e.currentTarget.elements;
+
+    for (const element of elements) {
+      const { id, value } = element as HTMLInputElement | HTMLSelectElement;
+
+      if (keyBelongsToObject(id, filterInitialState) && value) {
+        formData[id as keyof StudentFilter] = value;
       }
     }
 
-    return filters.length ? '?' + filters.join('&') : '';
-  };
+    const filter = buildFilter(formData);
 
-  const clearFields = () => {
-    setFilterValues(filterInitialState);
-  };
-
-  const handleChange = (value: object) => {
-    setFilterValues(Object.assign({}, filterValues, value));
-  };
-
-  const handleSubmit = () => {
-    let filter = buildFilter();
-
-    api.get(`alunos${filter}`).then(response => {
-      setStudents(response.data);
-    });
+    api
+      .get(`alunos${filter}`)
+      .then(response => {
+        setStudents(response.data);
+      })
+      .catch(error => {
+        alert(`Deu ruim: ${error}`);
+      });
   };
 
   return (
@@ -56,19 +72,9 @@ const SearchStudents = () => {
         <Menu />
 
         <div className="pesquisar-aluno">
-          <FormTableStudents
-            disability={nee}
-            grade={ano}
-            group={turma}
-            name={nome}
-            period={periodo}
-            studentRegistration={ra}
-            students={students}
-            teacher={professor}
-            clearFields={clearFields}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
+          <FormSearchStudents handleSubmit={handleSubmit} handleClearResult={clearStudents} />
+
+          <TableSearchStudents students={students} />
         </div>
       </div>
     </div>
